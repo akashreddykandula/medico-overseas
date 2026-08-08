@@ -10,6 +10,7 @@ import {
   HiOutlineAcademicCap,
   HiOutlineNewspaper,
   HiOutlineLogout,
+  HiOutlineQuestionMarkCircle,
   HiOutlineMenuAlt2,
   HiOutlineX,
   HiOutlineBell,
@@ -41,6 +42,11 @@ const LINKS = [
     icon: HiOutlineAcademicCap,
   },
   { to: "/admin/blogs", label: "Blog CMS", icon: HiOutlineNewspaper },
+  {
+    to: "/admin/faqs",
+    label: "FAQs",
+    icon: HiOutlineQuestionMarkCircle,
+  },
 ];
 
 const AdminLayout = () => {
