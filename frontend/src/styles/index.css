@@ -67,3 +67,8 @@ main {
 ::-webkit-scrollbar-thumb:hover {
   background: #6f96d2;
 }
+/* Position Google reCAPTCHA badge above WhatsApp button */
+.grecaptcha-badge {
+  right: 24px !important;
+  bottom: 88px !important;
+}
