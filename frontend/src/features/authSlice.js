@@ -32,17 +32,33 @@ export const fetchMe = createAsyncThunk(
   "auth/fetchMe",
   async (_, { rejectWithValue }) => {
     try {
+      // 1. Restore access token using the httpOnly refresh cookie
+      const { data: refreshData } = await api.post(
+        "/auth/refresh",
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      const newAccessToken = refreshData.data.accessToken;
+
+      // 2. Store the new access token in memory
+      setAccessToken(newAccessToken);
+
+      // 3. Now fetch the authenticated user
       const { data } = await api.get("/auth/me");
+
       return data.data.user;
     } catch (err) {
-      // 401 simply means the visitor is not logged in.
-      if (err.response?.status === 401) {
-        return rejectWithValue(null);
-      }
-
-      return rejectWithValue(
-        err.response?.data?.message || "Failed to fetch user",
+      console.error(
+        "SESSION RESTORE FAILED:",
+        err.response?.data || err.message,
       );
+
+      setAccessToken(null);
+
+      return rejectWithValue(err.response?.data?.message || "Session expired");
     }
   },
 );
