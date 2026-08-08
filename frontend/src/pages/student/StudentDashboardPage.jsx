@@ -1,10 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   HiCheckCircle,
   HiUserGroup,
   HiCalendar,
   HiFlag,
   HiChatAlt2,
+  HiOutlineDocumentText,
 } from "react-icons/hi";
 import { useMyApplication } from "../../hooks/useApplication";
 
@@ -27,6 +30,7 @@ const label = (stage) =>
   stage.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 const StudentDashboardPage = () => {
+  const navigate = useNavigate();
   const { data: application, isLoading } = useMyApplication();
 
   if (isLoading) {
@@ -39,11 +43,43 @@ const StudentDashboardPage = () => {
     );
   }
 
+  // No application exists
+  if (!application) {
+    return (
+      <div className="mx-auto flex min-h-[60vh] max-w-3xl items-center justify-center p-4">
+        <div className="w-full rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-sm sm:p-12">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-coral-50 text-coral">
+            <HiOutlineDocumentText size={32} />
+          </div>
+
+          <h2 className="mt-5 font-heading text-2xl font-bold tracking-tight text-navy-600">
+            Start Your Application
+          </h2>
+
+          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-navy-400">
+            You don't currently have an active application. Start your
+            application to begin your MBBS admission journey with Medico
+            Overseas.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => navigate("/portal/apply")}
+            className="mt-6 inline-flex items-center justify-center rounded-xl bg-coral px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
+          >
+            Start Application
+          </button>
+        </div>
+      </div>
+    );
+  }
   const currentIndex = STAGES.indexOf(
-    application?.currentStage || "application_submitted",
+    application.currentStage || "application_submitted",
   );
+
   const lastHistoryEntry =
-    application?.stageHistory?.[application.stageHistory.length - 1];
+    application.stageHistory?.[application.stageHistory.length - 1];
+
   const progressPercent = Math.round(
     ((currentIndex + 1) / STAGES.length) * 100,
   );
@@ -57,12 +93,14 @@ const StudentDashboardPage = () => {
             <p className="text-xs font-semibold uppercase tracking-wider text-navy-400">
               Current Stage
             </p>
+
             <div className="rounded-lg bg-coral-50 p-2 text-coral">
               <HiFlag size={18} />
             </div>
           </div>
+
           <p className="mt-2 font-heading text-xl font-bold tracking-tight text-navy-600">
-            {label(application?.currentStage || "application_submitted")}
+            {label(application.currentStage || "application_submitted")}
           </p>
         </div>
 
@@ -71,12 +109,14 @@ const StudentDashboardPage = () => {
             <p className="text-xs font-semibold uppercase tracking-wider text-navy-400">
               Assigned Counsellor
             </p>
+
             <div className="rounded-lg bg-navy-50 p-2 text-navy-400">
               <HiUserGroup size={18} />
             </div>
           </div>
+
           <p className="mt-2 font-heading text-xl font-bold tracking-tight text-navy-600">
-            {application?.assignedCounsellor?.name || "Not yet assigned"}
+            {application.assignedCounsellor?.name || "Not yet assigned"}
           </p>
         </div>
 
@@ -85,10 +125,12 @@ const StudentDashboardPage = () => {
             <p className="text-xs font-semibold uppercase tracking-wider text-navy-400">
               Est. Completion
             </p>
+
             <div className="rounded-lg bg-navy-50 p-2 text-navy-400">
               <HiCalendar size={18} />
             </div>
           </div>
+
           <p className="mt-2 font-heading text-xl font-bold tracking-tight text-navy-600">
             {lastHistoryEntry?.estimatedCompletionDate
               ? new Date(
@@ -110,10 +152,12 @@ const StudentDashboardPage = () => {
             <div className="mt-0.5 rounded-lg bg-white p-2 text-coral shadow-sm">
               <HiChatAlt2 size={18} />
             </div>
+
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-coral">
                 Counsellor Remark
               </p>
+
               <p className="mt-1 text-sm font-medium leading-relaxed text-navy-600">
                 {lastHistoryEntry.counsellorRemark}
               </p>
@@ -129,10 +173,12 @@ const StudentDashboardPage = () => {
             <h2 className="font-heading text-xl font-bold tracking-tight text-navy-600">
               Application Progress
             </h2>
+
             <p className="text-xs text-navy-400">
               Track your step-by-step admission journey
             </p>
           </div>
+
           <span className="self-start rounded-full bg-coral-50 px-3 py-1 text-xs font-bold text-coral sm:self-auto">
             {progressPercent}% Completed
           </span>
@@ -148,7 +194,6 @@ const StudentDashboardPage = () => {
 
         {/* Vertical Connected Timeline */}
         <div className="relative mt-10 pl-2">
-          {/* Connector Line behind steps */}
           <div className="absolute bottom-6 left-[19px] top-6 w-[2px] bg-navy-50" />
 
           <div className="space-y-6">
@@ -161,7 +206,6 @@ const StudentDashboardPage = () => {
                   key={stage}
                   className="relative flex items-center gap-4 transition-colors duration-200"
                 >
-                  {/* Step Icon Badge */}
                   <div
                     className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${
                       isDone
@@ -172,7 +216,6 @@ const StudentDashboardPage = () => {
                     {isDone ? <HiCheckCircle size={20} /> : i + 1}
                   </div>
 
-                  {/* Step Info */}
                   <div className="flex flex-1 items-center justify-between">
                     <p
                       className={`text-sm font-semibold transition-colors duration-200 ${

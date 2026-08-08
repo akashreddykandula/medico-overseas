@@ -35,6 +35,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import StudentDashboardPage from "./pages/student/StudentDashboardPage";
 import StudentDocumentsPage from "./pages/student/StudentDocumentsPage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
+import StudentApplicationPage from "./pages/student/StudentApplicationPage";
 
 // Admin pages
 import AdminOverviewPage from "./pages/admin/AdminOverviewPage";
@@ -102,6 +103,7 @@ const App = () => {
         <Route element={<ProtectedRoute roles={["student"]} />}>
           <Route element={<StudentPortalLayout />}>
             <Route path="/portal" element={<StudentDashboardPage />} />
+            <Route path="/portal/apply" element={<StudentApplicationPage />} />
             <Route
               path="/portal/documents"
               element={<StudentDocumentsPage />}

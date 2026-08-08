@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   getMyApplication,
+  createMyApplication,
   uploadDocument,
   deleteDocument,
   getApplications,
@@ -16,6 +17,21 @@ const router = express.Router();
 router.use(protect);
 // Student self-service
 router.get("/me", authorize("student"), getMyApplication);
+// Student self-service
+router.post("/me", authorize("student"), createMyApplication);
+
+router.post(
+  "/me/documents",
+  authorize("student"),
+  uploadDocMiddleware.single("file"),
+  uploadDocument,
+);
+
+router.delete(
+  "/me/documents/:documentId",
+  authorize("student"),
+  deleteDocument,
+);
 router.post(
   "/me/documents",
   authorize("student"),

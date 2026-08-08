@@ -8,18 +8,53 @@ const {
 } = require("../services/cloudinaryService");
 
 const getMyApplication = asyncHandler(async (req, res) => {
-  let application = await Application.findOne({ student: req.user._id })
+  const application = await Application.findOne({
+    student: req.user._id,
+  })
     .populate("interestedCountry", "name slug")
     .populate("targetUniversity", "name slug")
     .populate("assignedCounsellor", "name email phone")
     .populate("documents.verifiedBy", "name")
     .populate("stageHistory.updatedBy", "name");
 
-  if (!application) {
-    application = await Application.create({ student: req.user._id });
+  res.status(200).json(
+    new ApiResponse(200, {
+      application,
+    }),
+  );
+});
+const createMyApplication = asyncHandler(async (req, res) => {
+  const existingApplication = await Application.findOne({
+    student: req.user._id,
+  });
+
+  if (existingApplication) {
+    throw new ApiError(409, "You already have an application");
   }
 
-  res.status(200).json(new ApiResponse(200, { application }));
+  const { interestedCountry, targetUniversity } = req.body;
+
+  const application = await Application.create({
+    student: req.user._id,
+    interestedCountry,
+    targetUniversity,
+    currentStage: "application_submitted",
+  });
+
+  const populatedApplication = await Application.findById(application._id)
+    .populate("interestedCountry", "name slug")
+    .populate("targetUniversity", "name slug")
+    .populate("assignedCounsellor", "name email phone");
+
+  res.status(201).json(
+    new ApiResponse(
+      201,
+      {
+        application: populatedApplication,
+      },
+      "Application started successfully",
+    ),
+  );
 });
 
 const deleteApplication = asyncHandler(async (req, res) => {
@@ -204,6 +239,7 @@ const verifyDocument = asyncHandler(async (req, res) => {
 
 module.exports = {
   getMyApplication,
+  createMyApplication,
   uploadDocument,
   deleteDocument,
   getApplications,
