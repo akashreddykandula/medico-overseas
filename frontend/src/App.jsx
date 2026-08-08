@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import Preloader from "./components/common/Preloader";
@@ -58,21 +58,28 @@ const ADMIN_ROLES = [
 
 const App = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [showPreloader, setShowPreloader] = useState(true);
+
+  const requiresAuth =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/portal");
 
   useEffect(() => {
     const initialize = async () => {
       try {
-        await dispatch(fetchMe()).unwrap();
+        if (requiresAuth) {
+          await dispatch(fetchMe()).unwrap();
+        }
       } catch (err) {
-        // ignore if not logged in
+        // User is not authenticated
       } finally {
         setShowPreloader(false);
       }
     };
 
     initialize();
-  }, [dispatch]);
+  }, [dispatch, requiresAuth]);
 
   return (
     <>

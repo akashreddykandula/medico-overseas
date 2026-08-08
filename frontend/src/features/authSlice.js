@@ -32,15 +32,17 @@ export const fetchMe = createAsyncThunk(
   "auth/fetchMe",
   async (_, { rejectWithValue }) => {
     try {
-      const { data: refreshData } = await api.post("/auth/refresh");
-
-      setAccessToken(refreshData.data.accessToken);
-
       const { data } = await api.get("/auth/me");
-
       return data.data.user;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message);
+      // 401 simply means the visitor is not logged in.
+      if (err.response?.status === 401) {
+        return rejectWithValue(null);
+      }
+
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch user",
+      );
     }
   },
 );
