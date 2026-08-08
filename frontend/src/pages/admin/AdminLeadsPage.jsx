@@ -42,6 +42,10 @@ const AdminLeadsPage = () => {
   const [selectedLead, setSelectedLead] = useState(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
+  // File Export Loading States
+  const [isExportingExcel, setIsExportingExcel] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+
   const { data, isLoading, refetch } = useLeads({
     status: status || undefined,
     search: search || undefined,
@@ -65,6 +69,58 @@ const AdminLeadsPage = () => {
     }
   };
 
+  // Export Excel File
+  const handleExportExcel = async () => {
+    setIsExportingExcel(true);
+    try {
+      const response = await api.get("/admin/export/leads/excel", {
+        responseType: "blob",
+      });
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Leads_Report_${Date.now()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      toast.success("Excel report downloaded successfully");
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || "Failed to export Excel report",
+      );
+    } finally {
+      setIsExportingExcel(false);
+    }
+  };
+
+  // Export PDF File
+  const handleExportPdf = async () => {
+    setIsExportingPdf(true);
+    try {
+      const response = await api.get("/admin/export/leads/pdf", {
+        responseType: "blob",
+      });
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Leads_Report_${Date.now()}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      toast.success("PDF report downloaded successfully");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to export PDF report");
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
   const { data: counsellors = [] } = useCounsellors();
 
   return (
@@ -81,18 +137,33 @@ const AdminLeadsPage = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <a
-            href="/api/admin/export/leads/excel"
-            className="flex items-center gap-1.5 rounded-xl border border-navy-100 bg-navy-50 px-3.5 py-2 text-xs font-semibold text-navy-600 shadow-sm transition-all hover:bg-navy-100 hover:text-navy-700"
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            disabled={isExportingExcel}
+            className="flex items-center gap-1.5 rounded-xl border border-navy-100 bg-navy-50 px-3.5 py-2 text-xs font-semibold text-navy-600 shadow-sm transition-all hover:bg-navy-100 hover:text-navy-700 disabled:opacity-50"
           >
-            <HiDownload size={16} /> Excel
-          </a>
-          <a
-            href="/api/admin/export/leads/pdf"
-            className="flex items-center gap-1.5 rounded-xl border border-navy-100 bg-navy-50 px-3.5 py-2 text-xs font-semibold text-navy-600 shadow-sm transition-all hover:bg-navy-100 hover:text-navy-700"
+            {isExportingExcel ? (
+              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-navy-600 border-t-transparent" />
+            ) : (
+              <HiDownload size={16} />
+            )}
+            <span>{isExportingExcel ? "Downloading..." : "Excel"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportPdf}
+            disabled={isExportingPdf}
+            className="flex items-center gap-1.5 rounded-xl border border-navy-100 bg-navy-50 px-3.5 py-2 text-xs font-semibold text-navy-600 shadow-sm transition-all hover:bg-navy-100 hover:text-navy-700 disabled:opacity-50"
           >
-            <HiOutlineDocumentReport size={16} /> PDF
-          </a>
+            {isExportingPdf ? (
+              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-navy-600 border-t-transparent" />
+            ) : (
+              <HiOutlineDocumentReport size={16} />
+            )}
+            <span>{isExportingPdf ? "Downloading..." : "PDF"}</span>
+          </button>
         </div>
       </div>
 
