@@ -36,7 +36,19 @@ const EnquiryForm = ({
         return;
       }
 
-      const recaptchaToken = await executeRecaptcha("enquiry");
+      // Race reCAPTCHA against a 5-second timeout to prevent infinite hanging
+      const recaptchaPromise = executeRecaptcha("enquiry");
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error("reCAPTCHA execution timed out")),
+          5000,
+        ),
+      );
+
+      const recaptchaToken = await Promise.race([
+        recaptchaPromise,
+        timeoutPromise,
+      ]);
 
       if (!recaptchaToken) {
         toast.error("Security verification failed. Please try again.");
@@ -57,11 +69,14 @@ const EnquiryForm = ({
       reset();
     } catch (err) {
       toast.error(
-        err.response?.data?.message ||
-          "Something went wrong. Please try again.",
+        err.message === "reCAPTCHA execution timed out"
+          ? "Verification timed out. Please disable ad-blockers or try again."
+          : err.response?.data?.message ||
+              "Something went wrong. Please try again.",
       );
     }
   };
+
   const inputClass = `w-full rounded-xl border px-3.5 py-2.5 text-xs outline-none transition-all duration-200 ${
     isDark
       ? "border-white/15 bg-white/10 text-white placeholder-white/50 focus:border-coral focus:ring-1 focus:ring-coral"
