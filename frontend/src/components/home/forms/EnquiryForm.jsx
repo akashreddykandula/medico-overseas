@@ -15,8 +15,9 @@ const EnquiryForm = ({
   variant = "light",
   title = "Get Free Counselling",
 }) => {
-  const { data: countries = [] } = useCountries();
   const { executeRecaptcha } = useGoogleReCaptcha();
+  const { data: countries = [] } = useCountries();
+
   const {
     register,
     handleSubmit,
