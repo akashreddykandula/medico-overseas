@@ -13,7 +13,7 @@ import {
   HiOutlineShare,
   HiOutlineFolder,
 } from "react-icons/hi";
-import EnquiryForm from "../components/forms/EnquiryForm";
+import EnquiryForm from "../components/home/forms/EnquiryForm";
 import { useBlogPost } from "../hooks/useContent";
 
 const DEFAULT_IMAGE =

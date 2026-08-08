@@ -45,6 +45,7 @@ import AdminCountriesPage from "./pages/admin/AdminCountriesPage";
 import AdminUniversitiesPage from "./pages/admin/AdminUniversitiesPage";
 import AdminBlogsPage from "./pages/admin/AdminBlogsPage";
 import AdminFaqsPage from "./pages/admin/AdminFaqsPage";
+import AdminStudentsPage from "./pages/admin/AdminStudentsPage";
 
 const ADMIN_ROLES = [
   "super_admin",
@@ -121,6 +122,7 @@ const App = () => {
               path="/admin/applications"
               element={<AdminApplicationsPage />}
             />
+            <Route path="/admin/students" element={<AdminStudentsPage />} />
             <Route path="/admin/countries" element={<AdminCountriesPage />} />
             <Route
               path="/admin/universities"

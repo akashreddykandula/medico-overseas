@@ -9,6 +9,7 @@ import {
 import "swiper/css";
 import "swiper/css/pagination";
 import { useTestimonials } from "../../hooks/useContent";
+import EnquiryForm from "./forms/EnquiryForm";
 
 const TestimonialsCarousel = () => {
   const { data, isLoading } = useTestimonials({

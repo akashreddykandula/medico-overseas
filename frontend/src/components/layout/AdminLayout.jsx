@@ -27,6 +27,11 @@ const LINKS = [
     icon: HiOutlineUserGroup,
   },
   {
+    to: "/admin/students",
+    label: "Students",
+    icon: HiOutlineUserGroup,
+  },
+  {
     to: "/admin/applications",
     label: "Applications",
     icon: HiOutlineDocumentText,

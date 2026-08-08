@@ -34,6 +34,17 @@ const getCounsellors = asyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, { counsellors }));
 });
+const getStudents = asyncHandler(async (req, res) => {
+  const students = await User.find({ role: "student" })
+    .select("-password -refreshToken")
+    .sort({ createdAt: -1 });
+
+  res.status(200).json(
+    new ApiResponse(200, {
+      students,
+    }),
+  );
+});
 const deleteCounsellor = asyncHandler(async (req, res) => {
   const assignedLeads = await Lead.countDocuments({
     assignedCounsellor: req.params.id,
@@ -64,4 +75,5 @@ module.exports = {
   createCounsellor,
   getCounsellors,
   deleteCounsellor,
+  getStudents,
 };

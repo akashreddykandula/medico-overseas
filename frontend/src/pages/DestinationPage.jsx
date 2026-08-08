@@ -22,7 +22,7 @@ import {
 } from "react-icons/hi";
 import { FaWhatsapp, FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa";
 import PageHero from "../components/common/PageHero";
-import EnquiryForm from "../components/forms/EnquiryForm";
+import EnquiryForm from "../components/home/forms/EnquiryForm";
 import { useCountry } from "../hooks/useCountries";
 import { useBlogs } from "../hooks/useContent";
 

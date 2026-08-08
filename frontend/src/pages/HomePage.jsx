@@ -13,7 +13,7 @@ import AdmissionProcess from "../components/home/AdmissionProcess";
 import ExamsTeaser from "../components/home/ExamsTeaser";
 import TestimonialsCarousel from "../components/home/TestimonialsCarousel";
 import BlogHighlights from "../components/home/BlogHighlights";
-import EnquiryForm from "../components/forms/EnquiryForm";
+import EnquiryForm from "../components/home/forms/EnquiryForm";
 
 const HomePage = () => (
   <>

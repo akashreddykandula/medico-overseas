@@ -6,8 +6,8 @@ import {
   HiOutlineShieldCheck,
   HiOutlineUserGroup,
 } from "react-icons/hi";
-import api from "../../lib/api";
-import { useCountries } from "../../hooks/useCountries";
+import api from "../../../lib/api";
+import { useCountries } from "../../../hooks/useCountries";
 
 const EnquiryForm = ({
   source = "other",

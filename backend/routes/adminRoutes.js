@@ -6,6 +6,7 @@ const {
   createCounsellor,
   getCounsellors,
   deleteCounsellor,
+  getStudents,
 } = require("../controllers/adminController");
 const {
   exportLeadsExcel,
@@ -20,6 +21,7 @@ router.use(protect, authorize("super_admin", "admin", "marketing_manager"));
 router.get("/analytics", getDashboardStats);
 router.post("/counsellors", authorize("super_admin"), createCounsellor);
 router.get("/counsellors", authorize("super_admin", "admin"), getCounsellors);
+router.get("/students", authorize("super_admin", "admin"), getStudents);
 router.get("/export/leads/excel", exportLeadsExcel);
 router.get("/export/leads/pdf", exportLeadsPdf);
 router.delete("/counsellors/:id", authorize("super_admin"), deleteCounsellor);
