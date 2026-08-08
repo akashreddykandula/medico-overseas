@@ -3,7 +3,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
 const { verifyRecaptcha } = require("../services/recaptchaService");
-const { sendEmail } = require("../services/emailService");
+// const { sendEmail } = require("../services/emailService");
 const User = require("../models/User");
 // @desc    Public lead capture (enquiry form used site-wide)
 // @route   POST /api/leads
@@ -39,24 +39,24 @@ const createLead = asyncHandler(async (req, res) => {
   });
 
   // Notify the team — failure to email should not fail the lead capture itself
-  try {
-    await sendEmail({
-      to: process.env.LEAD_NOTIFY_EMAIL,
-      subject: `New enquiry: ${name}`,
-      html: `
-        <h3>New website enquiry</h3>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Phone:</b> ${phone}</p>
-        <p><b>Email:</b> ${email || "—"}</p>
-        <p><b>City:</b> ${city || "—"}</p>
-        <p><b>NEET Score:</b> ${neetScore || "—"}</p>
-        <p><b>Message:</b> ${message || "—"}</p>
-        <p><b>Source:</b> ${source} (${sourcePageUrl || "n/a"})</p>
-      `,
-    });
-  } catch (err) {
-    console.error("Lead notification email failed:", err.message);
-  }
+  // try {
+  //   await sendEmail({
+  //     to: process.env.LEAD_NOTIFY_EMAIL,
+  //     subject: `New enquiry: ${name}`,
+  //     html: `
+  //       <h3>New website enquiry</h3>
+  //       <p><b>Name:</b> ${name}</p>
+  //       <p><b>Phone:</b> ${phone}</p>
+  //       <p><b>Email:</b> ${email || "—"}</p>
+  //       <p><b>City:</b> ${city || "—"}</p>
+  //       <p><b>NEET Score:</b> ${neetScore || "—"}</p>
+  //       <p><b>Message:</b> ${message || "—"}</p>
+  //       <p><b>Source:</b> ${source} (${sourcePageUrl || "n/a"})</p>
+  //     `,
+  //   });
+  // } catch (err) {
+  //   console.error("Lead notification email failed:", err.message);
+  // }
 
   res
     .status(201)
