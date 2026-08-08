@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -7,17 +7,24 @@ import useLenis from "../../hooks/useLenis";
 
 const PublicLayout = () => {
   useLenis();
+
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   const isDestinationPage = location.pathname.startsWith("/destinations/");
 
   return (
     <div className="flex min-h-screen w-full flex-col overflow-x-hidden">
-      <Navbar />
+      <Navbar onMobileMenuChange={setMobileOpen} />
+
       <main className="flex-1 w-full overflow-x-hidden">
         <Outlet />
       </main>
+
       <Footer />
-      {!isDestinationPage && <WhatsAppButton />}
+
+      {/* Hide WhatsApp on destination pages AND when mobile menu is open */}
+      {!isDestinationPage && !mobileOpen && <WhatsAppButton />}
     </div>
   );
 };

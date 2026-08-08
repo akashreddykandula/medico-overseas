@@ -271,7 +271,7 @@ const NAV_LINKS = [
 ];
 
 // --- MAIN NAVBAR COMPONENT ---
-const Navbar = () => {
+const Navbar = ({ onMobileMenuChange }) => {
   const [loading, setLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -523,7 +523,10 @@ const Navbar = () => {
           {/* Mobile Menu Toggle Button */}
           <button
             className="rounded-xl p-2 text-navy-700 hover:bg-slate-100 lg:hidden"
-            onClick={() => setMobileOpen(true)}
+            onClick={() => {
+              setMobileOpen(true);
+              onMobileMenuChange?.(true);
+            }}
             aria-label="Open menu"
           >
             <HiMenu size={24} />
@@ -547,7 +550,10 @@ const Navbar = () => {
                   className="h-10 w-auto object-contain"
                 />
                 <button
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() => {
+                    setMobileOpen(false);
+                    onMobileMenuChange?.(false);
+                  }}
                   className="rounded-xl p-2 text-navy-700 hover:bg-slate-100"
                   aria-label="Close menu"
                 >
