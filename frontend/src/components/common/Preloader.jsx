@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Preloader = ({ show }) => {
-  // Brand Colors matching image precisely
-  const ORANGE = "#D94A28";
-  const NAVY = "#0F2540";
+  // Brand Colors matching the logo image precisely
+  const ORANGE = "#C8401A";
+  const NAVY = "#0B2240";
 
-  // Stagger delays for slow letter-by-letter sequence
+  // Stagger delays for sequential animation
   const medicoContainer = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.3,
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
       },
     },
   };
@@ -23,19 +23,19 @@ const Preloader = ({ show }) => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
-        delayChildren: 1.2,
+        staggerChildren: 0.1,
+        delayChildren: 1.0,
       },
     },
   };
 
   const letterVariants = {
-    hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+    hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
     visible: {
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
-      transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
@@ -49,19 +49,11 @@ const Preloader = ({ show }) => {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#F9FBFD] selection:bg-none"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white selection:bg-none"
         >
-          {/* Subtle Ambient Background Glow */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 0.18, scale: 1 }}
-            transition={{ duration: 2.2, ease: "easeOut" }}
-            className="absolute h-[28rem] w-[28rem] rounded-full bg-[#D94A28] blur-3xl pointer-events-none"
-          />
-
           {/* Logo Content Container */}
-          <div className="relative z-10 flex flex-col items-center sm:flex-row sm:items-center sm:space-x-3">
+          <div className="relative z-10 flex flex-col items-center sm:flex-row sm:items-center sm:space-x-4">
             {/* Left Column: Animated Text */}
             <div className="flex flex-col items-start font-sans font-bold tracking-tight">
               {/* "Medico" */}
@@ -69,7 +61,7 @@ const Preloader = ({ show }) => {
                 variants={medicoContainer}
                 initial="hidden"
                 animate="visible"
-                className="flex text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight"
+                className="flex text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight"
                 style={{ color: ORANGE }}
               >
                 {medicoText.map((char, index) => (
@@ -83,12 +75,12 @@ const Preloader = ({ show }) => {
               </motion.div>
 
               {/* "Overseas" with Integrated Stethoscope 'V' */}
-              <div className="relative mt-[-6px] flex items-baseline">
+              <div className="relative mt-[-4px] flex items-baseline">
                 <motion.div
                   variants={overseasContainer}
                   initial="hidden"
                   animate="visible"
-                  className="flex text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight"
+                  className="flex text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight"
                   style={{ color: NAVY }}
                 >
                   {/* Letter "O" */}
@@ -107,12 +99,13 @@ const Preloader = ({ show }) => {
                     className="relative inline-block mx-[1px]"
                   >
                     <svg
-                      className="w-[1.1em] h-[1.3em] overflow-visible inline-block align-baseline"
+                      className="w-[1.15em] h-[1.35em] overflow-visible inline-block align-baseline"
                       viewBox="0 0 100 120"
                       fill="none"
                     >
+                      {/* Stethoscope Tubing & Binaural Curve */}
                       <motion.path
-                        d="M 15 20 Q 30 50 50 65 Q 70 50 85 20"
+                        d="M 15 25 Q 30 55 50 68 Q 70 55 85 25"
                         stroke={NAVY}
                         strokeWidth="11"
                         strokeLinecap="round"
@@ -120,41 +113,43 @@ const Preloader = ({ show }) => {
                         initial={{ pathLength: 0 }}
                         animate={{ pathLength: 1 }}
                         transition={{
-                          duration: 1.2,
-                          delay: 1.8,
+                          duration: 1.0,
+                          delay: 1.5,
                           ease: "easeInOut",
                         }}
                       />
+                      {/* Stethoscope Tail Extension */}
                       <motion.path
-                        d="M 50 65 C 50 90, 70 110, 110 110 C 150 110, 180 95, 210 105"
+                        d="M 50 68 C 50 92, 70 112, 110 112 C 150 112, 180 98, 210 108"
                         stroke={NAVY}
                         strokeWidth="10"
                         strokeLinecap="round"
                         initial={{ pathLength: 0 }}
                         animate={{ pathLength: 1 }}
                         transition={{
-                          duration: 1.8,
-                          delay: 2.6,
+                          duration: 1.5,
+                          delay: 2.2,
                           ease: "easeInOut",
                         }}
                       />
+                      {/* Chest Piece / Diaphragm */}
                       <motion.circle
                         cx="212"
-                        cy="105"
-                        r="10"
+                        cy="108"
+                        r="9"
                         fill={NAVY}
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ delay: 4.2, duration: 0.4 }}
+                        transition={{ delay: 3.6, duration: 0.3 }}
                       />
                       <motion.circle
                         cx="212"
-                        cy="105"
-                        r="5"
-                        fill="#F9FBFD"
+                        cy="108"
+                        r="4"
+                        fill="#FFFFFF"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ delay: 4.3, duration: 0.3 }}
+                        transition={{ delay: 3.7, duration: 0.2 }}
                       />
                     </svg>
                   </motion.div>
@@ -172,13 +167,13 @@ const Preloader = ({ show }) => {
               </div>
             </div>
 
-            {/* Right Column: Graduation Cap, Globe & Corrected Plane Emblem */}
+            {/* Right Column: Graduation Cap, Globe & Flight Emblem */}
             <motion.div
-              initial={{ scale: 0.7, opacity: 0, rotate: -4 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               transition={{
-                duration: 1.6,
-                delay: 0.5,
+                duration: 1.2,
+                delay: 0.4,
                 ease: [0.16, 1, 0.3, 1],
               }}
               className="mt-6 sm:mt-0 sm:ml-2"
@@ -187,20 +182,20 @@ const Preloader = ({ show }) => {
                 viewBox="0 0 160 160"
                 className="h-32 w-32 sm:h-40 sm:w-40 lg:h-44 lg:w-44"
               >
-                {/* Globe Circle Background */}
+                {/* Globe Circle Outer Ring */}
                 <motion.circle
                   cx="80"
                   cy="95"
                   r="36"
                   stroke={ORANGE}
-                  strokeWidth="6"
+                  strokeWidth="5.5"
                   fill="none"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.8, delay: 0.8 }}
+                  transition={{ duration: 1.5, delay: 0.6 }}
                 />
 
-                {/* Stars pattern on globe */}
+                {/* Star Pattern inside Globe */}
                 <motion.path
                   d="M 62 82 L 63 85 L 66 85 L 64 87 L 65 90 L 62 88 L 59 90 L 60 87 L 58 85 L 61 85 Z
                      M 78 75 L 79 78 L 82 78 L 80 80 L 81 83 L 78 81 L 75 83 L 76 80 L 74 78 L 77 78 Z
@@ -208,24 +203,26 @@ const Preloader = ({ show }) => {
                   fill={NAVY}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.7 }}
-                  transition={{ delay: 2.0, duration: 1.0 }}
+                  transition={{ delay: 1.8, duration: 0.8 }}
                 />
 
-                {/* Graduation Cap */}
+                {/* Graduation Cap Top */}
                 <motion.path
                   d="M 80 20 L 140 46 L 80 72 L 20 46 Z"
                   fill={NAVY}
-                  initial={{ y: -16, opacity: 0 }}
+                  initial={{ y: -12, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 1.1, delay: 1.0, ease: "easeOut" }}
+                  transition={{ duration: 0.9, delay: 0.8, ease: "easeOut" }}
                 />
+                {/* Graduation Cap Base */}
                 <motion.path
                   d="M 40 55 V 78 C 40 88, 55 98, 80 98 C 105 98, 120 88, 120 78 V 55"
                   fill={NAVY}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 1.5, duration: 0.8 }}
+                  transition={{ delay: 1.2, duration: 0.6 }}
                 />
+                {/* Tassel */}
                 <motion.path
                   d="M 38 48 V 75 M 36 75 H 40"
                   stroke={ORANGE}
@@ -233,10 +230,10 @@ const Preloader = ({ show }) => {
                   strokeLinecap="round"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ delay: 1.8, duration: 0.8 }}
+                  transition={{ delay: 1.5, duration: 0.6 }}
                 />
 
-                {/* Flight Orbit Arc */}
+                {/* Orbit Trail */}
                 <motion.path
                   d="M 35 125 C 50 145, 110 135, 132 80"
                   stroke={ORANGE}
@@ -245,40 +242,26 @@ const Preloader = ({ show }) => {
                   fill="none"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 2.0, delay: 2.2, ease: "easeInOut" }}
+                  transition={{ duration: 1.8, delay: 1.8, ease: "easeInOut" }}
                 />
 
-                {/* --- CORRECTED AIRPLANE ICON SECTION --- */}
-                {/* Rebuilt geometry: Rear three-quarter view, climbing up-right */}
+                {/* Airplane Icon */}
                 <motion.g
-                  initial={{ scale: 0, x: -15, y: 15 }}
+                  initial={{ scale: 0, x: -10, y: 10 }}
                   animate={{ scale: 1, x: 0, y: 0 }}
-                  transition={{ delay: 4.0, duration: 0.6, ease: "backOut" }}
+                  transition={{ delay: 3.2, duration: 0.5, ease: "backOut" }}
                 >
-                  {/* Fuselage & Vertical Stabilizer (Climbing Profile) */}
                   <path
-                    d="M 124 81 L 138 78 C 145 76 150 78 150 78 L 134 85 L 124 81 Z
-                       M 124 81 L 126 71 L 131 77 L 124 81 Z"
-                    fill={ORANGE}
-                  />
-                  {/* Port (Left) Wing - Main Lift Surface, Rear View */}
-                  <path
-                    d="M 132 82 L 140 80 L 128 88 C 124 90 120 87 120 87 L 132 82 Z"
-                    fill={ORANGE}
-                  />
-                  {/* Starboard (Right) Wing - Partially Hidden, Rear View */}
-                  <path
-                    d="M 138 78 L 144 76 L 148 78 L 143 81 Z"
+                    d="M 148 72 L 138 78 L 134 74 L 132 76 L 136 81 L 128 86 L 124 84 L 122 86 L 127 89 L 123 93 L 126 94 L 132 89 L 142 83 L 150 78 C 152 76, 151 73, 148 72 Z"
                     fill={ORANGE}
                   />
                 </motion.g>
-                {/* ------------------------------------------ */}
               </svg>
             </motion.div>
           </div>
 
-          {/* Luxury Bottom Progress Bar */}
-          <div className="absolute bottom-12 h-[3px] w-40 overflow-hidden rounded-full bg-slate-200">
+          {/* Minimalist Bottom Progress Bar */}
+          <div className="absolute bottom-10 h-[3px] w-36 overflow-hidden rounded-full bg-slate-100">
             <motion.div
               className="h-full w-full rounded-full"
               style={{ backgroundColor: ORANGE }}
@@ -286,7 +269,7 @@ const Preloader = ({ show }) => {
               animate={{ x: "100%" }}
               transition={{
                 repeat: Infinity,
-                duration: 2.6,
+                duration: 2.2,
                 ease: "easeInOut",
               }}
             />
@@ -296,4 +279,5 @@ const Preloader = ({ show }) => {
     </AnimatePresence>
   );
 };
+
 export default Preloader;
