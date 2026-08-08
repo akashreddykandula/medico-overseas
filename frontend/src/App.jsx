@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import Preloader from "./components/common/Preloader";
+import ScrollToTop from "./components/common/ScrollToTop";
 import PublicLayout from "./components/layout/PublicLayout";
 import StudentPortalLayout from "./components/layout/StudentPortalLayout";
 import AdminLayout from "./components/layout/AdminLayout";
@@ -76,6 +77,7 @@ const App = () => {
   return (
     <>
       <Preloader show={showPreloader} />
+      <ScrollToTop />
 
       <Routes>
         {/* Public site */}
