@@ -10,27 +10,34 @@ import { store } from "./app/store";
 import { queryClient } from "./lib/queryClient";
 import App from "./App";
 import "./styles/index.css";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <HelmetProvider>
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
-          <App />
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              style: { borderRadius: "9999px", padding: "12px 20px" },
-              success: { iconTheme: { primary: "#E15B3F", secondary: "#fff" } },
+  <GoogleReCaptchaProvider
+    reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+  >
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <HelmetProvider>
+          <BrowserRouter
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true,
             }}
-          />
-        </BrowserRouter>
-      </HelmetProvider>
-    </QueryClientProvider>
-  </Provider>,
+          >
+            <App />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style: { borderRadius: "9999px", padding: "12px 20px" },
+                success: {
+                  iconTheme: { primary: "#E15B3F", secondary: "#fff" },
+                },
+              }}
+            />
+          </BrowserRouter>
+        </HelmetProvider>
+      </QueryClientProvider>
+    </Provider>
+  </GoogleReCaptchaProvider>,
 );

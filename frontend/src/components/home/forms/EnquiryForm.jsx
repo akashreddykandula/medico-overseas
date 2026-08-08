@@ -1,4 +1,5 @@
 import React from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -15,6 +16,7 @@ const EnquiryForm = ({
   title = "Get Free Counselling",
 }) => {
   const { data: countries = [] } = useCountries();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const {
     register,
     handleSubmit,
@@ -26,14 +28,31 @@ const EnquiryForm = ({
 
   const onSubmit = async (formData) => {
     try {
+      if (!executeRecaptcha) {
+        toast.error(
+          "Security verification is still loading. Please try again.",
+        );
+        return;
+      }
+
+      const recaptchaToken = await executeRecaptcha("enquiry");
+
+      if (!recaptchaToken) {
+        toast.error("Security verification failed. Please try again.");
+        return;
+      }
+
       await api.post("/leads", {
         ...formData,
         source,
         sourcePageUrl: window.location.pathname,
+        recaptchaToken,
       });
+
       toast.success(
         "Thank you! Our senior counsellor will contact you shortly.",
       );
+
       reset();
     } catch (err) {
       toast.error(
@@ -42,7 +61,6 @@ const EnquiryForm = ({
       );
     }
   };
-
   const inputClass = `w-full rounded-xl border px-3.5 py-2.5 text-xs outline-none transition-all duration-200 ${
     isDark
       ? "border-white/15 bg-white/10 text-white placeholder-white/50 focus:border-coral focus:ring-1 focus:ring-coral"
