@@ -155,6 +155,7 @@ const getApplications = asyncHandler(async (req, res) => {
       .populate("student", "name email phone")
       .populate("interestedCountry", "name")
       .populate("targetUniversity", "name")
+      .populate("assignedCounsellor", "name email phone")
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(Number(limit)),
@@ -205,15 +206,36 @@ const updateStage = asyncHandler(async (req, res) => {
 // @access  Private (admin)
 const assignCounsellor = asyncHandler(async (req, res) => {
   const { counsellorId } = req.body;
-  const application = await Application.findByIdAndUpdate(
-    req.params.id,
-    { assignedCounsellor: counsellorId },
-    { new: true },
-  );
-  if (!application) throw new ApiError(404, "Application not found");
+
+  if (!counsellorId) {
+    throw new ApiError(400, "Counsellor ID is required");
+  }
+
+  const application = await Application.findById(req.params.id);
+
+  if (!application) {
+    throw new ApiError(404, "Application not found");
+  }
+
+  application.assignedCounsellor = counsellorId;
+
+  await application.save();
+
+  const populatedApplication = await Application.findById(application._id)
+    .populate("student", "name email phone")
+    .populate("interestedCountry", "name slug")
+    .populate("targetUniversity", "name slug")
+    .populate("assignedCounsellor", "name email phone");
+
   res
     .status(200)
-    .json(new ApiResponse(200, { application }, "Counsellor assigned"));
+    .json(
+      new ApiResponse(
+        200,
+        { application: populatedApplication },
+        "Counsellor assigned successfully",
+      ),
+    );
 });
 
 // @desc    Verify or reject an uploaded document

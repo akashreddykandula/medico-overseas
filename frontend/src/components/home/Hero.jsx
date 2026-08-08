@@ -131,13 +131,13 @@ const Hero = () => {
               className="btn-primary group flex items-center justify-center gap-2"
             >
               Get Free Counselling{" "}
-              <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+              <HiPhone className="transition-transform duration-300 group-hover:translate-x-1" />
             </a>
             <Link
-              to="/destinations/mbbs-in-armenia"
+              to="/portal/apply"
               className="btn-outline flex items-center justify-center gap-2 !border-white/30 !text-white hover:!bg-white hover:!text-navy"
             >
-              <HiPhone className="text-coral" /> Explore Universities
+              <HiArrowRight className="text-coral" /> Apply Now
             </Link>
           </div>
 

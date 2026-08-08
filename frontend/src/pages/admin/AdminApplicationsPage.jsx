@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useCounsellors } from "../../hooks/useCounsellors";
 import toast from "react-hot-toast";
 import {
   HiOutlineEye,
@@ -9,6 +10,13 @@ import {
   HiOutlineUser,
   HiOutlineAcademicCap,
   HiOutlineGlobe,
+  HiOutlineDocumentText,
+  HiOutlineExternalLink,
+  HiOutlineXCircle,
+  HiOutlineArrowLeft,
+  HiOutlinePhone,
+  HiOutlineMail,
+  HiOutlineUserAdd,
 } from "react-icons/hi";
 import {
   useAdminApplications,
@@ -36,10 +44,15 @@ const label = (s) =>
 
 const AdminApplicationsPage = () => {
   const [stageFilter, setStageFilter] = useState("");
-  const [selectedApp, setSelectedApp] = useState(null); // For viewing app details modal
+  const { data: counsellors = [] } = useCounsellors();
+  const [selectedApp, setSelectedApp] = useState(null); // Full-page selected application
   const [stageUpdateModal, setStageUpdateModal] = useState(null); // For custom stage update modal
   const [counsellorRemark, setCounsellorRemark] = useState("");
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [documentAction, setDocumentAction] = useState(null);
+  const [rejectionReason, setRejectionReason] = useState("");
+
+  const [isAssigning, setIsAssigning] = useState(false);
 
   const { data, isLoading, refetch } = useAdminApplications({
     stage: stageFilter || undefined,
@@ -47,6 +60,52 @@ const AdminApplicationsPage = () => {
   const updateStage = useUpdateApplicationStage();
 
   const applications = data?.applications || [];
+
+  // Fetch Counsellors List for Assignment
+  // useEffect(() => {
+  //   const fetchCounsellors = async () => {
+  //     try {
+  //       const res = await api.get("/users?role=counsellor");
+  //       setCounsellors(
+  //         res.data?.data?.users || res.data?.users || res.data || [],
+  //       );
+  //     } catch (err) {
+  //       // Fallback endpoint if specific counsellor route exists
+  //       try {
+  //         const res = await api.get("/counsellors");
+  //         setCounsellors(
+  //           res.data?.data?.counsellors ||
+  //             res.data?.counsellors ||
+  //             res.data ||
+  //             [],
+  //         );
+  //       } catch (error) {
+  //         console.error("Failed to load counsellors", error);
+  //       }
+  //     }
+  //   };
+  //   fetchCounsellors();
+  // }, []);
+
+  // Handle Assigning Counsellor to Application
+  const handleAssignCounsellor = async (applicationId, counsellorId) => {
+    if (!counsellorId) return;
+    setIsAssigning(true);
+    try {
+      await api.patch(`/applications/${applicationId}/assign`, {
+        counsellorId,
+      });
+      toast.success("Counsellor assigned successfully");
+      refetch();
+      if (selectedApp?._id === applicationId) {
+        refreshSelectedApp(applicationId);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to assign counsellor");
+    } finally {
+      setIsAssigning(false);
+    }
+  };
 
   // Initiate stage change modal
   const openStageModal = (appId, newStage) => {
@@ -69,6 +128,10 @@ const AdminApplicationsPage = () => {
           toast.success("Application stage updated");
           setStageUpdateModal(null);
           setCounsellorRemark("");
+
+          if (selectedApp?._id === stageUpdateModal.appId) {
+            refreshSelectedApp(selectedApp._id);
+          }
         },
         onError: (err) =>
           toast.error(err.response?.data?.message || "Failed to update stage"),
@@ -91,8 +154,589 @@ const AdminApplicationsPage = () => {
     }
   };
 
+  // Refresh single application details
+  const refreshSelectedApp = async (applicationId) => {
+    try {
+      const { data } = await api.get("/applications");
+      const updatedApp = data?.data?.applications?.find(
+        (app) => app._id === applicationId,
+      );
+      if (updatedApp) {
+        setSelectedApp(updatedApp);
+      }
+    } catch (err) {
+      console.error("Failed to refresh application details", err);
+    }
+  };
+
+  // Document Verification handler
+  const handleDocumentVerification = async (
+    applicationId,
+    documentId,
+    verified,
+  ) => {
+    if (!verified && !rejectionReason.trim()) {
+      toast.error("Please enter a rejection reason");
+      return;
+    }
+
+    try {
+      await api.patch(
+        `/applications/${applicationId}/documents/${documentId}/verify`,
+        {
+          verified,
+          rejectionReason: verified ? undefined : rejectionReason,
+        },
+      );
+
+      toast.success(
+        verified ? "Document verified successfully" : "Document rejected",
+      );
+
+      setDocumentAction(null);
+      setRejectionReason("");
+
+      refetch();
+      refreshSelectedApp(applicationId);
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || "Failed to update document status",
+      );
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // FULL PAGE DETAILS VIEW
+  // ---------------------------------------------------------------------------
+  if (selectedApp) {
+    return (
+      <div className="space-y-6 font-sans">
+        {/* Back Navigation Header */}
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-navy-100 pb-4">
+          <button
+            onClick={() => setSelectedApp(null)}
+            className="inline-flex items-center gap-2 rounded-xl border border-navy-100 bg-white px-4 py-2 text-xs font-bold text-navy-600 shadow-sm transition-all hover:bg-navy-50 hover:text-navy-800"
+          >
+            <HiOutlineArrowLeft size={16} /> Back to Applications List
+          </button>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-navy-400">Current Stage:</span>
+            <span className="inline-block rounded-full bg-coral-50 px-3 py-1 text-xs font-bold text-coral">
+              {label(selectedApp.currentStage)}
+            </span>
+            <button
+              onClick={() => setDeleteConfirmId(selectedApp._id)}
+              className="ml-2 inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100"
+            >
+              <HiOutlineTrash size={15} /> Delete Application
+            </button>
+          </div>
+        </div>
+
+        {/* Page Title Card */}
+        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="font-heading text-xl font-bold text-navy-600 sm:text-2xl">
+                {selectedApp.student?.name || "Student Application"}
+              </h2>
+              <p className="mt-0.5 text-xs text-navy-400">
+                Application Reference ID: {selectedApp._id}
+              </p>
+            </div>
+
+            <div className="mt-2 md:mt-0">
+              <label className="text-xs font-semibold text-navy-500 block mb-1">
+                Advance Application Stage
+              </label>
+              <select
+                defaultValue=""
+                onChange={(e) => {
+                  if (e.target.value) {
+                    openStageModal(selectedApp._id, e.target.value);
+                    e.target.value = "";
+                  }
+                }}
+                className="rounded-xl border border-navy-100 bg-white px-3 py-2 text-xs font-semibold text-navy-600 shadow-sm focus:border-coral focus:outline-none"
+              >
+                <option value="" disabled>
+                  Change Stage...
+                </option>
+                {STAGES.map((s) => (
+                  <option key={s} value={s}>
+                    {label(s)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Info Grid (Student, Target, Counsellor) */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {/* Student Info Card */}
+          <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-xl bg-coral/10 p-2.5 text-coral">
+                <HiOutlineUser size={22} />
+              </div>
+              <div>
+                <h3 className="font-heading text-base font-bold text-navy-600">
+                  Student Information
+                </h3>
+                <p className="text-[11px] text-navy-400">Applicant Details</p>
+              </div>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <span className="text-navy-400">Full Name</span>
+                <p className="font-semibold text-navy-600">
+                  {selectedApp.student?.name || "N/A"}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-navy-600">
+                <HiOutlineMail className="text-navy-400" size={15} />
+                <span className="truncate">
+                  {selectedApp.student?.email || "—"}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-navy-600">
+                <HiOutlinePhone className="text-navy-400" size={15} />
+                <span>{selectedApp.student?.phone || "Not Provided"}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Destination & University Card */}
+          <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-xl bg-coral/10 p-2.5 text-coral">
+                <HiOutlineGlobe size={22} />
+              </div>
+              <div>
+                <h3 className="font-heading text-base font-bold text-navy-600">
+                  Target Destination
+                </h3>
+                <p className="text-[11px] text-navy-400">
+                  University & Country
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <span className="text-navy-400">Country Preference</span>
+                <p className="font-semibold text-navy-600">
+                  {selectedApp.interestedCountry?.name || "Not Specified"}
+                </p>
+              </div>
+              <div>
+                <span className="text-navy-400">Target University</span>
+                <p className="font-semibold text-navy-600">
+                  {selectedApp.targetUniversity?.name || "Not Specified"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Counsellor Info & Assignment Card */}
+          <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="rounded-xl bg-coral/10 p-2.5 text-coral">
+                  <HiOutlineAcademicCap size={22} />
+                </div>
+                <div>
+                  <h3 className="font-heading text-base font-bold text-navy-600">
+                    Assigned Counsellor
+                  </h3>
+                  <p className="text-[11px] text-navy-400">CRM Assignment</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <span className="text-navy-400">Current Counsellor</span>
+                <p className="font-semibold text-navy-600">
+                  {selectedApp.assignedCounsellor?.name || "Unassigned"}
+                </p>
+              </div>
+
+              {/* Assign / Change Counsellor Selector */}
+              <div className="pt-2">
+                <label className="text-[11px] font-semibold text-navy-500 block mb-1">
+                  Assign / Change Counsellor
+                </label>
+                <div className="flex items-center gap-2">
+                  <select
+                    value={selectedApp.assignedCounsellor?._id || ""}
+                    onChange={(e) =>
+                      handleAssignCounsellor(selectedApp._id, e.target.value)
+                    }
+                    disabled={isAssigning}
+                    className="w-full rounded-xl border border-navy-100 bg-navy-50/50 px-3 py-2 text-xs font-semibold text-navy-600 focus:border-coral focus:outline-none disabled:opacity-50"
+                  >
+                    <option value="" disabled>
+                      Select Counsellor...
+                    </option>
+                    {counsellors.map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.name} ({c.email})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content Grid: Stage Timeline & Documents */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          {/* Documents Section */}
+          <div className="lg:col-span-7 space-y-4">
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+              <div className="flex items-center justify-between border-b border-navy-50 pb-4">
+                <div>
+                  <h3 className="font-heading text-base font-bold text-navy-600">
+                    Submitted Documents
+                  </h3>
+                  <p className="text-xs text-navy-400">
+                    Review and verify student uploaded paperwork
+                  </p>
+                </div>
+                <span className="rounded-full bg-navy-50 px-3 py-1 text-xs font-bold text-navy-600">
+                  {selectedApp.documents?.length || 0} Files
+                </span>
+              </div>
+
+              <div className="mt-5 space-y-4">
+                {!selectedApp.documents?.length ? (
+                  <div className="rounded-2xl border border-dashed border-navy-100 bg-slate-50/50 p-8 text-center">
+                    <HiOutlineDocumentText
+                      size={32}
+                      className="mx-auto text-navy-300"
+                    />
+                    <p className="mt-2 text-sm font-semibold text-navy-600">
+                      No documents uploaded
+                    </p>
+                    <p className="mt-1 text-xs text-navy-400">
+                      The student has not submitted any documents yet.
+                    </p>
+                  </div>
+                ) : (
+                  selectedApp.documents.map((doc) => (
+                    <div
+                      key={doc._id}
+                      className="rounded-2xl border border-navy-100/80 bg-white p-4 shadow-sm transition-all hover:border-navy-200"
+                    >
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-start gap-3 min-w-0">
+                          <div className="rounded-xl bg-coral-50 p-2.5 text-coral shrink-0">
+                            <HiOutlineDocumentText size={20} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-bold text-navy-600">
+                              {label(doc.type)}
+                            </p>
+                            <p className="truncate text-xs text-navy-400 mt-0.5">
+                              {doc.fileName || "Document File"}
+                            </p>
+                            <p className="text-[10px] text-navy-300 mt-1">
+                              Uploaded:{" "}
+                              {doc.uploadedAt
+                                ? new Date(doc.uploadedAt).toLocaleString()
+                                : "—"}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="shrink-0">
+                          {doc.verified ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600 border border-emerald-200/60">
+                              <HiOutlineCheckCircle size={15} />
+                              Verified
+                            </span>
+                          ) : doc.rejectionReason ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-600 border border-red-200/60">
+                              <HiOutlineXCircle size={15} />
+                              Rejected
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-600 border border-amber-200/60">
+                              Pending Review
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {doc.rejectionReason && (
+                        <div className="mt-3 rounded-xl bg-red-50/80 p-3 text-xs text-red-700 border border-red-100">
+                          <span className="font-bold uppercase tracking-wider text-[10px] text-red-500 block mb-0.5">
+                            Rejection Reason
+                          </span>
+                          {doc.rejectionReason}
+                        </div>
+                      )}
+
+                      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-navy-50 pt-3">
+                        <a
+                          href={doc.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 rounded-xl border border-navy-100 bg-white px-3.5 py-1.5 text-xs font-semibold text-navy-600 transition-colors hover:bg-navy-50"
+                        >
+                          <HiOutlineExternalLink size={15} /> View File
+                        </a>
+
+                        {!doc.verified && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleDocumentVerification(
+                                  selectedApp._id,
+                                  doc._id,
+                                  true,
+                                )
+                              }
+                              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+                            >
+                              <HiOutlineCheckCircle size={15} /> Verify
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setDocumentAction({
+                                  applicationId: selectedApp._id,
+                                  documentId: doc._id,
+                                });
+                                setRejectionReason("");
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-xl bg-red-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+                            >
+                              <HiOutlineXCircle size={15} /> Reject
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Timeline Section */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+              <h3 className="font-heading text-base font-bold text-navy-600">
+                Stage Timeline History
+              </h3>
+              <p className="text-xs text-navy-400 mt-0.5">
+                Audit log of application progress updates
+              </p>
+
+              <div className="mt-5 space-y-3">
+                {selectedApp.stageHistory &&
+                selectedApp.stageHistory.length > 0 ? (
+                  selectedApp.stageHistory.map((history, idx) => (
+                    <div
+                      key={idx}
+                      className="relative flex items-start gap-3 rounded-xl border border-navy-50 bg-slate-50/50 p-3.5 text-xs"
+                    >
+                      <HiOutlineCheckCircle
+                        size={18}
+                        className="mt-0.5 text-coral shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="font-bold text-navy-600 truncate">
+                            {label(history.stage)}
+                          </p>
+                          <span className="text-[10px] text-navy-400 shrink-0">
+                            {history.updatedAt
+                              ? new Date(history.updatedAt).toLocaleDateString()
+                              : ""}
+                          </span>
+                        </div>
+                        {history.counsellorRemark && (
+                          <p className="mt-1 text-slate-600 italic">
+                            "{history.counsellorRemark}"
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-navy-400 py-4 text-center">
+                    Current Stage:{" "}
+                    <span className="font-bold text-navy-600">
+                      {label(selectedApp.currentStage)}
+                    </span>
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* DOCUMENT REJECTION MODAL */}
+        {documentAction && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-navy-900/40 p-4 backdrop-blur-sm">
+            <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-heading text-base font-bold text-navy-600">
+                    Reject Document
+                  </h3>
+                  <p className="mt-1 text-xs text-navy-400">
+                    Enter a reason so the student knows what needs to be
+                    corrected.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDocumentAction(null);
+                    setRejectionReason("");
+                  }}
+                  className="rounded-lg p-1 text-navy-400 hover:bg-navy-50"
+                >
+                  <HiOutlineX size={20} />
+                </button>
+              </div>
+
+              <div className="mt-5">
+                <label className="text-xs font-semibold text-navy-600">
+                  Rejection Reason
+                </label>
+                <textarea
+                  rows={4}
+                  value={rejectionReason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
+                  placeholder="Example: Passport image is blurry. Please upload a clear copy."
+                  className="mt-2 w-full rounded-xl border border-navy-100 p-3 text-xs text-navy-600 focus:border-coral focus:outline-none"
+                />
+              </div>
+
+              <div className="mt-5 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDocumentAction(null);
+                    setRejectionReason("");
+                  }}
+                  className="rounded-xl border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleDocumentVerification(
+                      documentAction.applicationId,
+                      documentAction.documentId,
+                      false,
+                    )
+                  }
+                  className="rounded-xl bg-red-500 px-4 py-2 text-xs font-semibold text-white hover:opacity-90"
+                >
+                  Reject Document
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* UPDATE STAGE MODAL */}
+        {stageUpdateModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/40 p-4 backdrop-blur-sm">
+            <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+              <h3 className="font-heading text-base font-bold text-navy-600">
+                Update Application Stage
+              </h3>
+              <p className="mt-1 text-xs text-navy-400">
+                Advancing to{" "}
+                <span className="font-bold text-coral">
+                  {label(stageUpdateModal.newStage)}
+                </span>
+              </p>
+
+              <div className="mt-4 space-y-2">
+                <label className="text-xs font-semibold text-navy-600">
+                  Counsellor Remark (Optional)
+                </label>
+                <textarea
+                  rows={3}
+                  value={counsellorRemark}
+                  onChange={(e) => setCounsellorRemark(e.target.value)}
+                  placeholder="Enter progress remarks or notes for the student..."
+                  className="w-full rounded-xl border border-navy-100 p-3 text-xs focus:border-coral focus:outline-none"
+                />
+              </div>
+
+              <div className="mt-5 flex justify-end gap-2">
+                <button
+                  onClick={() => setStageUpdateModal(null)}
+                  className="rounded-xl border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmStageChange}
+                  disabled={updateStage.isPending}
+                  className="rounded-xl bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
+                  {updateStage.isPending ? "Updating..." : "Confirm Update"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* DELETE CONFIRMATION MODAL */}
+        {deleteConfirmId && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/40 p-4 backdrop-blur-sm">
+            <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
+              <h3 className="font-heading text-base font-bold text-navy-600">
+                Delete Application?
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                Are you sure you want to delete this application? This action
+                cannot be undone and will erase all progress history.
+              </p>
+
+              <div className="mt-5 flex justify-end gap-2">
+                <button
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="rounded-xl border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDelete(deleteConfirmId)}
+                  className="rounded-xl bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // DEFAULT TABLE LIST VIEW
+  // ---------------------------------------------------------------------------
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Header & Filter Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -100,7 +744,8 @@ const AdminApplicationsPage = () => {
             Student Applications
           </h2>
           <p className="text-xs text-navy-400">
-            Manage student admission lifecycles and stage progressions
+            Manage student admission lifecycles, assign counsellors, and stage
+            progressions
           </p>
         </div>
 
@@ -109,7 +754,7 @@ const AdminApplicationsPage = () => {
           <select
             value={stageFilter}
             onChange={(e) => setStageFilter(e.target.value)}
-            className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-xs font-medium text-navy-600 focus:border-coral focus:outline-none"
+            className="rounded-xl border border-navy-100 bg-white px-3 py-2 text-xs font-medium text-navy-600 focus:border-coral focus:outline-none"
           >
             <option value="">All Stages</option>
             {STAGES.map((s) => (
@@ -127,10 +772,10 @@ const AdminApplicationsPage = () => {
           <thead className="bg-navy-50 text-left text-xs uppercase text-navy-400">
             <tr>
               <th className="px-4 py-3">Student</th>
-              <th className="px-4 py-3">Country</th>
-              <th className="px-4 py-3">University</th>
+              <th className="px-4 py-3">Country & University</th>
+              <th className="px-4 py-3">Assigned Counsellor</th>
               <th className="px-4 py-3">Current Stage</th>
-              <th className="px-4 py-3">Advance To</th>
+              <th className="px-4 py-3">Advance Stage</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -163,11 +808,35 @@ const AdminApplicationsPage = () => {
                   </p>
                 </td>
                 <td className="px-4 py-3 text-navy-600">
-                  {app.interestedCountry?.name || "—"}
+                  <p className="font-semibold">
+                    {app.interestedCountry?.name || "—"}
+                  </p>
+                  <p className="text-xs text-navy-400">
+                    {app.targetUniversity?.name || "—"}
+                  </p>
                 </td>
-                <td className="px-4 py-3 text-navy-600">
-                  {app.targetUniversity?.name || "—"}
+
+                {/* Direct Counsellor Assignment Selector */}
+                <td className="px-4 py-3">
+                  <select
+                    value={app.assignedCounsellor?._id || ""}
+                    onChange={(e) =>
+                      handleAssignCounsellor(app._id, e.target.value)
+                    }
+                    disabled={isAssigning}
+                    className="rounded-lg border border-navy-100 bg-white px-2 py-1 text-xs text-navy-600 focus:border-coral focus:outline-none disabled:opacity-50"
+                  >
+                    <option value="" disabled>
+                      Assign Counsellor...
+                    </option>
+                    {counsellors.map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
                 </td>
+
                 <td className="px-4 py-3">
                   <span className="inline-block rounded-full bg-coral-50 px-3 py-1 text-xs font-semibold text-coral">
                     {label(app.currentStage)}
@@ -218,142 +887,6 @@ const AdminApplicationsPage = () => {
         </table>
       </div>
 
-      {/* VIEW APPLICATION DETAILS MODAL */}
-      {selectedApp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/40 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
-            <div className="flex items-center justify-between border-b border-navy-50 pb-4">
-              <div>
-                <h3 className="font-heading text-lg font-bold text-navy-600">
-                  Application Details
-                </h3>
-                <p className="text-xs text-navy-400">ID: {selectedApp._id}</p>
-              </div>
-              <button
-                onClick={() => setSelectedApp(null)}
-                className="rounded-lg p-1 text-navy-400 hover:bg-navy-50 hover:text-navy-600"
-              >
-                <HiOutlineX size={20} />
-              </button>
-            </div>
-
-            <div className="mt-6 space-y-6">
-              {/* Student Info Card */}
-              <div className="grid grid-cols-1 gap-4 rounded-xl border border-slate-100 bg-slate-50/50 p-4 sm:grid-cols-2">
-                <div className="flex items-start gap-3">
-                  <div className="rounded-lg bg-white p-2 text-coral shadow-sm">
-                    <HiOutlineUser size={18} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-navy-400">
-                      Student Info
-                    </p>
-                    <p className="text-sm font-bold text-navy-600">
-                      {selectedApp.student?.name || "N/A"}
-                    </p>
-                    <p className="text-xs text-navy-500">
-                      {selectedApp.student?.email}
-                    </p>
-                    <p className="text-xs text-navy-500">
-                      Phone: {selectedApp.student?.phone || "—"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="rounded-lg bg-white p-2 text-coral shadow-sm">
-                    <HiOutlineGlobe size={18} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-navy-400">
-                      Target Country & Counsellor
-                    </p>
-                    <p className="text-sm font-bold text-navy-600">
-                      {selectedApp.interestedCountry?.name || "Not Specified"}
-                    </p>
-                    <p className="text-xs text-navy-500">
-                      Counsellor:{" "}
-                      {selectedApp.assignedCounsellor?.name || "Unassigned"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 sm:col-span-2">
-                  <div className="rounded-lg bg-white p-2 text-coral shadow-sm">
-                    <HiOutlineAcademicCap size={18} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-navy-400">
-                      Target University
-                    </p>
-                    <p className="text-sm font-bold text-navy-600">
-                      {selectedApp.targetUniversity?.name || "Not Specified"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Progress Timeline */}
-              <div>
-                <h4 className="font-heading text-sm font-bold text-navy-600">
-                  Stage Timeline History
-                </h4>
-
-                <div className="mt-4 space-y-3">
-                  {selectedApp.stageHistory &&
-                  selectedApp.stageHistory.length > 0 ? (
-                    selectedApp.stageHistory.map((history, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-start gap-3 rounded-xl border border-navy-50 bg-white p-3 text-xs"
-                      >
-                        <HiOutlineCheckCircle
-                          size={18}
-                          className="mt-0.5 text-coral shrink-0"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <p className="font-bold text-navy-600">
-                              {label(history.stage)}
-                            </p>
-                            <span className="text-[10px] text-navy-400">
-                              {history.updatedAt
-                                ? new Date(history.updatedAt).toLocaleString()
-                                : ""}
-                            </span>
-                          </div>
-                          {history.counsellorRemark && (
-                            <p className="mt-1 text-slate-600 italic">
-                              "{history.counsellorRemark}"
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-xs text-navy-400">
-                      Current Stage:{" "}
-                      <span className="font-semibold text-navy-600">
-                        {label(selectedApp.currentStage)}
-                      </span>
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 flex justify-end border-t border-navy-50 pt-4">
-              <button
-                onClick={() => setSelectedApp(null)}
-                className="rounded-lg bg-navy-50 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-100"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* UPDATE STAGE & REMARK MODAL */}
       {stageUpdateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/40 p-4 backdrop-blur-sm">
@@ -377,21 +910,21 @@ const AdminApplicationsPage = () => {
                 value={counsellorRemark}
                 onChange={(e) => setCounsellorRemark(e.target.value)}
                 placeholder="Enter progress remarks or notes for the student..."
-                className="w-full rounded-lg border border-navy-100 p-3 text-xs focus:border-coral focus:outline-none"
+                className="w-full rounded-xl border border-navy-100 p-3 text-xs focus:border-coral focus:outline-none"
               />
             </div>
 
             <div className="mt-5 flex justify-end gap-2">
               <button
                 onClick={() => setStageUpdateModal(null)}
-                className="rounded-lg border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
+                className="rounded-xl border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmStageChange}
                 disabled={updateStage.isPending}
-                className="rounded-lg bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="rounded-xl bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
               >
                 {updateStage.isPending ? "Updating..." : "Confirm Update"}
               </button>
@@ -415,13 +948,13 @@ const AdminApplicationsPage = () => {
             <div className="mt-5 flex justify-end gap-2">
               <button
                 onClick={() => setDeleteConfirmId(null)}
-                className="rounded-lg border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
+                className="rounded-xl border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleDelete(deleteConfirmId)}
-                className="rounded-lg bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                className="rounded-xl bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
               >
                 Delete
               </button>
