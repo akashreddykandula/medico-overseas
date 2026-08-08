@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 import { login } from "../features/authSlice";
 
 const LoginPage = () => {
@@ -10,6 +11,10 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { status } = useSelector((s) => s.auth);
+
+  // Password Visibility Toggle State
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -71,16 +76,24 @@ const LoginPage = () => {
                 )}
               </div>
 
-              {/* Password Input */}
+              {/* Password Input with Eye Icon */}
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  className="w-full border-b border-slate-300 py-2.5 text-sm text-[#0F2540] placeholder-slate-400 outline-none transition-colors focus:border-[#D94A28]"
+                  className="w-full border-b border-slate-300 py-2.5 pr-10 text-sm text-[#0F2540] placeholder-slate-400 outline-none transition-colors focus:border-[#D94A28]"
                   {...register("password", {
                     required: "Password is required",
                   })}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-2.5 text-slate-400 hover:text-[#0F2540] transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <HiEyeOff size={18} /> : <HiEye size={18} />}
+                </button>
                 {errors.password && (
                   <p className="mt-1 text-xs text-[#D94A28]">
                     {errors.password.message}
@@ -121,19 +134,29 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* Right Side: Deep Navy Visual Branding Section */}
-        <div className="relative hidden w-1/2 bg-[#0F2540] p-12 lg:flex lg:flex-col lg:justify-between">
+        {/* Right Side: Deep Navy Visual Branding Section with Medical Travel Imagery */}
+        <div
+          className="relative hidden w-1/2 bg-cover bg-center p-12 lg:flex lg:flex-col lg:justify-between"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80')",
+          }}
+        >
+          {/* Dark Navy Overlay Gradients */}
+          <div className="absolute inset-0 bg-[#0F2540]/85 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F2540] via-transparent to-[#0F2540]/60" />
+
           {/* Ambient Glow */}
-          <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#D94A28]/20 blur-3xl pointer-events-none" />
+          <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#D94A28]/25 blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col justify-center h-full text-white">
-            <span className="inline-block rounded-full bg-[#D94A28]/20 px-3 py-1 text-xs font-semibold text-[#D94A28] w-max">
+            <span className="inline-block rounded-full border border-[#D94A28]/40 bg-[#D94A28]/20 px-3 py-1 text-xs font-semibold text-[#D94A28] w-max backdrop-blur-md">
               Medico Overseas Portal
             </span>
             <h2 className="mt-4 text-3xl font-extrabold leading-tight">
               Welcome Back to Your Global Medical Journey
             </h2>
-            <p className="mt-3 text-sm text-slate-300">
+            <p className="mt-3 text-sm text-slate-300 leading-relaxed">
               Access your real-time application status, upload necessary
               university documents, and consult directly with expert counselors.
             </p>
@@ -147,12 +170,12 @@ const LoginPage = () => {
               ].map((text, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 rounded-xl bg-white/5 p-3 backdrop-blur-md"
+                  className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/10 p-3 backdrop-blur-md shadow-sm"
                 >
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#D94A28] text-xs text-white">
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#D94A28] text-xs text-white">
                     ✓
                   </div>
-                  <span className="text-xs font-medium text-slate-200">
+                  <span className="text-xs font-medium text-slate-100">
                     {text}
                   </span>
                 </div>
