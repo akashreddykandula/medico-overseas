@@ -138,10 +138,10 @@ const Footer = () => {
                 <HiPhone size={16} />
               </div>
               <a
-                href="tel:+911234567890"
+                href="tel:+916301878730"
                 className="transition-colors hover:text-coral font-medium"
               >
-                +91 12345 67890
+                +91 6301878730
               </a>
             </li>
             <li className="flex items-center gap-3 text-slate-300">

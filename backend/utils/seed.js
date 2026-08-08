@@ -13,7 +13,7 @@ const run = async () => {
     await User.create({
       name: "Super Admin",
       email: adminEmail,
-      phone: "9999999999",
+      phone: "6301878730",
       password: "ChangeMe123!", // change immediately after first login
       role: "super_admin",
       isEmailVerified: true,

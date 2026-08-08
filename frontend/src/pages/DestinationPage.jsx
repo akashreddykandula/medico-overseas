@@ -603,7 +603,7 @@ const DestinationPage = () => {
               Book Free Counselling
             </a>
             <a
-              href="https://wa.me/919999999999"
+              href="https://wa.me/916301878730"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500"
@@ -617,7 +617,7 @@ const DestinationPage = () => {
       {/* 17. Floating Contact Buttons */}
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
         <a
-          href="https://wa.me/919999999999"
+          href="https://wa.me/916301878730"
           target="_blank"
           rel="noreferrer"
           className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition-transform hover:scale-110"
@@ -626,7 +626,7 @@ const DestinationPage = () => {
           <FaWhatsapp size={22} />
         </a>
         <a
-          href="tel:+919999999999"
+          href="tel:+916301878730"
           className="flex h-11 w-11 items-center justify-center rounded-full bg-navy-600 text-white shadow-lg transition-transform hover:scale-110"
           title="Call Us"
         >

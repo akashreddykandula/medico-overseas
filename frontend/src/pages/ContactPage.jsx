@@ -28,7 +28,7 @@ const ContactPage = () => (
             "Office Address",
             "123 Education Tower, MG Road, Hyderabad, Telangana, India",
           ],
-          [HiPhone, "Phone", "+91 12345 67890"],
+          [HiPhone, "Phone", "+91 6301878730"],
           [HiMail, "Email", "info@medicooverseas.com"],
           [HiClock, "Office Hours", "Mon – Sat, 10:00 AM – 7:00 PM IST"],
         ].map(([Icon, label, value]) => (

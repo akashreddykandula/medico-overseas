@@ -6,6 +6,8 @@ import {
   HiMinus,
   HiSearch,
   HiOutlineQuestionMarkCircle,
+  HiSparkles,
+  HiOutlineBookOpen,
 } from "react-icons/hi";
 import PageHero from "../components/common/PageHero";
 import { useFaqs } from "../hooks/useContent";
@@ -59,27 +61,44 @@ const FaqsPage = () => {
         subtitle="Everything students and parents commonly ask about the MBBS-abroad journey."
       />
 
-      <div className="section-container relative max-w-3xl py-16">
-        {/* Search & Filter Bar */}
-        <div className="relative mb-12">
-          <div className="relative flex items-center">
-            <HiSearch className="absolute left-4 text-navy-400" size={20} />
+      <div className="section-container relative max-w-4xl py-16 font-sans">
+        {/* Decorative Background Ambient Glows */}
+        <div className="pointer-events-none absolute left-1/2 top-12 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-coral/5 blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-1/3 -z-10 h-80 w-80 rounded-full bg-navy-100/40 blur-3xl" />
+
+        {/* Floating Search & Filter Bar */}
+        <div className="relative mb-14">
+          <div className="group relative flex items-center rounded-2xl border border-navy-100/80 bg-white/80 p-1.5 shadow-xl shadow-navy-900/5 backdrop-blur-xl transition-all duration-300 focus-within:border-coral/50 focus-within:ring-4 focus-within:ring-coral/10 hover:border-navy-200">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy-50 text-navy-400 transition-colors group-focus-within:bg-coral-50 group-focus-within:text-coral">
+              <HiSearch size={22} />
+            </div>
             <input
               type="text"
               placeholder="Search questions (e.g. eligibility, fees, NEET, visa)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-2xl border border-navy-100 bg-white py-4 pl-12 pr-4 text-sm font-medium text-navy-600 shadow-sm transition-all focus:border-coral focus:outline-none focus:ring-2 focus:ring-coral/20"
+              className="w-full bg-transparent px-4 text-sm font-medium text-navy-600 placeholder-navy-300 focus:outline-none"
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="mr-3 rounded-lg px-2 py-1 text-xs font-semibold text-navy-400 hover:bg-navy-50 hover:text-navy-600"
+              >
+                Clear
+              </button>
+            )}
           </div>
         </div>
 
         {/* Loading State */}
         {isLoading && (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-coral border-t-transparent" />
-            <p className="mt-4 text-sm font-medium text-navy-400">
-              Loading FAQs...
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="relative flex h-10 w-10 items-center justify-center">
+              <div className="absolute h-full w-full animate-spin rounded-full border-2 border-coral border-t-transparent" />
+              <HiOutlineBookOpen className="text-coral" size={16} />
+            </div>
+            <p className="mt-4 text-xs font-bold uppercase tracking-wider text-navy-400">
+              Loading Help Center...
             </p>
           </div>
         )}
@@ -88,40 +107,60 @@ const FaqsPage = () => {
         {!isLoading &&
           Object.entries(grouped).map(([category, items]) => (
             <div key={category} className="mb-12">
-              <div className="mb-4 flex items-center gap-3 border-b border-navy-100 pb-2">
-                <span className="rounded-full bg-coral/10 px-3 py-1 text-xs font-bold text-coral uppercase tracking-wider">
-                  {CATEGORY_LABELS[category] || category}
-                </span>
-                <span className="text-xs font-semibold text-navy-400">
-                  {items.length} {items.length === 1 ? "question" : "questions"}
+              {/* Category Header Badge */}
+              <div className="mb-5 flex items-center justify-between border-b border-navy-100/80 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-coral/10 text-coral">
+                    <HiSparkles size={14} />
+                  </span>
+                  <h3 className="font-heading text-lg font-bold tracking-tight text-navy-600">
+                    {CATEGORY_LABELS[category] || category}
+                  </h3>
+                </div>
+                <span className="rounded-full bg-navy-50 px-3 py-1 text-[11px] font-bold text-navy-400">
+                  {items.length} {items.length === 1 ? "Article" : "Articles"}
                 </span>
               </div>
 
-              <div className="space-y-3">
+              {/* Accordion Cards */}
+              <div className="space-y-3.5">
                 {items.map((faq) => {
                   const isOpen = openId === faq._id;
                   return (
                     <div
                       key={faq._id}
-                      className={`group rounded-2xl border transition-all duration-300 ${
+                      className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 ${
                         isOpen
-                          ? "border-coral/40 bg-white shadow-md"
-                          : "border-navy-100 bg-white hover:border-navy-200 hover:shadow-sm"
+                          ? "border-coral/40 bg-white shadow-lg shadow-coral/5"
+                          : "border-navy-100/80 bg-white/90 shadow-sm hover:border-coral/30 hover:bg-white hover:shadow-md"
                       }`}
                     >
+                      {/* Active Indicator Strip */}
+                      <div
+                        className={`absolute left-0 top-0 h-full w-1 transition-all duration-300 ${
+                          isOpen ? "bg-coral" : "bg-transparent"
+                        }`}
+                      />
+
                       <button
                         type="button"
                         onClick={() => toggleAccordion(faq._id)}
-                        className="flex w-full items-center justify-between p-5 text-left font-heading text-base font-semibold text-navy-600 transition-colors"
+                        className="flex w-full items-center justify-between p-5 text-left transition-colors sm:p-6"
                       >
-                        <span className="pr-4 leading-snug">
+                        <span
+                          className={`pr-4 font-heading text-base font-bold transition-colors ${
+                            isOpen
+                              ? "text-coral"
+                              : "text-navy-600 group-hover:text-navy-800"
+                          }`}
+                        >
                           {faq.question}
                         </span>
                         <div
-                          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ${
+                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-all duration-300 ${
                             isOpen
-                              ? "bg-coral text-white rotate-180"
-                              : "bg-navy-50 text-navy-400 group-hover:bg-coral-50 group-hover:text-coral"
+                              ? "border-coral bg-coral text-white rotate-180 shadow-md shadow-coral/25"
+                              : "border-navy-100 bg-navy-50/60 text-navy-400 group-hover:border-coral/30 group-hover:bg-coral-50 group-hover:text-coral"
                           }`}
                         >
                           {isOpen ? (
@@ -142,9 +181,9 @@ const FaqsPage = () => {
                               duration: 0.3,
                               ease: [0.16, 1, 0.3, 1],
                             }}
-                            className="overflow-hidden px-5 pb-5 text-sm leading-relaxed text-navy-400"
+                            className="overflow-hidden px-5 pb-6 text-sm leading-relaxed text-navy-400 sm:px-6"
                           >
-                            <div className="pt-2 border-t border-navy-50">
+                            <div className="pt-3 border-t border-navy-50 text-slate-600">
                               {faq.answer}
                             </div>
                           </motion.div>
@@ -159,14 +198,16 @@ const FaqsPage = () => {
 
         {/* Empty State */}
         {!isLoading && filteredFaqs.length === 0 && (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-navy-200 py-16 text-center">
-            <HiOutlineQuestionMarkCircle size={40} className="text-navy-300" />
-            <p className="mt-3 text-base font-semibold text-navy-600">
-              No FAQs found
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-navy-200 bg-white/60 p-12 text-center backdrop-blur-sm">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-50 text-navy-300">
+              <HiOutlineQuestionMarkCircle size={36} />
+            </div>
+            <p className="mt-4 font-heading text-lg font-bold text-navy-600">
+              No matching questions found
             </p>
-            <p className="mt-1 text-xs text-navy-400">
+            <p className="mt-1 max-w-sm text-xs text-navy-400">
               {searchQuery
-                ? "Try searching with different keywords."
+                ? `We couldn't find any results matching "${searchQuery}". Try searching for terms like "NEET", "Visa", or "Tuition".`
                 : "FAQs will appear here once published."}
             </p>
           </div>
