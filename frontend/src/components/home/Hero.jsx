@@ -10,12 +10,12 @@ import "swiper/css";
 // High-resolution medical university and international campus imagery
 const HERO_IMAGES = [
   {
-    url: "https://plus.unsplash.com/premium_photo-1764691415779-1240207e7c51?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    url: "https://images.unsplash.com/photo-1583373834259-46cc92173cb7?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Russia Medical Universities",
     subtitle: "Moscow • Kazan • St. Petersburg",
   },
   {
-    url: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1600&q=80",
+    url: "https://images.unsplash.com/photo-1647083423730-ea9567142412?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Georgia Medical Universities",
     subtitle: "Tbilisi • Batumi • Kutaisi",
   },
@@ -30,9 +30,39 @@ const HERO_IMAGES = [
     subtitle: "Almaty • Astana",
   },
   {
-    url: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    url: "https://images.unsplash.com/photo-1652487308763-4e9cee456d12?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Uzbekistan Medical Universities",
     subtitle: "Tashkent • Samarkand",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1565963479542-3cf82a9ee7e9?q=80&w=1346&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dp",
+    title: "Russia Medical Universities",
+    subtitle: "Moscow • Kazan",
+  },
+  {
+    url: "https://plus.unsplash.com/premium_photo-1765987838916-bd0a10bbb476?q=80&w=1432&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Georgia Medical Universities",
+    subtitle: "Tbilisi • Batumi",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1470&auto=format&fit=crop",
+    title: "Kyrgyzstan Medical Universities",
+    subtitle: "Bishkek • Osh",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1528181304800-259b08848526?q=80&w=1470&auto=format&fit=crop",
+    title: "Armenia Medical Universities",
+    subtitle: "Yerevan • Gyumri",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1681782421891-5088f13466ec?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Vietnam Medical Universities",
+    subtitle: "Hanoi • Ho Chi Minh City",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1568792923760-d70635a89fdc?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "India Medical Education",
+    subtitle: "Delhi • Mumbai",
   },
 ];
 
