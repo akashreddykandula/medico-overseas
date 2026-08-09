@@ -1,14 +1,16 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { HiSearch } from "react-icons/hi";
-import PageHero from "../components/common/PageHero";
 import { useBlogs } from "../hooks/useContent";
 
 const CATEGORIES = ["all", "country", "exam", "general", "visa", "scholarship"];
 
 const DEFAULT_IMAGE =
   "https://images.unsplash.com/photo-1562774053-701939374585?w=1200";
+const BLOG_HERO_IMAGE =
+  "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2400&auto=format&fit=crop";
 
 // Helper to strip HTML tags from plain text fields (Title, Excerpt)
 const stripHtml = (htmlString) => {
@@ -82,11 +84,51 @@ const BlogListPage = () => {
         />
       </Helmet>
 
-      <PageHero
-        eyebrow="RESOURCES"
-        title="MBBS Abroad Blog"
-        subtitle="Practical guidance for students and parents navigating the MBBS-abroad journey."
-      />
+      {/* Blog Hero */}
+      <section className="relative min-h-[320px] overflow-hidden text-white sm:min-h-[350px]">
+        {/* Background Image */}
+        <motion.img
+          src={BLOG_HERO_IMAGE}
+          alt="MBBS Abroad Resources"
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            opacity: { duration: 1 },
+            scale: { duration: 5, ease: "easeOut" },
+          }}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+
+        {/* Light Navy Overlay */}
+        <div className="absolute inset-0 bg-[#071A38]/45" />
+
+        {/* Soft Gradient for Text Contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071A38]/65 via-[#102F5C]/50 to-[#071A38]/45" />
+
+        {/* Centered Content */}
+        <div className="relative z-10 flex min-h-[320px] items-center justify-center sm:min-h-[350px]">
+          <div className="section-container text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-sm">
+                RESOURCES
+              </span>
+
+              <h1 className="mt-4 font-heading text-4xl font-extrabold text-white sm:text-5xl">
+                MBBS Abroad Blog
+              </h1>
+
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base">
+                Practical guidance for students and parents navigating the
+                MBBS-abroad journey.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       <div className="section-container py-16">
         {/* Filters & Search */}

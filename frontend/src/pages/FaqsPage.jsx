@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
+import PageHero from "../components/common/PageHero";
 import {
   HiPlus,
   HiMinus,
@@ -9,7 +10,7 @@ import {
   HiSparkles,
   HiOutlineBookOpen,
 } from "react-icons/hi";
-import PageHero from "../components/common/PageHero";
+
 import { useFaqs } from "../hooks/useContent";
 
 const CATEGORY_LABELS = {
@@ -21,7 +22,8 @@ const CATEGORY_LABELS = {
   nmat: "NMAT",
   country_specific: "Country-Specific",
 };
-
+const FAQ_HERO_IMAGE =
+  "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?q=80&w=2400&auto=format&fit=crop";
 const FaqsPage = () => {
   const { data: faqs = [], isLoading } = useFaqs();
   const [searchQuery, setSearchQuery] = useState("");
@@ -83,6 +85,7 @@ const FaqsPage = () => {
         eyebrow="HELP CENTER"
         title="Frequently Asked Questions"
         subtitle="Everything students and parents commonly ask about the MBBS-abroad journey."
+        transparent={false}
       />
 
       <div className="section-container relative max-w-4xl py-16 font-sans">

@@ -57,13 +57,6 @@ router.get(
   authorize("super_admin", "admin", "counsellor", "marketing_manager"),
   getLead,
 );
-router.get(
-  "/counsellors",
-
-  authorize("super_admin", "admin"),
-
-  getCounsellors,
-);
 router.patch(
   "/:id",
   authorize("super_admin", "admin", "counsellor"),

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import {
   HiStar,
@@ -10,6 +11,8 @@ import {
 } from "react-icons/hi";
 import PageHero from "../components/common/PageHero";
 import { useTestimonials } from "../hooks/useContent";
+const SUCCESS_HERO_IMAGE =
+  "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=2400&auto=format&fit=crop";
 
 // Curated Demo Success Stories (Fallback if DB is empty)
 const DEMO_TESTIMONIALS = [
@@ -168,11 +171,54 @@ const TestimonialsPage = () => {
       </Helmet>
 
       {/* Hero Header */}
-      <PageHero
-        eyebrow="SUCCESS STORIES"
-        title="Our Students, Our Pride"
-        subtitle="Hear directly from students and parents who trusted Medico Overseas with their medical career journey abroad."
-      />
+      {/* Hero Header */}
+      <section className="relative min-h-[320px] overflow-hidden text-white sm:min-h-[350px]">
+        {/* Background Image */}
+        <motion.img
+          src={SUCCESS_HERO_IMAGE}
+          alt="Medical university campus"
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            opacity: { duration: 1 },
+            scale: { duration: 5, ease: "easeOut" },
+          }}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+
+        {/* Light Navy Overlay */}
+        <div className="absolute inset-0 bg-[#071A38]/45" />
+
+        {/* Soft Gradient for Text Contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071A38]/65 via-[#102F5C]/50 to-[#071A38]/45" />
+
+        {/* Centered Content */}
+        <div className="relative z-10 flex min-h-[320px] items-center justify-center sm:min-h-[350px]">
+          <div className="section-container text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              {/* Eyebrow */}
+              <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-sm">
+                SUCCESS STORIES
+              </span>
+
+              {/* Title */}
+              <h1 className="mt-4 font-heading text-4xl font-extrabold text-white sm:text-5xl">
+                Our Students, Our Pride
+              </h1>
+
+              {/* Subtitle */}
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base">
+                Hear directly from students and parents who trusted Medico
+                Overseas with their medical career journey abroad.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       <div className="section-container py-16">
         {/* Featured Video / Story Highlight Banner */}

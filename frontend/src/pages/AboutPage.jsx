@@ -57,8 +57,6 @@ const scaleIn = {
 
 // --- HERO BACKGROUND IMAGES ---
 const HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1618245596888-2fa0c17d4cec?q=80&w=2489&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2400&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2400&auto=format&fit=crop",
 ];
 
@@ -257,32 +255,59 @@ const AboutPage = () => {
       </Helmet>
 
       {/* Page Hero with Auto-sliding Background Images & Dark Overlay */}
-      <div className="relative overflow-hidden bg-navy-950 text-white">
+
+      {/* ABOUT HERO — IMAGE BACKGROUND + NAVY OVERLAY */}
+      <section className="relative min-h-[320px] overflow-hidden text-white sm:min-h-[350px]">
+        {/* Background Image */}
         <AnimatePresence mode="wait">
           <motion.img
             key={currentImageIndex}
             src={HERO_IMAGES[currentImageIndex]}
-            alt="Medical University Campus Background"
+            alt=""
             initial={{ opacity: 0, scale: 1.05 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
+            transition={{
+              opacity: { duration: 1.2 },
+              scale: { duration: 5, ease: "easeOut" },
+            }}
             className="absolute inset-0 h-full w-full object-cover"
           />
         </AnimatePresence>
 
-        {/* Dark Multi-Stage Gradient Overlay for Visual Contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/85 to-navy-950/60 backdrop-blur-[1px]" />
+        {/* Dark Navy Overlay */}
+        <div className="absolute inset-0 bg-[#071A38]/45" />
 
-        {/* Page Hero Content */}
-        <div className="relative z-10">
+        {/* Navy Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071A38]/65 via-[#102F5C]/50 to-[#071A38]/45" />
+
+        {/* Hero Content */}
+        <div className="relative z-10 flex min-h-[320px] items-center justify-center sm:min-h-[350px]">
           <PageHero
             eyebrow="ABOUT MEDICO OVERSEAS"
             title="A Safety-First Partner for Your Medical Career"
             subtitle="Founded to make globally recognized medical education accessible, transparent, and safe for Indian students."
+            transparent
           />
         </div>
-      </div>
+
+        {/* Slider Indicators */}
+        <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+          {HERO_IMAGES.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setCurrentImageIndex(index)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                currentImageIndex === index
+                  ? "w-8 bg-coral"
+                  : "w-2 bg-white/50 hover:bg-white/80"
+              }`}
+              aria-label={`Show background ${index + 1}`}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* 1. Our Story & Numbers */}
       <section className="section-container py-20 overflow-hidden">

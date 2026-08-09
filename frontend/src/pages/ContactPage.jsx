@@ -1,8 +1,11 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { HiLocationMarker, HiPhone, HiMail, HiClock } from "react-icons/hi";
-import PageHero from "../components/common/PageHero";
+
 import EnquiryForm from "../components/home/forms/EnquiryForm";
+const CONTACT_HERO_IMAGE =
+  "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2400&auto=format&fit=crop";
 
 const ContactPage = () => (
   <>
@@ -38,11 +41,50 @@ const ContactPage = () => (
       />
     </Helmet>
 
-    <PageHero
-      eyebrow="GET IN TOUCH"
-      title="Contact Medico Overseas"
-      subtitle="Talk to our counsellors about your MBBS abroad journey — no obligation, no pressure."
-    />
+    {/* Contact Hero */}
+    <section className="relative min-h-[320px] overflow-hidden text-white sm:min-h-[350px]">
+      {/* Background Image */}
+      <motion.img
+        src={CONTACT_HERO_IMAGE}
+        alt="Contact Medico Overseas"
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          opacity: { duration: 1 },
+          scale: { duration: 5, ease: "easeOut" },
+        }}
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      {/* Light Navy Overlay */}
+      <div className="absolute inset-0 bg-[#071A38]/45" />
+
+      {/* Soft Gradient for Text Contrast */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#071A38]/65 via-[#102F5C]/50 to-[#071A38]/45" />
+
+      {/* Centered Content */}
+      <div className="relative z-10 flex min-h-[320px] items-center justify-center sm:min-h-[350px]">
+        <div className="section-container text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-sm">
+              GET IN TOUCH
+            </span>
+
+            <h1 className="mt-4 font-heading text-4xl font-extrabold text-white sm:text-5xl">
+              Contact Medico Overseas
+            </h1>
+
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base">
+              Talk to our counsellors about your MBBS abroad journey — no
+              obligation, no pressure.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    </section>
 
     <div className="section-container grid grid-cols-1 gap-12 py-16 lg:grid-cols-3">
       <div className="space-y-8 lg:col-span-1">
