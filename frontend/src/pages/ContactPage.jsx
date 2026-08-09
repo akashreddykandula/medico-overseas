@@ -12,6 +12,7 @@ const ContactPage = () => (
         name="description"
         content="Get in touch with Medico Overseas for free MBBS abroad counselling. Call, WhatsApp, or visit our office."
       />
+      <link rel="canonical" href={window.location.href} />
     </Helmet>
 
     <PageHero

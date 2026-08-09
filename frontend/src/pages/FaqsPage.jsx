@@ -53,6 +53,7 @@ const FaqsPage = () => {
           name="description"
           content="Answers to common questions about MBBS admissions abroad, fees, visas, and licensing exams."
         />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       <PageHero

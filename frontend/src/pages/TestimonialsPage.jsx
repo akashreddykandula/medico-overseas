@@ -135,6 +135,7 @@ const TestimonialsPage = () => {
           name="description"
           content="Read real testimonials and watch video success stories from students studying MBBS abroad with Medico Overseas."
         />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       {/* Hero Header */}

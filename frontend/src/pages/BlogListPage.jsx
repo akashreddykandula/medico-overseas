@@ -50,6 +50,7 @@ const BlogListPage = () => {
           name="description"
           content="Guidance, tips, and news on studying MBBS abroad from the Medico Overseas team."
         />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       <PageHero

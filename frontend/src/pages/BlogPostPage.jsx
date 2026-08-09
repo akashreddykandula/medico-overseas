@@ -83,6 +83,7 @@ const BlogPostPage = () => {
           name="description"
           content={stripHtml(blog.metaDescription) || cleanExcerpt}
         />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       <article className="pt-28 pb-20 bg-slate-50/50">

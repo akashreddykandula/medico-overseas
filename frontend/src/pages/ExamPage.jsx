@@ -58,6 +58,7 @@ const ExamPage = () => {
       <Helmet>
         <title>{content.title} | Medico Overseas</title>
         <meta name="description" content={content.subtitle} />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       <PageHero

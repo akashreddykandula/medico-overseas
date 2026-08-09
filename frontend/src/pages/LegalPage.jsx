@@ -10,6 +10,7 @@ const LegalPage = ({ title, updatedDate, children }) => (
         name="description"
         content={`${title} for Medico Overseas. Read our policies, terms, and important information about using our website and MBBS abroad counselling services.`}
       />
+      <link rel="canonical" href={window.location.href} />
     </Helmet>
     <PageHero
       eyebrow="LEGAL"

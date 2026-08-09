@@ -188,6 +188,7 @@ const GalleryPage = () => {
           name="description"
           content="Explore campus, hostel, and student life photos from our partner universities abroad."
         />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       <PageHero
