@@ -21,10 +21,33 @@ const HomePage = () => (
       <title>
         Medico Overseas | Your Trusted Path to an MBBS Degree Abroad
       </title>
+
       <meta
         name="description"
         content="Get admission to NMC/WHO-recognized MBBS universities in Russia, Georgia, Kyrgyzstan, Uzbekistan, Armenia & Vietnam. Free counselling for Indian students."
       />
+
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Medico Overseas",
+          url: window.location.origin,
+          logo: `${window.location.origin}/medicologo.png`,
+          description:
+            "Medico Overseas helps Indian students pursue MBBS abroad at recognized medical universities.",
+          sameAs: [],
+        })}
+      </script>
+
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Medico Overseas",
+          url: window.location.origin,
+        })}
+      </script>
     </Helmet>
     <Hero />
     <WhyStudyAbroad />
