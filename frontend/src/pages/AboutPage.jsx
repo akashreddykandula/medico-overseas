@@ -224,6 +224,7 @@ const AboutPage = () => {
           name="description"
           content="Learn about Medico Overseas' mission, founder's message, university tie-ups, team, timeline, and track record guiding 5000+ Indian medical students."
         />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       {/* Page Hero with Auto-sliding Background Images & Dark Overlay */}
