@@ -282,7 +282,7 @@ const AboutPage = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-[#071A38]/65 via-[#102F5C]/50 to-[#071A38]/45" />
 
         {/* Hero Content */}
-        <div className="relative z-10 flex min-h-[320px] items-center justify-center sm:min-h-[350px]">
+        <div className="relative mt-14 z-10 flex min-h-[320px] items-center justify-center sm:min-h-[350px]">
           <PageHero
             eyebrow="ABOUT MEDICO OVERSEAS"
             title="A Safety-First Partner for Your Medical Career"

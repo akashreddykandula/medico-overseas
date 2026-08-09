@@ -26,7 +26,7 @@ const DEMO_TESTIMONIALS = [
     country: { name: "Russia" },
     batch: "Batch of 2021",
     photo: {
-      url: "https://images.unsplash.com/photo-1594824813571-24a69c100d02?w=400",
+      url: "https://plus.unsplash.com/premium_photo-1672691612717-954cdfaaa8c5?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     isVideo: true,
   },
@@ -201,7 +201,7 @@ const TestimonialsPage = () => {
               transition={{ duration: 0.6 }}
             >
               {/* Eyebrow */}
-              <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-sm">
+              <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-sm mt-16">
                 SUCCESS STORIES
               </span>
 
@@ -252,7 +252,7 @@ const TestimonialsPage = () => {
 
           <div className="relative flex h-64 items-center justify-center bg-slate-800 lg:h-full">
             <img
-              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800"
+              src="https://images.unsplash.com/photo-1580894732444-8ecded7900cd?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Medical Student Experience"
               className="h-full w-full object-cover opacity-60"
             />

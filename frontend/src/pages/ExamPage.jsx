@@ -11,42 +11,131 @@ const EXAM_CONTENT = {
   fmge: {
     title: "FMGE Exam",
     subtitle:
-      "The licensing exam required for MBBS graduates from foreign universities to practice medicine in India.",
+      "Understand the Foreign Medical Graduate Examination, eligibility, registration, preparation, and the path toward medical practice in India.",
+
     sections: [
       {
         heading: "What is FMGE?",
-        body: "The Foreign Medical Graduate Examination (FMGE), conducted by the National Board of Examinations, is mandatory for Indian citizens who complete their MBBS degree from a medical institution outside India, in order to be eligible for registration with the NMC and practice medicine in India.",
+        body: "The Foreign Medical Graduate Examination (FMGE) is a screening examination for eligible Indian citizens or overseas citizens of India who have obtained their primary medical qualification from a medical institution outside India and seek registration to practice medicine in India.",
+      },
+
+      {
+        heading: "Who Should Take FMGE?",
+        body: "FMGE is relevant to eligible medical graduates who completed their primary medical qualification outside India and need to meet the applicable Indian registration requirements. Students planning to study MBBS abroad should understand the licensing pathway before selecting a university.",
+      },
+
+      {
+        heading: "FMGE Eligibility",
+        body: "Eligibility depends on the candidate's nationality, primary medical qualification, university recognition, internship and other requirements prescribed by the competent Indian authorities. Students should verify the current eligibility requirements before applying.",
+      },
+
+      {
+        heading: "FMGE Registration",
+        body: "Eligible candidates register for the examination through the official examination authority's application process. Registration requirements, documents, application windows and fees should be checked against the latest official notification before submission.",
+      },
+
+      {
+        heading: "FMGE Exam Pattern",
+        body: "FMGE is conducted as a computer-based examination covering subjects from the medical curriculum. The detailed structure, number of questions, qualifying requirements and other examination rules should always be verified from the latest official notification.",
+      },
+
+      {
+        heading: "FMGE Syllabus",
+        body: "The examination covers subjects from the undergraduate medical curriculum, including pre-clinical, para-clinical and clinical disciplines. Students should prepare using the latest officially applicable syllabus and examination blueprint.",
+      },
+
+      {
+        heading: "FMGE Exam Dates",
+        body: "FMGE examination schedules and application deadlines are announced by the competent examination authority. Dates can change between examination cycles, so students should verify the latest official notification before planning registration or preparation.",
+      },
+
+      {
+        heading: "FMGE Preparation & Coaching",
+        body: "Medico Overseas can guide students with FMGE preparation planning, study resources, academic support and counselling regarding preparation strategies. Students should select preparation resources according to their individual academic requirements.",
+      },
+    ],
+
+    faqs: [
+      {
+        question: "Who needs to appear for FMGE?",
+        answer:
+          "Eligible medical graduates who obtained their primary medical qualification outside India may need to meet the applicable screening and registration requirements before practising medicine in India.",
       },
       {
-        heading: "Eligibility & Registration",
-        body: "Candidates must hold a primary medical qualification from a university recognized by the NMC, with a program duration of at least 54 months (excluding internship). Registration typically opens ahead of each exam cycle via the NBE portal.",
+        question: "When should students start preparing for FMGE?",
+        answer:
+          "Students should build strong clinical and theoretical fundamentals throughout their medical education rather than waiting until graduation.",
       },
       {
-        heading: "Exam Pattern & Frequency",
-        body: "FMGE is a computer-based test with objective-type questions covering the full MBBS curriculum, conducted twice a year (June and December cycles).",
+        question: "Is FMGE preparation important while studying MBBS abroad?",
+        answer:
+          "Yes. Understanding Indian licensing requirements early can help students choose appropriate academic resources and maintain a structured preparation plan.",
       },
       {
-        heading: "How Medico Overseas Helps",
-        body: "We provide structured FMGE preparation guidance, curated study resources, and mentorship from graduates who have successfully cleared the exam, alongside your MBBS admission support.",
+        question: "Where can I check the latest FMGE dates?",
+        answer:
+          "Students should check the latest official examination notification before relying on any examination date or registration deadline.",
       },
     ],
   },
+
   nmat: {
     title: "NMAT Exam",
     subtitle:
-      "Understand eligibility, exam pattern, and how we support your preparation and registration.",
+      "Understand the relevance, eligibility, examination pattern and preparation requirements for the applicable NMAT pathway.",
+
     sections: [
       {
         heading: "What is NMAT?",
-        body: "NMAT refers to exams required as part of the admission or licensing process in certain MBBS-abroad destination countries. Requirements vary by country and university — our counsellors will confirm exactly which exam applies to your chosen destination during your consultation.",
+        body: "The exact NMAT examination referred to in this project must be confirmed with the client before final content is published. NMAT can refer to different examinations depending on the context, so the applicable examination, authority and destination should be clearly identified.",
+      },
+
+      {
+        heading: "Why is NMAT Relevant?",
+        body: "The relevance of NMAT depends on the specific examination and the country, university or admission pathway involved. Medico Overseas should confirm the intended NMAT examination with the client before publishing destination-specific requirements.",
+      },
+
+      {
+        heading: "NMAT Eligibility",
+        body: "Eligibility requirements depend on the specific NMAT examination being referenced. Once the examination is confirmed, this section should contain the official academic, age, nationality and other applicable requirements.",
+      },
+
+      {
+        heading: "NMAT Exam Pattern",
+        body: "The examination pattern should be published only after confirming the exact NMAT examination. The final content should cover sections, question types, duration, scoring and qualifying requirements where applicable.",
+      },
+
+      {
+        heading: "NMAT Syllabus",
+        body: "The syllabus depends on the exact NMAT examination. After confirmation from the client, this section should provide the relevant subjects, topics and preparation areas.",
+      },
+
+      {
+        heading: "NMAT Registration",
+        body: "Registration requirements, application procedure, documents, fees and deadlines should be added after confirming the exact NMAT examination and its official registration authority.",
+      },
+
+      {
+        heading: "NMAT Preparation & Coaching",
+        body: "Medico Overseas can provide guidance regarding preparation planning, study resources, registration and the overall examination process once the applicable NMAT examination has been confirmed.",
+      },
+    ],
+
+    faqs: [
+      {
+        question: "Which NMAT examination does Medico Overseas refer to?",
+        answer:
+          "This needs to be confirmed with the client before finalizing the website content because NMAT can refer to different examinations depending on the context.",
       },
       {
-        heading: "Eligibility & Exam Pattern",
-        body: "Eligibility criteria and test format depend on the specific country/university combination. We provide destination-specific guidance once your preferred country is finalized.",
+        question: "Why does the exact NMAT examination need to be confirmed?",
+        answer:
+          "Eligibility, syllabus, examination pattern, registration process and preparation requirements can differ depending on the specific examination.",
       },
       {
-        heading: "How Medico Overseas Helps",
-        body: "Our team assists with registration, preparation resources, and scheduling so this step fits smoothly into your overall admission timeline.",
+        question: "Can students get NMAT guidance?",
+        answer:
+          "Yes. Medico Overseas can provide counselling and preparation guidance once the applicable examination and destination pathway have been confirmed.",
       },
     ],
   },
@@ -116,7 +205,7 @@ const ExamPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-sm">
+              <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-sm mt-14">
                 LICENSING EXAM
               </span>
 
@@ -142,6 +231,57 @@ const ExamPage = () => {
               <p className="mt-4 leading-relaxed text-navy-500">{s.body}</p>
             </section>
           ))}
+          {/* FAQs */}
+          {content.faqs?.length > 0 && (
+            <section className="mt-16">
+              <h2 className="font-heading text-2xl font-bold text-navy-600">
+                Frequently Asked Questions
+              </h2>
+
+              <div className="mt-6 space-y-4">
+                {content.faqs.map((faq) => (
+                  <details
+                    key={faq.question}
+                    className="group rounded-2xl border border-slate-100 bg-white p-5 shadow-sm"
+                  >
+                    <summary className="flex cursor-pointer list-none items-center justify-between font-heading text-sm font-bold text-navy-600">
+                      <span>{faq.question}</span>
+
+                      <span className="ml-4 text-coral transition-transform group-open:rotate-180">
+                        ↓
+                      </span>
+                    </summary>
+
+                    <p className="mt-4 border-t border-slate-100 pt-4 text-sm leading-relaxed text-navy-500">
+                      {faq.answer}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )}
+          {/* CTA */}
+          <section className="mt-16 overflow-hidden rounded-3xl bg-gradient-to-r from-navy-900 to-navy-800 p-8 text-white shadow-xl sm:p-10">
+            <span className="text-xs font-bold uppercase tracking-widest text-coral">
+              NEED GUIDANCE?
+            </span>
+
+            <h2 className="mt-3 font-heading text-2xl font-bold sm:text-3xl">
+              Plan Your {content.title.replace(" Exam", "")} Preparation
+            </h2>
+
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300">
+              Speak with our counsellors to understand eligibility, preparation,
+              registration and the next steps for your examination journey.
+            </p>
+
+            <a
+              href="#enquiry"
+              className="mt-6 inline-flex rounded-xl bg-coral px-6 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:opacity-90"
+            >
+              Get Expert Guidance →
+            </a>
+          </section>
         </div>
 
         <aside className="lg:col-span-1">
