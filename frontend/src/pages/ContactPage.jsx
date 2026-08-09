@@ -13,6 +13,29 @@ const ContactPage = () => (
         content="Get in touch with Medico Overseas for free MBBS abroad counselling. Call, WhatsApp, or visit our office."
       />
       <link rel="canonical" href={window.location.href} />
+      <meta property="og:title" content="Contact Us | Medico Overseas" />
+      <meta
+        property="og:description"
+        content="Get in touch with Medico Overseas for free MBBS abroad counselling. Call, WhatsApp, or visit our office."
+      />
+      <meta
+        property="og:image"
+        content={`${window.location.origin}/medicologo.png`}
+      />
+      <meta property="og:url" content={window.location.href} />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Medico Overseas" />
+
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Contact Us | Medico Overseas" />
+      <meta
+        name="twitter:description"
+        content="Get in touch with Medico Overseas for free MBBS abroad counselling."
+      />
+      <meta
+        name="twitter:image"
+        content={`${window.location.origin}/medicologo.png`}
+      />
     </Helmet>
 
     <PageHero

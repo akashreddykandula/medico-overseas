@@ -136,6 +136,35 @@ const TestimonialsPage = () => {
           content="Read real testimonials and watch video success stories from students studying MBBS abroad with Medico Overseas."
         />
         <link rel="canonical" href={window.location.href} />
+        <meta
+          property="og:title"
+          content="Student Success Stories | Medico Overseas"
+        />
+        <meta
+          property="og:description"
+          content="Read real testimonials and watch video success stories from students studying MBBS abroad with Medico Overseas."
+        />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Medico Overseas" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Student Success Stories | Medico Overseas"
+        />
+        <meta
+          name="twitter:description"
+          content="Read real testimonials and success stories from students studying MBBS abroad with Medico Overseas."
+        />
+        <meta
+          name="twitter:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
       </Helmet>
 
       {/* Hero Header */}

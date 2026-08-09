@@ -189,6 +189,29 @@ const GalleryPage = () => {
           content="Explore campus, hostel, and student life photos from our partner universities abroad."
         />
         <link rel="canonical" href={window.location.href} />
+        <meta property="og:title" content="Gallery | Medico Overseas" />
+        <meta
+          property="og:description"
+          content="Explore campus, hostel, and student life photos from our partner universities abroad."
+        />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Medico Overseas" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Gallery | Medico Overseas" />
+        <meta
+          name="twitter:description"
+          content="Explore campus, hostel, and student life photos from our partner universities abroad."
+        />
+        <meta
+          name="twitter:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
       </Helmet>
 
       <PageHero

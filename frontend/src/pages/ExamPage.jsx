@@ -59,6 +59,29 @@ const ExamPage = () => {
         <title>{content.title} | Medico Overseas</title>
         <meta name="description" content={content.subtitle} />
         <link rel="canonical" href={window.location.href} />
+        <meta
+          property="og:title"
+          content={`${content.title} | Medico Overseas`}
+        />
+        <meta property="og:description" content={content.subtitle} />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Medico Overseas" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content={`${content.title} | Medico Overseas`}
+        />
+        <meta name="twitter:description" content={content.subtitle} />
+        <meta
+          name="twitter:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
       </Helmet>
 
       <PageHero

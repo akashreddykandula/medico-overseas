@@ -84,6 +84,29 @@ const BlogPostPage = () => {
           content={stripHtml(blog.metaDescription) || cleanExcerpt}
         />
         <link rel="canonical" href={window.location.href} />
+        <meta
+          property="og:title"
+          content={`${cleanTitle} | Medico Overseas Blog`}
+        />
+        <meta
+          property="og:description"
+          content={stripHtml(blog.metaDescription) || cleanExcerpt}
+        />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:url" content={shareUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Medico Overseas" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content={`${cleanTitle} | Medico Overseas Blog`}
+        />
+        <meta
+          name="twitter:description"
+          content={stripHtml(blog.metaDescription) || cleanExcerpt}
+        />
+        <meta name="twitter:image" content={imageUrl} />
       </Helmet>
 
       <article className="pt-28 pb-20 bg-slate-50/50">

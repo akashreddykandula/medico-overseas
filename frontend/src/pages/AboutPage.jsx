@@ -225,6 +225,35 @@ const AboutPage = () => {
           content="Learn about Medico Overseas' mission, founder's message, university tie-ups, team, timeline, and track record guiding 5000+ Indian medical students."
         />
         <link rel="canonical" href={window.location.href} />
+        <meta
+          property="og:title"
+          content="About Us | Medico Overseas - Trusted MBBS Consultancy"
+        />
+        <meta
+          property="og:description"
+          content="Learn about Medico Overseas' mission, team, university partnerships, and experience helping Indian students pursue MBBS abroad."
+        />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Medico Overseas" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="About Us | Medico Overseas - Trusted MBBS Consultancy"
+        />
+        <meta
+          name="twitter:description"
+          content="Learn about Medico Overseas and our experience guiding Indian students toward MBBS opportunities abroad."
+        />
+        <meta
+          name="twitter:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
       </Helmet>
 
       {/* Page Hero with Auto-sliding Background Images & Dark Overlay */}

@@ -51,6 +51,35 @@ const BlogListPage = () => {
           content="Guidance, tips, and news on studying MBBS abroad from the Medico Overseas team."
         />
         <link rel="canonical" href={window.location.href} />
+        <meta
+          property="og:title"
+          content="MBBS Abroad Blog | Medico Overseas"
+        />
+        <meta
+          property="og:description"
+          content="Read expert guidance, admission tips, country updates, fees, and important information about studying MBBS abroad."
+        />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Medico Overseas" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="MBBS Abroad Blog | Medico Overseas"
+        />
+        <meta
+          name="twitter:description"
+          content="Expert guidance and useful information for Indian students planning to study MBBS abroad."
+        />
+        <meta
+          name="twitter:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
       </Helmet>
 
       <PageHero

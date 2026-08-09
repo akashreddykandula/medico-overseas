@@ -54,6 +54,29 @@ const FaqsPage = () => {
           content="Answers to common questions about MBBS admissions abroad, fees, visas, and licensing exams."
         />
         <link rel="canonical" href={window.location.href} />
+        <meta property="og:title" content="FAQs | Medico Overseas" />
+        <meta
+          property="og:description"
+          content="Answers to common questions about MBBS admissions abroad, fees, visas, and licensing exams."
+        />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Medico Overseas" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="FAQs | Medico Overseas" />
+        <meta
+          name="twitter:description"
+          content="Answers to common questions about MBBS admissions abroad, fees, visas, and licensing exams."
+        />
+        <meta
+          name="twitter:image"
+          content={`${window.location.origin}/medicologo.png`}
+        />
       </Helmet>
 
       <PageHero
