@@ -290,11 +290,15 @@ const AdminCountriesPage = () => {
       durationYears: country.durationYears ?? 6,
       mediumOfInstruction: country.mediumOfInstruction || "English",
 
-      // Fee Structure
-      tuitionPerYear: country.fees?.tuitionPerYear ?? 0,
-      hostelPerYear: country.fees?.hostelPerYear ?? 0,
-      messPerYear: country.fees?.messPerYear ?? 0,
-      oneTimeCosts: country.fees?.oneTimeCosts ?? 0,
+      // Fee Structure (Leave empty if undefined or zero to display placeholder)
+      tuitionPerYear: country.fees?.tuitionPerYear
+        ? country.fees.tuitionPerYear
+        : "",
+      hostelPerYear: country.fees?.hostelPerYear
+        ? country.fees.hostelPerYear
+        : "",
+      messPerYear: country.fees?.messPerYear ? country.fees.messPerYear : "",
+      oneTimeCosts: country.fees?.oneTimeCosts ? country.fees.oneTimeCosts : "",
       feeCurrency: country.fees?.currency || "USD",
 
       // Eligibility
@@ -307,7 +311,9 @@ const AdminCountriesPage = () => {
       requiredDocuments: (country.requiredDocuments || []).join("\n"),
       visaProcess: country.visaProcess || "",
 
-      monthlyLivingCost: country.livingCost?.monthlyEstimate ?? 0,
+      monthlyLivingCost: country.livingCost?.monthlyEstimate
+        ? country.livingCost.monthlyEstimate
+        : "",
       livingCostCurrency: country.livingCost?.currency || "USD",
       livingCostNotes: country.livingCost?.notes || "",
 
@@ -521,44 +527,69 @@ const AdminCountriesPage = () => {
             </h4>
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <input
-                type="number"
-                min="0"
-                placeholder="Tuition Fee / Year"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
-                {...registerCreate("tuitionPerYear")}
-              />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-navy-600">
+                  Tuition Fee / Year
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 4000"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerCreate("tuitionPerYear")}
+                />
+              </div>
 
-              <input
-                type="number"
-                min="0"
-                placeholder="Hostel Fee / Year"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
-                {...registerCreate("hostelPerYear")}
-              />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-navy-600">
+                  Hostel Fee / Year
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 800"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerCreate("hostelPerYear")}
+                />
+              </div>
 
-              <input
-                type="number"
-                min="0"
-                placeholder="Mess Fee / Year"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
-                {...registerCreate("messPerYear")}
-              />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-navy-600">
+                  Mess Fee / Year
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 1000"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerCreate("messPerYear")}
+                />
+              </div>
 
-              <input
-                type="number"
-                min="0"
-                placeholder="One-Time Costs"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
-                {...registerCreate("oneTimeCosts")}
-              />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-navy-600">
+                  One-Time Costs
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 1500"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerCreate("oneTimeCosts")}
+                />
+              </div>
 
-              <input
-                placeholder="Fee Currency (e.g. USD)"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none sm:col-span-2"
-                {...registerCreate("feeCurrency")}
-                defaultValue="USD"
-              />
+              <div className="space-y-1 sm:col-span-2">
+                <label className="text-xs font-semibold text-navy-600">
+                  Fee Currency
+                </label>
+                <input
+                  placeholder="Fee Currency (e.g. USD)"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerCreate("feeCurrency")}
+                  defaultValue="USD"
+                />
+              </div>
             </div>
           </div>
 
@@ -660,7 +691,7 @@ Medical Fitness Certificate`}
                 <input
                   type="number"
                   min="0"
-                  placeholder="Monthly Living Cost"
+                  placeholder="e.g. 200"
                   className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
                   {...registerCreate("monthlyLivingCost")}
                 />
@@ -918,43 +949,68 @@ Step 6 | Complete university registration`}
             </h4>
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <input
-                type="number"
-                min="0"
-                placeholder="Tuition Fee / Year"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
-                {...registerEdit("tuitionPerYear")}
-              />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-navy-600">
+                  Tuition Fee / Year
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 4000"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerEdit("tuitionPerYear")}
+                />
+              </div>
 
-              <input
-                type="number"
-                min="0"
-                placeholder="Hostel Fee / Year"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
-                {...registerEdit("hostelPerYear")}
-              />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-navy-600">
+                  Hostel Fee / Year
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 800"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerEdit("hostelPerYear")}
+                />
+              </div>
 
-              <input
-                type="number"
-                min="0"
-                placeholder="Mess Fee / Year"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
-                {...registerEdit("messPerYear")}
-              />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-navy-600">
+                  Mess Fee / Year
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 1000"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerEdit("messPerYear")}
+                />
+              </div>
 
-              <input
-                type="number"
-                min="0"
-                placeholder="One-Time Costs"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
-                {...registerEdit("oneTimeCosts")}
-              />
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-navy-600">
+                  One-Time Costs
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 1500"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerEdit("oneTimeCosts")}
+                />
+              </div>
 
-              <input
-                placeholder="Fee Currency (e.g. USD)"
-                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none sm:col-span-2"
-                {...registerEdit("feeCurrency")}
-              />
+              <div className="space-y-1 sm:col-span-2">
+                <label className="text-xs font-semibold text-navy-600">
+                  Fee Currency
+                </label>
+                <input
+                  placeholder="Fee Currency (e.g. USD)"
+                  className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerEdit("feeCurrency")}
+                />
+              </div>
             </div>
           </div>
 
@@ -1029,7 +1085,7 @@ Step 6 | Complete university registration`}
                 <input
                   type="number"
                   min="0"
-                  placeholder="Monthly Living Cost"
+                  placeholder="e.g. 200"
                   className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
                   {...registerEdit("monthlyLivingCost")}
                 />
