@@ -26,6 +26,7 @@ const HomePage = () => (
         name="description"
         content="Get admission to NMC/WHO-recognized MBBS universities in Russia, Georgia, Kyrgyzstan, Uzbekistan, Armenia & Vietnam. Free counselling for Indian students."
       />
+      <link rel="canonical" href={window.location.origin + "/"} />
 
       <script type="application/ld+json">
         {JSON.stringify({
