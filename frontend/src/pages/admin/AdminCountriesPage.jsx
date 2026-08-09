@@ -114,7 +114,6 @@ const AdminCountriesPage = () => {
       heroImage: {
         url: formData.heroImage?.url || "",
       },
-
       capital: formData.capital || "",
       currency: formData.currency || "",
       flightDuration: formData.flightDuration || "",

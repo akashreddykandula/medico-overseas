@@ -48,6 +48,34 @@ const DestinationPage = () => {
     alert("Page link copied to clipboard!");
   };
 
+  const handleDownloadBrochure = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/brochures/${country.slug}`,
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate brochure");
+      }
+
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `MBBS_in_${country.name}_Brochure.pdf`;
+
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Brochure download error:", error);
+      alert("Unable to download brochure. Please try again.");
+    }
+  };
   if (isLoading) {
     return (
       <div className="section-container min-h-[500px] py-16 flex flex-col items-center justify-center">
@@ -263,12 +291,13 @@ const DestinationPage = () => {
 
             {/* Social Share & Download Brochure */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-3 sm:pt-4">
-              <a
-                href="#enquiry-form"
+              <button
+                type="button"
+                onClick={handleDownloadBrochure}
                 className="flex items-center justify-center gap-2 rounded-lg bg-coral px-4 py-2.5 sm:py-2 text-xs font-bold text-white shadow-md hover:opacity-90 w-full sm:w-auto text-center"
               >
                 <HiOutlineDownload size={16} /> Download Brochure PDF
-              </a>
+              </button>
               <div className="flex items-center justify-between sm:justify-start gap-2 text-xs text-slate-300 pt-1 sm:pt-0">
                 <span className="font-semibold">Share:</span>
                 <div className="flex items-center gap-2">

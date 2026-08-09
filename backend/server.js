@@ -23,6 +23,7 @@ const galleryRoutes = require("./routes/galleryRoutes");
 const applicationRoutes = require("./routes/applicationRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const brochureRoutes = require("./routes/brochureRoutes");
 
 connectDB();
 
@@ -73,6 +74,7 @@ app.use("/api/gallery", galleryRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/brochures", brochureRoutes);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(404, `Route not found: ${req.originalUrl}`));
