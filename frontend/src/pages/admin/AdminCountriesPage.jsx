@@ -110,10 +110,73 @@ const AdminCountriesPage = () => {
       name: formData.name,
       shortDescription: formData.shortDescription,
       overview: formData.overview,
+
       heroImage: {
         url: formData.heroImage?.url || "",
       },
-      eligibility: { minAge: 17, neetRequired: true, minAcademicPercent: 50 },
+
+      capital: formData.capital || "",
+      currency: formData.currency || "",
+      flightDuration: formData.flightDuration || "",
+      timeDifference: formData.timeDifference || "",
+      internationalAirports: formData.internationalAirports || "",
+
+      durationYears: Number(formData.durationYears) || 6,
+      mediumOfInstruction: formData.mediumOfInstruction || "English",
+
+      fees: {
+        tuitionPerYear: Number(formData.tuitionPerYear) || 0,
+        hostelPerYear: Number(formData.hostelPerYear) || 0,
+        messPerYear: Number(formData.messPerYear) || 0,
+        oneTimeCosts: Number(formData.oneTimeCosts) || 0,
+        currency: formData.feeCurrency || "USD",
+      },
+
+      eligibility: {
+        minAge: Number(formData.minAge) || 17,
+        neetRequired: formData.neetRequired === "true",
+        minAcademicPercent: Number(formData.minAcademicPercent) || 50,
+        notes: formData.eligibilityNotes || "",
+      },
+      requiredDocuments: formData.requiredDocuments
+        ? formData.requiredDocuments
+            .split("\n")
+            .map((doc) => doc.trim())
+            .filter(Boolean)
+        : [],
+      visaProcess: formData.visaProcess || "",
+
+      livingCost: {
+        monthlyEstimate: Number(formData.monthlyLivingCost) || 0,
+        currency: formData.livingCostCurrency || "USD",
+        notes: formData.livingCostNotes || "",
+      },
+      admissionProcess: formData.admissionProcess
+        ? formData.admissionProcess
+            .split("\n")
+            .map((step, index) => {
+              const [title, ...descriptionParts] = step.split("|");
+
+              return {
+                step: title?.trim() || `Step ${index + 1}`,
+                description: descriptionParts.join("|").trim(),
+              };
+            })
+            .filter((item) => item.description)
+        : [],
+      faqs: formData.faqs
+        ? formData.faqs
+            .split("\n")
+            .map((faq) => {
+              const [question, ...answerParts] = faq.split("|");
+
+              return {
+                question: question?.trim(),
+                answer: answerParts.join("|").trim(),
+              };
+            })
+            .filter((item) => item.question && item.answer)
+        : [],
     });
   };
 
@@ -124,10 +187,79 @@ const AdminCountriesPage = () => {
         name: formData.name,
         shortDescription: formData.shortDescription,
         overview: formData.overview,
-        isPublished: formData.isPublished,
+        isPublished: formData.isPublished === "true",
+
         heroImage: {
           url: formData.heroImage?.url || "",
         },
+
+        capital: formData.capital || "",
+        currency: formData.currency || "",
+        flightDuration: formData.flightDuration || "",
+        timeDifference: formData.timeDifference || "",
+        internationalAirports: formData.internationalAirports || "",
+
+        durationYears: Number(formData.durationYears) || 6,
+        mediumOfInstruction: formData.mediumOfInstruction || "English",
+
+        fees: {
+          tuitionPerYear: Number(formData.tuitionPerYear) || 0,
+          hostelPerYear: Number(formData.hostelPerYear) || 0,
+          messPerYear: Number(formData.messPerYear) || 0,
+          oneTimeCosts: Number(formData.oneTimeCosts) || 0,
+          currency: formData.feeCurrency || "USD",
+        },
+
+        eligibility: {
+          minAge: Number(formData.minAge) || 17,
+          neetRequired: formData.neetRequired === "true",
+          minAcademicPercent: Number(formData.minAcademicPercent) || 50,
+          notes: formData.eligibilityNotes || "",
+        },
+
+        requiredDocuments: formData.requiredDocuments
+          ? formData.requiredDocuments
+              .split("\n")
+              .map((doc) => doc.trim())
+              .filter(Boolean)
+          : [],
+        visaProcess: formData.visaProcess || "",
+
+        livingCost: {
+          monthlyEstimate: Number(formData.monthlyLivingCost) || 0,
+          currency: formData.livingCostCurrency || "USD",
+          notes: formData.livingCostNotes || "",
+        },
+
+        admissionProcess: formData.admissionProcess
+          ? formData.admissionProcess
+              .split("\n")
+              .map((step, index) => {
+                const [title, ...descriptionParts] = step.split("|");
+
+                return {
+                  step: title?.trim() || `Step ${index + 1}`,
+                  description: descriptionParts.join("|").trim(),
+                };
+              })
+              .filter((item) => item.description)
+          : [],
+        faqs: formData.faqs
+          ? formData.faqs
+              .split("\n")
+              .map((faq) => {
+                const [question, ...answerParts] = faq.split("|");
+
+                return {
+                  question: question?.trim(),
+                  answer: answerParts.join("|").trim(),
+                };
+              })
+              .filter((item) => item.question && item.answer)
+          : [],
+
+        climateNotes: formData.climateNotes || "",
+        studentLifeNotes: formData.studentLifeNotes || "",
       },
     });
   };
@@ -135,14 +267,63 @@ const AdminCountriesPage = () => {
   const handleStartEdit = (country) => {
     setEditingCountry(country);
     setShowForm(false);
+
     resetEdit({
       name: country.name || "",
       shortDescription: country.shortDescription || "",
       overview: country.overview || "",
-      isPublished: country.isPublished ?? true,
+
+      isPublished: String(country.isPublished ?? true),
+
       heroImage: {
         url: country.heroImage?.url || country.heroImage || "",
       },
+
+      // Destination Information
+      capital: country.capital || "",
+      currency: country.currency || "",
+      flightDuration: country.flightDuration || "",
+      timeDifference: country.timeDifference || "",
+      internationalAirports: country.internationalAirports || "",
+
+      // MBBS Information
+      durationYears: country.durationYears ?? 6,
+      mediumOfInstruction: country.mediumOfInstruction || "English",
+
+      // Fee Structure
+      tuitionPerYear: country.fees?.tuitionPerYear ?? 0,
+      hostelPerYear: country.fees?.hostelPerYear ?? 0,
+      messPerYear: country.fees?.messPerYear ?? 0,
+      oneTimeCosts: country.fees?.oneTimeCosts ?? 0,
+      feeCurrency: country.fees?.currency || "USD",
+
+      // Eligibility
+      minAge: country.eligibility?.minAge ?? 17,
+      neetRequired: String(country.eligibility?.neetRequired ?? true),
+      minAcademicPercent: country.eligibility?.minAcademicPercent ?? 50,
+      eligibilityNotes: country.eligibility?.notes || "",
+
+      // Required Documents
+      requiredDocuments: (country.requiredDocuments || []).join("\n"),
+      visaProcess: country.visaProcess || "",
+
+      monthlyLivingCost: country.livingCost?.monthlyEstimate ?? 0,
+      livingCostCurrency: country.livingCost?.currency || "USD",
+      livingCostNotes: country.livingCost?.notes || "",
+
+      // Admission Process
+      admissionProcess: (country.admissionProcess || [])
+        .map((item) => `${item.step} | ${item.description}`)
+        .join("\n"),
+
+      // FAQs
+      faqs: (country.faqs || [])
+        .map((item) => `${item.question} | ${item.answer}`)
+        .join("\n"),
+
+      // Climate & Student Life
+      climateNotes: country.climateNotes || "",
+      studentLifeNotes: country.studentLifeNotes || "",
     });
   };
 
@@ -272,6 +453,262 @@ const AdminCountriesPage = () => {
             {...registerCreate("overview", { required: true })}
           />
 
+          {/* BASIC DESTINATION INFORMATION */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Destination Information
+            </h4>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <input
+                placeholder="Capital City"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("capital")}
+              />
+
+              <input
+                placeholder="Currency (e.g. RUB, GEL, USD)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("currency")}
+              />
+
+              <input
+                placeholder="Flight Duration (e.g. 7-8 Hours)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("flightDuration")}
+              />
+
+              <input
+                placeholder="Time Difference (e.g. +2:30 Hours)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("timeDifference")}
+              />
+
+              <input
+                placeholder="International Airports"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none sm:col-span-2"
+                {...registerCreate("internationalAirports")}
+              />
+            </div>
+          </div>
+
+          {/* MBBS INFORMATION */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              MBBS Information
+            </h4>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <input
+                type="number"
+                placeholder="Course Duration (Years)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("durationYears")}
+              />
+
+              <input
+                placeholder="Medium of Instruction"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("mediumOfInstruction")}
+              />
+            </div>
+          </div>
+
+          {/* FEE STRUCTURE */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Fee Structure
+            </h4>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <input
+                type="number"
+                min="0"
+                placeholder="Tuition Fee / Year"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("tuitionPerYear")}
+              />
+
+              <input
+                type="number"
+                min="0"
+                placeholder="Hostel Fee / Year"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("hostelPerYear")}
+              />
+
+              <input
+                type="number"
+                min="0"
+                placeholder="Mess Fee / Year"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("messPerYear")}
+              />
+
+              <input
+                type="number"
+                min="0"
+                placeholder="One-Time Costs"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("oneTimeCosts")}
+              />
+
+              <input
+                placeholder="Fee Currency (e.g. USD)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none sm:col-span-2"
+                {...registerCreate("feeCurrency")}
+                defaultValue="USD"
+              />
+            </div>
+          </div>
+
+          {/* ELIGIBILITY */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Eligibility
+            </h4>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <input
+                type="number"
+                min="1"
+                placeholder="Minimum Age"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("minAge")}
+                defaultValue={17}
+              />
+
+              <input
+                type="number"
+                min="0"
+                max="100"
+                placeholder="Minimum Academic %"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("minAcademicPercent")}
+                defaultValue={50}
+              />
+
+              <select
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("neetRequired")}
+                defaultValue="true"
+              >
+                <option value="true">NEET Required</option>
+                <option value="false">NEET Not Required</option>
+              </select>
+            </div>
+
+            <textarea
+              placeholder="Eligibility notes"
+              rows={2}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerCreate("eligibilityNotes")}
+            />
+          </div>
+
+          {/* REQUIRED DOCUMENTS */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Required Documents
+            </h4>
+
+            <p className="text-[11px] text-navy-400">
+              Enter one document per line.
+            </p>
+
+            <textarea
+              placeholder={`Example:
+Original Passport
+Class 10th Marksheet
+Class 12th Marksheet
+NEET Scorecard
+Passport Size Photographs
+Medical Fitness Certificate`}
+              rows={6}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerCreate("requiredDocuments")}
+            />
+          </div>
+
+          {/* VISA & LIVING COST */}
+          <div className="space-y-4 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Visa & Living Cost
+            </h4>
+
+            {/* Visa Process */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-navy-600">
+                Visa Process
+              </label>
+
+              <textarea
+                placeholder="Describe the student visa process, invitation letter, embassy submission, visa stamping, etc."
+                rows={4}
+                className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerCreate("visaProcess")}
+              />
+            </div>
+
+            {/* Living Cost */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-navy-600">
+                Monthly Living Cost
+              </label>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Monthly Living Cost"
+                  className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerCreate("monthlyLivingCost")}
+                />
+
+                <input
+                  placeholder="Currency (e.g. USD)"
+                  defaultValue="USD"
+                  className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerCreate("livingCostCurrency")}
+                />
+              </div>
+            </div>
+
+            {/* Living Cost Notes */}
+            <textarea
+              placeholder="Living cost notes (food, transport, accommodation, utilities, personal expenses...)"
+              rows={3}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerCreate("livingCostNotes")}
+            />
+          </div>
+
+          {/* ADMISSION PROCESS */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+                Admission Process
+              </h4>
+
+              <p className="mt-1 text-[11px] text-navy-400">
+                Add one admission step per line using: Step Title | Description
+              </p>
+            </div>
+
+            <textarea
+              placeholder={`Example:
+Step 1 | Submit application and academic documents
+Step 2 | Receive admission confirmation
+Step 3 | Receive invitation letter
+Step 4 | Apply for student visa
+Step 5 | Travel to the destination country
+Step 6 | Complete university registration`}
+              rows={8}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerCreate("admissionProcess")}
+            />
+          </div>
+
           <div className="flex gap-2">
             <button
               type="submit"
@@ -323,8 +760,8 @@ const AdminCountriesPage = () => {
               className="w-full rounded-lg border border-navy-100 px-3 py-2 text-sm focus:border-coral focus:outline-none"
               {...registerEdit("isPublished")}
             >
-              <option value={true}>Published</option>
-              <option value={false}>Draft</option>
+              <option value="true">Published</option>
+              <option value="false">Draft</option>
             </select>
           </div>
 
@@ -412,6 +849,302 @@ const AdminCountriesPage = () => {
             className="w-full rounded-lg border border-navy-100 px-3 py-2 text-sm focus:border-coral focus:outline-none"
             {...registerEdit("overview", { required: true })}
           />
+
+          {/* EDIT DESTINATION INFORMATION */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Destination Information
+            </h4>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <input
+                placeholder="Capital City"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("capital")}
+              />
+
+              <input
+                placeholder="Currency (e.g. RUB, GEL, USD)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("currency")}
+              />
+
+              <input
+                placeholder="Flight Duration (e.g. 7-8 Hours)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("flightDuration")}
+              />
+
+              <input
+                placeholder="Time Difference (e.g. +2:30 Hours)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("timeDifference")}
+              />
+
+              <input
+                placeholder="International Airports"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none sm:col-span-2"
+                {...registerEdit("internationalAirports")}
+              />
+            </div>
+          </div>
+
+          {/* EDIT MBBS INFORMATION */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              MBBS Information
+            </h4>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <input
+                type="number"
+                placeholder="Course Duration (Years)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("durationYears")}
+              />
+
+              <input
+                placeholder="Medium of Instruction"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("mediumOfInstruction")}
+              />
+            </div>
+          </div>
+
+          {/* EDIT FEE STRUCTURE */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Fee Structure
+            </h4>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <input
+                type="number"
+                min="0"
+                placeholder="Tuition Fee / Year"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("tuitionPerYear")}
+              />
+
+              <input
+                type="number"
+                min="0"
+                placeholder="Hostel Fee / Year"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("hostelPerYear")}
+              />
+
+              <input
+                type="number"
+                min="0"
+                placeholder="Mess Fee / Year"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("messPerYear")}
+              />
+
+              <input
+                type="number"
+                min="0"
+                placeholder="One-Time Costs"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("oneTimeCosts")}
+              />
+
+              <input
+                placeholder="Fee Currency (e.g. USD)"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none sm:col-span-2"
+                {...registerEdit("feeCurrency")}
+              />
+            </div>
+          </div>
+
+          {/* EDIT ELIGIBILITY */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Eligibility
+            </h4>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <input
+                type="number"
+                min="1"
+                placeholder="Minimum Age"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("minAge")}
+              />
+
+              <input
+                type="number"
+                min="0"
+                max="100"
+                placeholder="Minimum Academic %"
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("minAcademicPercent")}
+              />
+
+              <select
+                className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("neetRequired")}
+              >
+                <option value="true">NEET Required</option>
+                <option value="false">NEET Not Required</option>
+              </select>
+            </div>
+
+            <textarea
+              placeholder="Eligibility notes"
+              rows={2}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerEdit("eligibilityNotes")}
+            />
+          </div>
+
+          {/* EDIT VISA & LIVING COST */}
+          <div className="space-y-4 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Visa & Living Cost
+            </h4>
+
+            {/* Visa Process */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-navy-600">
+                Visa Process
+              </label>
+
+              <textarea
+                placeholder="Describe the student visa process, invitation letter, embassy submission, visa stamping, etc."
+                rows={4}
+                className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                {...registerEdit("visaProcess")}
+              />
+            </div>
+
+            {/* Living Cost */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-navy-600">
+                Monthly Living Cost
+              </label>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Monthly Living Cost"
+                  className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerEdit("monthlyLivingCost")}
+                />
+
+                <input
+                  placeholder="Currency (e.g. USD)"
+                  className="rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+                  {...registerEdit("livingCostCurrency")}
+                />
+              </div>
+            </div>
+
+            {/* Living Cost Notes */}
+            <textarea
+              placeholder="Living cost notes (food, transport, accommodation, utilities, personal expenses...)"
+              rows={3}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerEdit("livingCostNotes")}
+            />
+          </div>
+
+          {/* EDIT ADMISSION PROCESS */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+                Admission Process
+              </h4>
+
+              <p className="mt-1 text-[11px] text-navy-400">
+                Add one admission step per line using: Step Title | Description
+              </p>
+            </div>
+
+            <textarea
+              placeholder={`Example:
+Step 1 | Submit application and academic documents
+Step 2 | Receive admission confirmation
+Step 3 | Receive invitation letter
+Step 4 | Apply for student visa
+Step 5 | Travel to the destination country
+Step 6 | Complete university registration`}
+              rows={8}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerEdit("admissionProcess")}
+            />
+          </div>
+
+          {/* EDIT FAQs */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+                Frequently Asked Questions
+              </h4>
+
+              <p className="mt-1 text-[11px] text-navy-400">
+                Add one FAQ per line using: Question | Answer
+              </p>
+            </div>
+
+            <textarea
+              placeholder={`Example:
+What is the duration of MBBS? | The MBBS program is 6 years.
+Is NEET required? | Yes, NEET qualification is required.
+Is the course taught in English? | Yes, English-medium programs are available.
+Is hostel accommodation available? | Yes, hostel accommodation is available.`}
+              rows={8}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerEdit("faqs")}
+            />
+          </div>
+
+          {/* EDIT CLIMATE & STUDENT LIFE */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Climate & Student Life
+            </h4>
+
+            <textarea
+              placeholder="Climate & Seasons (e.g. Cold winters, pleasant summers...)"
+              rows={3}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerEdit("climateNotes")}
+            />
+
+            <textarea
+              placeholder="Student Life (e.g. Indian community, food, accommodation, campus life...)"
+              rows={3}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerEdit("studentLifeNotes")}
+            />
+          </div>
+
+          {/* EDIT REQUIRED DOCUMENTS */}
+          <div className="space-y-3 rounded-xl border border-navy-50 bg-slate-50/50 p-4">
+            <h4 className="text-xs font-bold uppercase tracking-wide text-navy-600">
+              Required Documents
+            </h4>
+
+            <p className="text-[11px] text-navy-400">
+              Enter one document per line.
+            </p>
+
+            <textarea
+              placeholder={`Example:
+Original Passport
+Class 10th Marksheet
+Class 12th Marksheet
+NEET Scorecard
+Passport Size Photographs
+Medical Fitness Certificate`}
+              rows={6}
+              className="w-full rounded-lg border border-navy-100 bg-white px-3 py-2 text-sm focus:border-coral focus:outline-none"
+              {...registerEdit("requiredDocuments")}
+            />
+          </div>
 
           <div className="flex gap-2">
             <button
