@@ -50,10 +50,48 @@ const DestinationPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-96 items-center justify-center text-navy-400">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-3 border-coral border-t-transparent" />
-          <p className="text-sm font-medium">Loading destination details...</p>
+      <div className="section-container min-h-[500px] py-16 flex flex-col items-center justify-center">
+        {/* Animated Floating Radar / Globe Visual */}
+        <div className="relative flex items-center justify-center">
+          {/* Pulsing Outer Rings */}
+          <div className="absolute h-28 w-28 animate-ping rounded-full bg-coral/20 duration-1000" />
+          <div className="absolute h-20 w-20 animate-pulse rounded-full bg-navy-100" />
+
+          {/* Center Icon Badge */}
+          <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl bg-coral text-white shadow-lg shadow-coral/30">
+            <HiOutlineGlobeAlt
+              size={32}
+              className="animate-spin"
+              style={{ animationDuration: "6s" }}
+            />
+          </div>
+        </div>
+
+        {/* Dynamic Text with Progress Indicators */}
+        <div className="mt-6 text-center space-y-2">
+          <h3 className="font-heading text-lg font-bold text-navy-600 tracking-wide">
+            Exploring Destinations...
+          </h3>
+          <p className="text-xs text-navy-400 animate-pulse max-w-xs">
+            Fetching top universities, fee structures, and entry requirements
+          </p>
+        </div>
+
+        {/* Progress Line Bar */}
+        <div className="mt-6 h-1.5 w-48 overflow-hidden rounded-full bg-navy-50">
+          <div className="h-full w-full bg-gradient-to-r from-coral via-coral-400 to-navy-600 animate-[shimmer_1.5s_infinite] -translate-x-full bg-[length:200%_100%]" />
+        </div>
+
+        {/* Quick Feature Dots Preview */}
+        <div className="mt-8 flex items-center gap-6 text-[11px] text-navy-400 font-medium">
+          <span className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />{" "}
+            NMC Approved
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-sky-500 animate-ping" />{" "}
+            WHO Recognized
+          </span>
         </div>
       </div>
     );
