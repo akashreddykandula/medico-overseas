@@ -190,10 +190,10 @@ const AdminLayout = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="relative rounded-xl border border-navy-100 p-2.5 text-navy-400 transition-colors hover:bg-navy-50 hover:text-navy-600">
+            {/* <button className="relative rounded-xl border border-navy-100 p-2.5 text-navy-400 transition-colors hover:bg-navy-50 hover:text-navy-600">
               <HiOutlineBell size={18} />
               <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-coral" />
-            </button>
+            </button> */}
 
             <div className="hidden sm:flex items-center gap-2 rounded-full border border-navy-100 bg-navy-50/50 px-3.5 py-1.5 text-xs font-semibold text-navy-600">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
