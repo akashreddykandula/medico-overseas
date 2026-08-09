@@ -330,7 +330,7 @@ const Navbar = ({ onMobileMenuChange }) => {
           >
             <img
               src="/medicologo-removebg-preview.png"
-              alt=""
+              alt="Medico OverSeas Logo"
               className="h-9 w-auto max-w-[150px] object-contain shrink"
             />
           </Link>
