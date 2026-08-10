@@ -70,7 +70,7 @@ router.post("/", upload.single("logo"), createUniversity);
 // - Duplicate-key errors are handled safely.
 // ------------------------------------------------------------
 
-router.put("/:id", updateUniversity);
+router.put("/:id", upload.single("logo"), updateUniversity);
 
 // ------------------------------------------------------------
 // DELETE UNIVERSITY

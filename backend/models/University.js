@@ -39,7 +39,6 @@ const universitySchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       maxlength: 200,
-      index: true,
     },
 
     country: {

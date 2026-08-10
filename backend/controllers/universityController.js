@@ -4,7 +4,7 @@ const Country = require("../models/Country");
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
-const uploadToCloudinary = require("../utils/uploadToCloudinary");
+const { uploadBufferToCloudinary } = require("../services/cloudinaryService");
 
 // ------------------------------------------------------------
 // SECURITY HELPERS
@@ -226,6 +226,10 @@ const validateUniversityPayload = async (
   // "true", "false", {}, "$ne", etc. from being accepted.
   // ----------------------------------------------------------
 
+  // ----------------------------------------------------------
+  // BOOLEAN FIELDS
+  // ----------------------------------------------------------
+
   const booleanFields = [
     "nmcApproved",
     "whoRecognized",
@@ -239,7 +243,6 @@ const validateUniversityPayload = async (
       throw new ApiError(400, `${field} must be a boolean`);
     }
   }
-
   // ----------------------------------------------------------
   // NUMERIC FIELDS
   // ----------------------------------------------------------
@@ -484,7 +487,77 @@ const getUniversityBySlug = asyncHandler(async (req, res) => {
 // @route   POST /api/universities
 // @access  Private (admin/content_manager)
 // ------------------------------------------------------------
+const parseMultipartUniversityBody = (body) => {
+  const data = { ...body };
 
+  // ----------------------------------------------------------
+  // BOOLEAN FIELDS
+  // ----------------------------------------------------------
+
+  const booleanFields = [
+    "nmcApproved",
+    "whoRecognized",
+    "hostelAvailable",
+    "isPartner",
+    "isPublished",
+  ];
+
+  for (const field of booleanFields) {
+    if (data[field] !== undefined) {
+      if (data[field] === "true") {
+        data[field] = true;
+      } else if (data[field] === "false") {
+        data[field] = false;
+      } else {
+        throw new ApiError(400, `${field} must be a boolean`);
+      }
+    }
+  }
+
+  // ----------------------------------------------------------
+  // NUMBER FIELDS
+  // ----------------------------------------------------------
+
+  const numericFields = ["establishedYear", "durationYears"];
+
+  for (const field of numericFields) {
+    if (data[field] !== undefined && data[field] !== "") {
+      const number = Number(data[field]);
+
+      if (!Number.isFinite(number)) {
+        throw new ApiError(400, `${field} must be a valid number`);
+      }
+
+      data[field] = number;
+    }
+  }
+
+  // ----------------------------------------------------------
+  // FEES
+  // ----------------------------------------------------------
+
+  if (typeof data.fees === "string") {
+    try {
+      data.fees = JSON.parse(data.fees);
+    } catch {
+      throw new ApiError(400, "Invalid fees data");
+    }
+  }
+
+  // ----------------------------------------------------------
+  // HIGHLIGHTS
+  // ----------------------------------------------------------
+
+  if (typeof data.highlights === "string") {
+    try {
+      data.highlights = JSON.parse(data.highlights);
+    } catch {
+      throw new ApiError(400, "Invalid highlights data");
+    }
+  }
+
+  return data;
+};
 const createUniversity = asyncHandler(async (req, res) => {
   // ----------------------------------------------------------
 
@@ -493,17 +566,61 @@ const createUniversity = asyncHandler(async (req, res) => {
   // ----------------------------------------------------------
 
   if (req.file) {
+    // ----------------------------------------------------------
+
+    // SECURITY: SERVER-SIDE FILE VALIDATION
+
+    // ----------------------------------------------------------
+
+    const ALLOWED_IMAGE_MIMES = new Set([
+      "image/jpeg",
+
+      "image/png",
+
+      "image/webp",
+    ]);
+
+    const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+    if (!ALLOWED_IMAGE_MIMES.has(req.file.mimetype)) {
+      throw new ApiError(400, "Only JPG, PNG, and WEBP images are allowed");
+    }
+
+    if (!Buffer.isBuffer(req.file.buffer) || req.file.buffer.length === 0) {
+      throw new ApiError(400, "Invalid image file");
+    }
+
+    if (req.file.size > MAX_IMAGE_SIZE) {
+      throw new ApiError(400, "University logo must be less than 5MB");
+    }
+
     try {
-      const uploadedLogo = await uploadToCloudinary(req.file.buffer, {
-        folder: "medico-overseas/universities",
-      });
+      const uploadedLogo = await uploadBufferToCloudinary(
+        req.file.buffer,
+
+        "medico-overseas/universities",
+
+        "image",
+      );
+
+      if (
+        !uploadedLogo ||
+        typeof uploadedLogo.secure_url !== "string" ||
+        typeof uploadedLogo.public_id !== "string"
+      ) {
+        throw new Error("Invalid Cloudinary upload response");
+      }
 
       req.body.logo = {
-        url: uploadedLogo.url,
+        url: uploadedLogo.secure_url,
 
-        publicId: uploadedLogo.publicId,
+        publicId: uploadedLogo.public_id,
       };
     } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+
       throw new ApiError(500, "Failed to upload university logo");
     }
   }
@@ -516,7 +633,9 @@ const createUniversity = asyncHandler(async (req, res) => {
     throw new ApiError(403, "Access denied");
   }
 
-  const universityData = buildSafePayload(req.body);
+  const normalizedBody = parseMultipartUniversityBody(req.body);
+
+  const universityData = buildSafePayload(normalizedBody);
 
   await validateUniversityPayload(universityData, {
     isCreate: true,
@@ -562,24 +681,129 @@ const createUniversity = asyncHandler(async (req, res) => {
 const updateUniversity = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
+  // ----------------------------------------------------------
+  // VALIDATE UNIVERSITY ID
+  // ----------------------------------------------------------
+
   if (!isValidObjectId(id)) {
     throw new ApiError(400, "Invalid university ID");
   }
 
-  const updateData = buildSafePayload(req.body);
+  // ----------------------------------------------------------
+  // DEFENSE-IN-DEPTH AUTHORIZATION
+  // ----------------------------------------------------------
 
-  if (Object.keys(updateData).length === 0) {
-    throw new ApiError(400, "No valid fields provided for update");
+  if (
+    !req.user ||
+    !["super_admin", "admin", "content_manager"].includes(req.user.role)
+  ) {
+    throw new ApiError(403, "Access denied");
   }
 
-  // Get current university before applying changes.
-  const existingUniversity = await University.findById(id).select("country");
+  // ----------------------------------------------------------
+  // GET EXISTING UNIVERSITY
+  // ----------------------------------------------------------
+
+  const existingUniversity =
+    await University.findById(id).select("country logo");
 
   if (!existingUniversity) {
     throw new ApiError(404, "University not found");
   }
 
+  // ----------------------------------------------------------
+  // HANDLE NEW LOGO UPLOAD
+  // ----------------------------------------------------------
+  //
+  // IMPORTANT:
+  // The route uses:
+  // upload.single("logo")
+  //
+  // Therefore the uploaded file is available as req.file.
+  // ----------------------------------------------------------
+
+  if (req.file) {
+    const ALLOWED_IMAGE_MIMES = new Set([
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ]);
+
+    const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+
+    if (!ALLOWED_IMAGE_MIMES.has(req.file.mimetype)) {
+      throw new ApiError(400, "Only JPG, PNG, and WEBP images are allowed");
+    }
+
+    if (!Buffer.isBuffer(req.file.buffer) || req.file.buffer.length === 0) {
+      throw new ApiError(400, "Invalid image file");
+    }
+
+    if (req.file.size > MAX_IMAGE_SIZE) {
+      throw new ApiError(400, "University logo must be less than 5MB");
+    }
+
+    try {
+      const uploadedLogo = await uploadBufferToCloudinary(
+        req.file.buffer,
+        "medico-overseas/universities",
+        "image",
+      );
+
+      if (
+        !uploadedLogo ||
+        typeof uploadedLogo.secure_url !== "string" ||
+        typeof uploadedLogo.public_id !== "string"
+      ) {
+        throw new Error("Invalid Cloudinary upload response");
+      }
+
+      // Add Cloudinary logo to the update payload.
+      req.body.logo = {
+        url: uploadedLogo.secure_url,
+        publicId: uploadedLogo.public_id,
+      };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+
+      throw new ApiError(500, "Failed to upload university logo");
+    }
+  }
+
+  // ----------------------------------------------------------
+  // NORMALIZE MULTIPART BODY
+  // ----------------------------------------------------------
+  //
+  // PUT + multipart/form-data sends values as strings.
+  // Convert booleans, numbers, fees and highlights before
+  // validation.
+  // ----------------------------------------------------------
+
+  const normalizedBody = req.is("multipart/form-data")
+    ? parseMultipartUniversityBody(req.body)
+    : req.body;
+
+  // ----------------------------------------------------------
+  // BUILD SAFE UPDATE PAYLOAD
+  // ----------------------------------------------------------
+
+  const updateData = buildSafePayload(normalizedBody);
+
+  if (Object.keys(updateData).length === 0) {
+    throw new ApiError(400, "No valid fields provided for update");
+  }
+
+  // ----------------------------------------------------------
+  // VALIDATE UPDATE DATA
+  // ----------------------------------------------------------
+
   await validateUniversityPayload(updateData);
+
+  // ----------------------------------------------------------
+  // COUNTRY CHANGE TRACKING
+  // ----------------------------------------------------------
 
   const oldCountryId = existingUniversity.country
     ? String(existingUniversity.country)
@@ -589,6 +813,10 @@ const updateUniversity = asyncHandler(async (req, res) => {
     updateData.country !== undefined
       ? String(updateData.country)
       : oldCountryId;
+
+  // ----------------------------------------------------------
+  // UPDATE UNIVERSITY
+  // ----------------------------------------------------------
 
   let university;
 
@@ -619,9 +847,6 @@ const updateUniversity = asyncHandler(async (req, res) => {
   // ----------------------------------------------------------
   // COUNTRY COUNTER MAINTENANCE
   // ----------------------------------------------------------
-  // Preserve the existing business logic when a university is
-  // moved from one country to another.
-  // ----------------------------------------------------------
 
   if (oldCountryId !== newCountryId) {
     if (oldCountryId) {
@@ -641,6 +866,10 @@ const updateUniversity = asyncHandler(async (req, res) => {
     }
   }
 
+  // ----------------------------------------------------------
+  // RESPONSE
+  // ----------------------------------------------------------
+
   res.status(200).json(
     new ApiResponse(
       200,
@@ -651,7 +880,6 @@ const updateUniversity = asyncHandler(async (req, res) => {
     ),
   );
 });
-
 // ------------------------------------------------------------
 // DELETE UNIVERSITY
 // @route   DELETE /api/universities/:id

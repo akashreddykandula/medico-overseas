@@ -467,9 +467,8 @@ const DestinationPage = () => {
                             Tuition / Yr
                           </span>
                           <span className="font-bold text-coral">
-                            {u.fees?.currency || "USD"}{" "}
-                            {typeof u.fees?.tuitionPerYear === "number"
-                              ? u.fees.tuitionPerYear.toLocaleString()
+                            {u.fees?.tuitionPerYear
+                              ? `${u.fees?.currency || "USD"} ${u.fees.tuitionPerYear.toLocaleString()}`
                               : "Not specified"}
                           </span>
                         </div>
@@ -566,9 +565,8 @@ const DestinationPage = () => {
                             </div>
                           </td>
                           <td className="p-3 font-bold text-coral">
-                            {u.fees?.currency || "USD"}{" "}
-                            {typeof u.fees?.tuitionPerYear === "number"
-                              ? u.fees.tuitionPerYear.toLocaleString()
+                            {u.fees?.tuitionPerYear
+                              ? `${u.fees?.currency || "USD"} ${u.fees.tuitionPerYear.toLocaleString()}`
                               : "Not specified"}
                           </td>
                           <td className="p-3">
@@ -627,41 +625,42 @@ const DestinationPage = () => {
                 <div className="flex justify-between border-b pb-1">
                   <span>Tuition Fee (Annual):</span>
                   <span className="font-bold">
-                    {country.fees?.currency || "USD"}{" "}
-                    {country.fees?.tuitionPerYear?.toLocaleString() ||
-                      "Not specified"}
+                    {country.fees?.tuitionPerYear
+                      ? `${country.fees?.currency || "USD"} ${country.fees.tuitionPerYear.toLocaleString()}`
+                      : "Not specified"}
                   </span>
                 </div>
                 <div className="flex justify-between border-b pb-1">
                   <span>Hostel Accommodation:</span>
                   <span className="font-bold">
-                    {country.fees?.currency || "USD"}{" "}
-                    {country.fees?.hostelPerYear?.toLocaleString() ||
-                      "Not specified"}
+                    {country.fees?.hostelPerYear
+                      ? `${country.fees?.currency || "USD"} ${country.fees.hostelPerYear.toLocaleString()}`
+                      : "Not specified"}
                   </span>
                 </div>
                 <div className="flex justify-between border-b pb-1">
                   <span>Mess Fee:</span>
                   <span className="font-bold">
-                    {country.fees?.currency || "USD"}{" "}
-                    {country.fees?.messPerYear?.toLocaleString() ||
-                      "Not specified"}
+                    {country.fees?.messPerYear
+                      ? `${country.fees?.currency || "USD"} ${country.fees.messPerYear.toLocaleString()}`
+                      : "Not specified"}
                   </span>
                 </div>
                 <div className="flex justify-between border-b pb-1">
                   <span>One-Time Costs:</span>
                   <span className="font-bold">
-                    {country.fees?.currency || "USD"}{" "}
-                    {country.fees?.oneTimeCosts?.toLocaleString() ||
-                      "Not specified"}
+                    {country.fees?.oneTimeCosts
+                      ? `${country.fees?.currency || "USD"} ${country.fees.oneTimeCosts.toLocaleString()}`
+                      : "Not specified"}
                   </span>
                 </div>
                 <div className="flex justify-between pt-1 font-bold text-navy-600">
                   <span>Est. Annual Total:</span>
                   <span className="text-coral">
-                    {country.fees?.tuitionPerYear != null ||
-                    country.fees?.hostelPerYear != null ||
-                    country.fees?.messPerYear != null
+                    {(country.fees?.tuitionPerYear || 0) +
+                      (country.fees?.hostelPerYear || 0) +
+                      (country.fees?.messPerYear || 0) >
+                    0
                       ? `${country.fees?.currency || "USD"} ${(
                           (country.fees?.tuitionPerYear || 0) +
                           (country.fees?.hostelPerYear || 0) +
@@ -683,9 +682,9 @@ const DestinationPage = () => {
                   <span>Estimated Monthly Cost:</span>
 
                   <span className="font-bold text-coral">
-                    {country.livingCost?.currency || "USD"}{" "}
-                    {country.livingCost?.monthlyEstimate?.toLocaleString() ||
-                      "Not specified"}
+                    {country.livingCost?.monthlyEstimate
+                      ? `${country.livingCost?.currency || "USD"} ${country.livingCost.monthlyEstimate.toLocaleString()}`
+                      : "Not specified"}
                   </span>
                 </div>
 

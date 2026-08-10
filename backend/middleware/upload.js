@@ -35,12 +35,7 @@ const storage = multer.memoryStorage();
 // GIF is retained for the existing general image-upload logic.
 //
 
-const ALLOWED_IMAGE_TYPES = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-]);
+const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 const ALLOWED_DOCUMENT_TYPES = new Set([
   "image/jpeg",
@@ -101,7 +96,7 @@ const upload = multer({
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB
     files: 1,
-    fields: 10,
+    fields: 30,
     fieldNameSize: 100,
     fieldSize: 50 * 1024,
   },
