@@ -66,6 +66,8 @@ const App = () => {
     location.pathname.startsWith("/portal");
 
   useEffect(() => {
+    let timer;
+
     const initialize = async () => {
       try {
         if (requiresAuth) {
@@ -74,13 +76,18 @@ const App = () => {
       } catch (err) {
         // User is not authenticated
       } finally {
-        setShowPreloader(false);
+        timer = setTimeout(() => {
+          setShowPreloader(false);
+        }, 4500);
       }
     };
 
     initialize();
-  }, [dispatch, requiresAuth]);
 
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [dispatch, requiresAuth]);
   return (
     <>
       <Preloader show={showPreloader} />

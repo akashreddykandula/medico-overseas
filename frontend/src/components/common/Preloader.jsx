@@ -1,9 +1,9 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Preloader = ({ show }) => {
-  const ORANGE = "#C8401A";
-  const NAVY = "#0B2240";
+const Preloader = ({ show = true }) => {
+  const ORANGE = "#E15B3F";
+  const NAVY = "#1F3864";
 
   const medicoContainer = {
     hidden: { opacity: 0 },
@@ -97,10 +97,10 @@ const Preloader = ({ show }) => {
 
                   <motion.div
                     variants={letterVariants}
-                    className="relative mx-[1px] inline-block"
+                    className="relative -mr-[0.99em] ml-[1px] inline-block"
                   >
                     <svg
-                      className="inline-block h-[1.35em] w-[1.15em] overflow-visible align-baseline"
+                      className="inline-block h-[1.35em] w-[1.85em] overflow-visible align-baseline"
                       viewBox="0 0 220 120"
                       fill="none"
                       aria-hidden="true"

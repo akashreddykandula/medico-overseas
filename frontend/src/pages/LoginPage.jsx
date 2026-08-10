@@ -3,7 +3,12 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { HiEye, HiEyeOff } from "react-icons/hi";
+import {
+  HiEye,
+  HiEyeOff,
+  HiArrowLeft,
+  HiOutlineSparkles,
+} from "react-icons/hi";
 import { login } from "../features/authSlice";
 
 const LoginPage = () => {
@@ -44,99 +49,154 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#EEF2F6] p-4 sm:p-8">
+    <div className="relative flex min-h-screen items-center justify-center bg-[#071A38] p-3 sm:p-6 lg:p-8 text-slate-800 overflow-hidden">
+      {/* Background Ambient Glow Orbs */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-[#E15B3F]/10 blur-[120px]"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute right-10 top-10 h-72 w-72 rounded-full bg-sky-500/10 blur-[100px]"
+        aria-hidden="true"
+      />
+
       {/* Outer Card Shell */}
-      <div className="flex w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+      <div className="relative z-10 flex w-full max-w-5xl overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white shadow-2xl backdrop-blur-xl">
         {/* Left Side: Clean Form Area */}
-        <div className="flex w-full flex-col justify-between p-8 sm:p-12 lg:w-1/2">
-          {/* Logo Header */}
-          <div>
-            <Link to="/" className="inline-block">
+        <div className="flex w-full flex-col justify-between p-5 sm:p-10 lg:p-12 lg:w-1/2 bg-white">
+          {/* Header Bar with Back Arrow & Logo */}
+          <div className="flex items-center justify-between gap-4">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50/80 px-3 py-1.5 text-xs font-bold text-[#1F3864] transition-all duration-200 hover:border-[#E15B3F]/40 hover:bg-[#E15B3F]/5 hover:text-[#E15B3F]"
+              aria-label="Back to home"
+            >
+              <HiArrowLeft size={16} />
+              <span className="hidden sm:inline">Back to Home</span>
+            </Link>
+
+            <Link
+              to="/"
+              className="inline-block transition-transform duration-300 hover:scale-105"
+            >
               <img
                 src="/medicologo-removebg-preview.png"
                 alt="Medico Overseas Logo"
-                className="h-10 w-auto object-contain"
+                className="h-9 sm:h-11 w-auto object-contain"
               />
             </Link>
           </div>
 
           {/* Main Title & Form */}
-          <div className="my-8">
-            <h1 className="text-2xl font-bold tracking-tight text-[#0F2540] sm:text-3xl">
+          <div className="my-6 sm:my-8">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E15B3F]/20 bg-[#E15B3F]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E15B3F]">
+              <HiOutlineSparkles size={12} /> Student & Portal Access
+            </div>
+
+            <h1 className="mt-3 font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-[#1F3864]">
               Sign in to your account!
             </h1>
-            <p className="mt-1 text-xs text-slate-500">
-              Log in to track your application or manage the platform
+            <p className="mt-1.5 text-xs sm:text-sm text-slate-500 leading-relaxed">
+              Log in to track your application or manage the platform.
             </p>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="mt-6 sm:mt-8 space-y-4 sm:space-y-5"
+            >
               {/* Email Input */}
-              <div className="relative">
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="w-full border-b border-slate-300 py-2.5 text-sm text-[#0F2540] placeholder-slate-400 outline-none transition-colors focus:border-[#D94A28]"
-                  {...register("email", { required: "Email is required" })}
-                />
+              <div>
+                <label className="mb-1 block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#1F3864]">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
+                    {...register("email", { required: "Email is required" })}
+                  />
+                </div>
                 {errors.email && (
-                  <p className="mt-1 text-xs text-[#D94A28]">
+                  <p className="mt-1 text-[11px] font-semibold text-[#E15B3F]">
                     {errors.email.message}
                   </p>
                 )}
               </div>
 
               {/* Password Input with Eye Icon */}
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  className="w-full border-b border-slate-300 py-2.5 pr-10 text-sm text-[#0F2540] placeholder-slate-400 outline-none transition-colors focus:border-[#D94A28]"
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-2.5 text-slate-400 hover:text-[#0F2540] transition-colors"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <HiEyeOff size={18} /> : <HiEye size={18} />}
-                </button>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#1F3864]">
+                    Password
+                  </label>
+                  <Link
+                    to="/forgot-password"
+                    className="text-[11px] font-semibold text-[#E15B3F] hover:underline"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 sm:px-4 py-2.5 sm:py-3 pr-10 text-xs sm:text-sm text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#1F3864] transition-colors"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? (
+                      <HiEyeOff size={18} />
+                    ) : (
+                      <HiEye size={18} />
+                    )}
+                  </button>
+                </div>
                 {errors.password && (
-                  <p className="mt-1 text-xs text-[#D94A28]">
+                  <p className="mt-1 text-[11px] font-semibold text-[#E15B3F]">
                     {errors.password.message}
                   </p>
                 )}
-              </div>
-
-              {/* Forgot Password Link */}
-              <div className="flex justify-end">
-                <Link
-                  to="/forgot-password"
-                  className="text-xs font-semibold text-[#D94A28] hover:underline"
-                >
-                  Forgot Password?
-                </Link>
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="w-full rounded-xl bg-[#D94A28] py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-all hover:bg-orange-600 disabled:opacity-60"
+                className="group relative w-full overflow-hidden rounded-2xl bg-[#E15B3F] py-3.5 px-4 text-xs sm:text-sm font-extrabold uppercase tracking-wider text-white shadow-lg shadow-[#E15B3F]/25 transition-all duration-300 hover:bg-[#d04f35] hover:shadow-xl hover:shadow-[#E15B3F]/35 active:scale-[0.98] disabled:opacity-60 min-h-[48px]"
               >
-                {status === "loading" ? "Logging in..." : "Login"}
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {status === "loading" ? (
+                    <>
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      <span>Logging in...</span>
+                    </>
+                  ) : (
+                    <span>Login</span>
+                  )}
+                </span>
+                {/* Button Shimmer */}
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
               </button>
             </form>
           </div>
 
           {/* Footer Navigation */}
-          <div className="text-center text-xs text-slate-500">
+          <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
             Don't have an account?{" "}
             <Link
               to="/register"
-              className="font-semibold text-[#0F2540] hover:underline"
+              className="font-bold text-[#1F3864] hover:text-[#E15B3F] hover:underline transition-colors"
             >
               Create one here
             </Link>
@@ -145,27 +205,29 @@ const LoginPage = () => {
 
         {/* Right Side: Deep Navy Visual Branding Section with Medical Travel Imagery */}
         <div
-          className="relative hidden w-1/2 bg-cover bg-center p-12 lg:flex lg:flex-col lg:justify-between"
+          className="relative hidden w-1/2 bg-cover bg-center p-10 lg:p-12 lg:flex lg:flex-col lg:justify-between overflow-hidden"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80')",
           }}
         >
           {/* Dark Navy Overlay Gradients */}
-          <div className="absolute inset-0 bg-[#0F2540]/85 backdrop-blur-[2px]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0F2540] via-transparent to-[#0F2540]/60" />
+          <div className="absolute inset-0 bg-[#1F3864]/85 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#071A38] via-[#1F3864]/60 to-[#071A38]/70" />
 
           {/* Ambient Glow */}
-          <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#D94A28]/25 blur-3xl pointer-events-none" />
+          <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#E15B3F]/25 blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col justify-center h-full text-white">
-            <span className="inline-block rounded-full border border-[#D94A28]/40 bg-[#D94A28]/20 px-3 py-1 text-xs font-semibold text-[#D94A28] w-max backdrop-blur-md">
-              Medico Overseas Portal
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-bold text-[#E15B3F] w-max backdrop-blur-md">
+              <HiOutlineSparkles size={14} /> Medico Overseas Portal
             </span>
-            <h2 className="mt-4 text-3xl font-extrabold leading-tight">
+
+            <h2 className="mt-4 font-heading text-2xl lg:text-3xl font-extrabold leading-tight text-white">
               Welcome Back to Your Global Medical Journey
             </h2>
-            <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+
+            <p className="mt-3 text-xs lg:text-sm text-slate-300 leading-relaxed">
               Access your real-time application status, upload necessary
               university documents, and consult directly with expert counselors.
             </p>
@@ -179,12 +241,12 @@ const LoginPage = () => {
               ].map((text, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/10 p-3 backdrop-blur-md shadow-sm"
+                  className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 p-3.5 backdrop-blur-md shadow-sm transition-all duration-300 hover:border-[#E15B3F]/40"
                 >
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#D94A28] text-xs text-white">
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#E15B3F] text-xs font-bold text-white shadow-xs">
                     ✓
                   </div>
-                  <span className="text-xs font-medium text-slate-100">
+                  <span className="text-xs font-semibold text-slate-100">
                     {text}
                   </span>
                 </div>
