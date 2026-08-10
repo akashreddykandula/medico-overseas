@@ -7,9 +7,11 @@ const PageHero = ({ eyebrow, title, subtitle, transparent = false }) => (
       transparent ? "bg-transparent" : "bg-navy pb-16 pt-32"
     }`}
   >
-    {/* Only show the default mesh when this is NOT a transparent hero */}
     {!transparent && (
-      <div className="absolute inset-0 bg-mesh-navy opacity-70" />
+      <div
+        className="pointer-events-none absolute inset-0 bg-mesh-navy opacity-70"
+        aria-hidden="true"
+      />
     )}
 
     <div

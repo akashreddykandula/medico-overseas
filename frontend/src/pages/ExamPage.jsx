@@ -143,7 +143,21 @@ const EXAM_CONTENT = {
 
 const ExamPage = () => {
   const { examSlug } = useParams();
-  const content = EXAM_CONTENT[examSlug] || EXAM_CONTENT.fmge;
+  const content = EXAM_CONTENT[examSlug];
+
+  if (!content) {
+    return (
+      <div className="section-container min-h-[60vh] py-40 text-center">
+        <h1 className="font-heading text-2xl font-bold text-navy-700">
+          Exam Page Not Found
+        </h1>
+
+        <p className="mt-3 text-sm text-navy-400">
+          The examination page you are looking for does not exist.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -285,7 +299,7 @@ const ExamPage = () => {
         </div>
 
         <aside className="lg:col-span-1">
-          <div className="glass-card sticky top-28 !bg-white p-6">
+          <div id="enquiry" className="glass-card sticky top-28 !bg-white p-6">
             <EnquiryForm
               source="exam_page"
               title={`Get Guidance on ${content.title}`}

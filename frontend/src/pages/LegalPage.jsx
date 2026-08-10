@@ -1,6 +1,5 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import PageHero from "../components/common/PageHero";
 
 const LegalPage = ({ title, updatedDate, children }) => (
   <>
@@ -40,7 +39,8 @@ const LegalPage = ({ title, updatedDate, children }) => (
       {/* Background Image */}
       <img
         src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=2400&auto=format&fit=crop"
-        alt=""
+        alt="Legal Background"
+        aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover"
       />
 

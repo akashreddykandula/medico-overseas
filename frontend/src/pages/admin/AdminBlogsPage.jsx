@@ -132,7 +132,7 @@ const AdminBlogsPage = () => {
   const createMutation = useMutation({
     mutationFn: async (payload) => api.post("/blogs", processPayload(payload)),
     onSuccess: () => {
-      toast.success("Blog post created as draft");
+      toast.success("BLOG created as draft");
       queryClient.invalidateQueries({ queryKey: ["admin-blogs"] });
       resetCreate();
       setShowForm(false);
@@ -144,7 +144,7 @@ const AdminBlogsPage = () => {
     mutationFn: ({ id, payload }) =>
       api.put(`/blogs/${id}`, processPayload(payload)),
     onSuccess: () => {
-      toast.success("Post updated successfully");
+      toast.success("BLOG updated successfully");
       queryClient.invalidateQueries({ queryKey: ["admin-blogs"] });
       setEditingBlog(null);
       resetEdit();
@@ -155,14 +155,14 @@ const AdminBlogsPage = () => {
   const publishMutation = useMutation({
     mutationFn: ({ id, status }) => api.put(`/blogs/${id}`, { status }),
     onSuccess: () => {
-      toast.success("Post status updated");
+      toast.success("BLOG status updated");
       queryClient.invalidateQueries({ queryKey: ["admin-blogs"] });
     },
   });
   const deleteMutation = useMutation({
     mutationFn: (id) => api.delete(`/blogs/${id}`),
     onSuccess: () => {
-      toast.success("Post deleted");
+      toast.success("BLOG deleted");
       queryClient.invalidateQueries({ queryKey: ["admin-blogs"] });
     },
   });

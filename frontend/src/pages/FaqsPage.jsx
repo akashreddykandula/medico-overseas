@@ -25,7 +25,7 @@ const CATEGORY_LABELS = {
 const FAQ_HERO_IMAGE =
   "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?q=80&w=2400&auto=format&fit=crop";
 const FaqsPage = () => {
-  const { data: faqs = [], isLoading } = useFaqs();
+  const { data: faqs = [], isLoading, isError } = useFaqs();
   const [searchQuery, setSearchQuery] = useState("");
   const [openId, setOpenId] = useState(null);
 
@@ -172,6 +172,8 @@ const FaqsPage = () => {
                       <button
                         type="button"
                         onClick={() => toggleAccordion(faq._id)}
+                        aria-expanded={isOpen}
+                        aria-controls={`faq-answer-${faq._id}`}
                         className="flex w-full items-center justify-between p-5 text-left transition-colors sm:p-6"
                       >
                         <span
@@ -224,14 +226,35 @@ const FaqsPage = () => {
           ))}
 
         {/* Empty State */}
-        {!isLoading && filteredFaqs.length === 0 && (
+        {/* Error State */}
+        {!isLoading && isError && (
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-red-100 bg-red-50/50 p-12 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-100 text-red-500">
+              <HiOutlineQuestionMarkCircle size={36} />
+            </div>
+
+            <p className="mt-4 font-heading text-lg font-bold text-navy-600">
+              Unable to load FAQs
+            </p>
+
+            <p className="mt-1 max-w-sm text-xs text-navy-400">
+              We couldn't load the frequently asked questions right now. Please
+              try again later.
+            </p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && !isError && filteredFaqs.length === 0 && (
           <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-navy-200 bg-white/60 p-12 text-center backdrop-blur-sm">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-50 text-navy-300">
               <HiOutlineQuestionMarkCircle size={36} />
             </div>
+
             <p className="mt-4 font-heading text-lg font-bold text-navy-600">
               No matching questions found
             </p>
+
             <p className="mt-1 max-w-sm text-xs text-navy-400">
               {searchQuery
                 ? `We couldn't find any results matching "${searchQuery}". Try searching for terms like "NEET", "Visa", or "Tuition".`

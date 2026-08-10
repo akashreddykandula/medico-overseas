@@ -60,7 +60,12 @@ const RegisterPage = () => {
                   type="text"
                   placeholder="Full Name"
                   className="w-full border-b border-slate-300 py-2.5 text-sm text-[#0F2540] placeholder-slate-400 outline-none transition-colors focus:border-[#D94A28]"
-                  {...register("name", { required: "Name is required" })}
+                  {...register("name", {
+                    required: "Name is required",
+                    validate: (value) =>
+                      value.trim().length >= 2 ||
+                      "Name must be at least 2 characters",
+                  })}
                 />
                 {errors.name && (
                   <p className="mt-1 text-xs text-[#D94A28]">
@@ -90,7 +95,13 @@ const RegisterPage = () => {
                   type="text"
                   placeholder="Phone Number"
                   className="w-full border-b border-slate-300 py-2.5 text-sm text-[#0F2540] placeholder-slate-400 outline-none transition-colors focus:border-[#D94A28]"
-                  {...register("phone", { required: "Phone is required" })}
+                  {...register("phone", {
+                    required: "Phone is required",
+                    pattern: {
+                      value: /^[6-9]\d{9}$/,
+                      message: "Enter a valid 10-digit Indian phone number",
+                    },
+                  })}
                 />
                 {errors.phone && (
                   <p className="mt-1 text-xs text-[#D94A28]">

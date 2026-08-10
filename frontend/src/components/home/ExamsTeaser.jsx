@@ -22,7 +22,6 @@ const EXAMS = [
   },
 ];
 
-// Staggered Container Variant
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -34,7 +33,6 @@ const containerVariants = {
   },
 };
 
-// Exam Card Reveal Variant
 const cardVariants = {
   hidden: { opacity: 0, y: 30, scale: 0.98 },
   visible: {
@@ -49,79 +47,98 @@ const cardVariants = {
   },
 };
 
-const ExamsTeaser = () => (
-  <section className="section-container overflow-hidden py-24">
-    {/* Animated Section Header */}
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="mx-auto max-w-2xl text-center"
-    >
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-coral-50 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-coral">
-        <HiSparkles size={14} /> Medical Licensing
-      </span>
-      <h2 className="section-heading mt-3">
-        Beyond Admission: Licensing Support
-      </h2>
-      <p className="mt-4 leading-relaxed text-navy-400">
-        We stay with you through graduation and licensing — a full-journey
-        partner, not just an admissions agent.
-      </p>
-    </motion.div>
+const ExamsTeaser = () => {
+  return (
+    <section className="relative overflow-hidden bg-[#071A38] py-16 sm:py-24 text-white">
+      {/* Background Decorative Ambient Glows */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 sm:h-96 sm:w-96 rounded-full bg-coral/10 blur-3xl" />
+      <div className="pointer-events-none absolute right-5 sm:right-10 top-10 h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-sky-500/10 blur-3xl" />
 
-    {/* Animated Cards Grid */}
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2"
-    >
-      {EXAMS.map((exam) => (
+      <div className="section-container relative z-10 px-4 sm:px-6">
         <motion.div
-          key={exam.slug}
-          variants={cardVariants}
-          whileHover={{ y: -6, transition: { duration: 0.25 } }}
-          className="group relative flex flex-col justify-between rounded-2xl border border-navy-100 bg-white p-7 shadow-sm transition-all duration-300 hover:border-coral/30 hover:shadow-xl sm:flex-row sm:items-start sm:gap-6"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto max-w-2xl text-center"
         >
-          {/* Icon Circle with Hover Effects */}
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-coral-50 text-coral shadow-sm ring-1 ring-coral/10 transition-transform duration-300 group-hover:scale-105 group-hover:bg-coral group-hover:text-white">
-            <HiOutlineClipboardCheck
-              size={28}
-              className="transition-transform duration-300 group-hover:rotate-6"
-            />
-          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 sm:px-4 py-1 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-coral backdrop-blur-md">
+            <HiSparkles size={14} aria-hidden="true" />
+            Medical Licensing
+          </span>
 
-          <div className="mt-4 flex-1 sm:mt-0">
-            {/* Header Title & Floating Badge */}
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="font-heading text-xl font-bold text-navy-600 transition-colors group-hover:text-coral">
-                {exam.title}
-              </h3>
-              <span className="rounded-full bg-navy-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-navy-500">
-                {exam.badge}
-              </span>
-            </div>
+          <h2 className="mt-3 sm:mt-4 font-heading text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+            Beyond Admission: Licensing Support
+          </h2>
 
-            <p className="mt-2 text-sm leading-relaxed text-navy-400">
-              {exam.desc}
-            </p>
-
-            {/* CTA Link */}
-            <Link
-              to={`/exams/${exam.slug}`}
-              className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-coral transition-all duration-200 group-hover:gap-2.5"
-            >
-              <span>Learn More</span>
-              <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-          </div>
+          <p className="mt-2.5 sm:mt-4 text-xs sm:text-base leading-relaxed text-slate-300">
+            We stay with you through graduation and licensing — a full-journey
+            partner, not just an admissions agent.
+          </p>
         </motion.div>
-      ))}
-    </motion.div>
-  </section>
-);
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="mt-10 sm:mt-16 grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2"
+        >
+          {EXAMS.map((exam) => (
+            <motion.div
+              key={exam.slug}
+              variants={cardVariants}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl bg-white/5 border border-white/10 p-5 sm:p-7 backdrop-blur-xl shadow-2xl transition-all duration-500 hover:border-coral/50 hover:shadow-coral/20 sm:flex-row sm:items-start sm:gap-6"
+            >
+              {/* Subtle Animated Glow Effect on Hover */}
+              <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none">
+                <div className="absolute -inset-[100%] bg-[conic-gradient(from_0deg,#ff6b6b_0deg,transparent_120deg,#38bdf8_240deg,transparent_360deg)] opacity-15" />
+              </div>
+
+              <div
+                className="relative z-10 flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-white/10 text-coral shadow-inner border border-white/10 backdrop-blur-md transition-all duration-300 group-hover:scale-105 group-hover:bg-coral group-hover:text-white"
+                aria-hidden="true"
+              >
+                <HiOutlineClipboardCheck
+                  size={26}
+                  className="transition-transform duration-300 group-hover:rotate-6 sm:text-[28px]"
+                />
+              </div>
+
+              <div className="relative z-10 mt-4 sm:mt-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-heading text-lg sm:text-xl font-bold text-white transition-colors duration-300 group-hover:text-coral">
+                    {exam.title}
+                  </h3>
+
+                  <span className="rounded-full bg-white/10 border border-white/10 px-2.5 sm:px-3 py-0.5 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-300 backdrop-blur-md">
+                    {exam.badge}
+                  </span>
+                </div>
+
+                <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-slate-300">
+                  {exam.desc}
+                </p>
+
+                <Link
+                  to={`/exams/${encodeURIComponent(exam.slug)}`}
+                  className="mt-4 sm:mt-6 inline-flex items-center gap-1.5 sm:gap-2 text-xs font-bold text-coral transition-all duration-300 group-hover:gap-3 group-hover:text-white"
+                  aria-label={`Learn more about ${exam.title}`}
+                >
+                  <span>Learn More</span>
+                  <HiArrowRight
+                    aria-hidden="true"
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
 
 export default ExamsTeaser;

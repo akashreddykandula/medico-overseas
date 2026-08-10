@@ -119,7 +119,9 @@ const TestimonialsPage = () => {
   const allTestimonials =
     dbTestimonials && dbTestimonials.length > 0
       ? dbTestimonials
-      : DEMO_TESTIMONIALS;
+      : import.meta.env.DEV
+        ? DEMO_TESTIMONIALS
+        : [];
 
   // Filter testimonials based on active category
   const filteredTestimonials =
@@ -225,15 +227,15 @@ const TestimonialsPage = () => {
         <div className="mb-16 overflow-hidden rounded-3xl border border-slate-100 bg-gradient-to-r from-navy-900 via-navy-800 to-navy-900 text-white shadow-2xl lg:grid lg:grid-cols-2">
           <div className="flex flex-col justify-center p-8 sm:p-12">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-coral/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-coral">
-              <HiOutlineSparkles size={16} /> Featured Doctor Journey
+              <HiOutlineSparkles size={16} /> Featured Success Story
             </span>
             <h2 className="mt-4 font-heading text-2xl font-bold text-white sm:text-3xl">
-              From Aspirant to Qualified Medical Graduate
+              Real Student Success Stories
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-slate-300">
-              "Medico Overseas provided step-by-step guidance right from NEET
-              counseling, visa assistance, to foreign university orientation.
-              Today I'm practicing successfully!"
+              Explore genuine student experiences from students and parents who
+              have received guidance from Medico Overseas throughout their
+              MBBS-abroad journey.
             </p>
             <div className="mt-6 flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-coral font-bold text-white shadow-md">
@@ -241,10 +243,10 @@ const TestimonialsPage = () => {
               </div>
               <div>
                 <p className="text-sm font-bold text-white">
-                  Dr. Ananya Sharma
+                  Student Success Stories
                 </p>
                 <p className="text-xs text-slate-400">
-                  Bashkir State Medical University, Russia
+                  MBBS Abroad Counselling & Support
                 </p>
               </div>
             </div>
@@ -256,12 +258,12 @@ const TestimonialsPage = () => {
               alt="Medical Student Experience"
               className="h-full w-full object-cover opacity-60"
             />
-            <button className="group absolute flex h-16 w-16 items-center justify-center rounded-full bg-coral text-white shadow-lg transition-transform hover:scale-110">
-              <HiOutlinePlay
-                size={32}
-                className="ml-1 transition-transform group-hover:scale-110"
-              />
-            </button>
+            <div
+              className="group absolute flex h-16 w-16 items-center justify-center rounded-full bg-coral/80 text-white shadow-lg"
+              aria-label="Featured success story"
+            >
+              <HiOutlinePlay size={32} className="ml-1" />
+            </div>
           </div>
         </div>
 
@@ -269,7 +271,7 @@ const TestimonialsPage = () => {
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-6">
           <div>
             <h3 className="font-heading text-xl font-bold text-navy-600">
-              Verified Student Reviews
+              Student Success Stories
             </h3>
             <p className="text-xs text-navy-400">
               Filtered by popular study destinations
@@ -326,9 +328,11 @@ const TestimonialsPage = () => {
                         <HiStar key={i} size={18} />
                       ))}
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-600">
-                      <HiOutlineCheckCircle size={14} /> Verified
-                    </span>
+                    {t.verified && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-600">
+                        <HiOutlineCheckCircle size={14} /> Verified
+                      </span>
+                    )}
                   </div>
 
                   {/* Quote Text */}

@@ -10,7 +10,6 @@ import {
   HiSparkles,
 } from "react-icons/hi";
 import api from "../lib/api";
-import PageHero from "../components/common/PageHero";
 
 const CATEGORIES = [
   "all",
@@ -21,8 +20,10 @@ const CATEGORIES = [
   "events",
   "graduation",
 ];
+const GALLERY_HERO_IMAGE =
+  "https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?q=80&w=2400&auto=format&fit=crop";
 
-// Fallback high-resolution photos if the database has no records yet
+// Expanded fallback high-resolution photos if the database has no records yet
 const DEFAULT_GALLERY = [
   {
     _id: "def-1",
@@ -104,6 +105,106 @@ const DEFAULT_GALLERY = [
       url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80",
     },
   },
+  {
+    _id: "def-9",
+    title: "Modern Anatomy Simulation Lab",
+    category: "campus",
+    description:
+      "Advanced 3D virtual dissection tables and anatomical learning models.",
+    image: {
+      url: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
+  {
+    _id: "def-10",
+    title: "Hostel Dining Hall & Indian Mess",
+    category: "hostel",
+    description:
+      "Hygienic campus mess facilities serving nutritious Indian vegetarian and non-vegetarian meals.",
+    image: {
+      url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
+  {
+    _id: "def-11",
+    title: "Interactive Medical Lecture Theatre",
+    category: "campus",
+    description:
+      "Tiered auditorium equipped with smart boards and audio-visual teaching aids.",
+    image: {
+      url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
+  {
+    _id: "def-12",
+    title: "Cricket & Sports Tournament",
+    category: "events",
+    description:
+      "Annual sports meet featuring inter-university cricket and football championships.",
+    image: {
+      url: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
+  {
+    _id: "def-13",
+    title: "Medical Consultation Guidance Desk",
+    category: "office",
+    description:
+      "1-on-1 counseling session guiding aspirants through university selection and visa processes.",
+    image: {
+      url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
+  {
+    _id: "def-14",
+    title: "Group Study & Clinical Discussions",
+    category: "student_life",
+    description:
+      "Students collaborating on medical case studies and clinical problem-solving.",
+    image: {
+      url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
+  {
+    _id: "def-15",
+    title: "Graduation Oath & Hippocratic Ceremony",
+    category: "graduation",
+    description:
+      "Graduating doctors taking the Hippocratic Oath alongside faculty mentors.",
+    image: {
+      url: "https://plus.unsplash.com/premium_photo-1713296255442-e9338f42aad8?q=80&w=722&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+  },
+  {
+    _id: "def-16",
+    title: "University Study Room & Dorm Desk",
+    category: "hostel",
+    description:
+      "Quiet personal study setups in single and double sharing hostel rooms.",
+    image: {
+      url: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
+  {
+    _id: "def-17",
+    title: "University Hospital Ward Rounds",
+    category: "student_life",
+    description:
+      "Senior medical students attending real-time clinical rounds under attending physicians.",
+    image: {
+      url: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
+  {
+    _id: "def-18",
+    title: "Holi & Festival Celebrations On Campus",
+    category: "events",
+    description:
+      "Joyful festival of colors celebrated by Indian students studying abroad.",
+    image: {
+      url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    },
+  },
 ];
 
 const useGallery = (category) =>
@@ -116,6 +217,7 @@ const useGallery = (category) =>
         });
 
         let apiItems = [];
+
         if (Array.isArray(data)) apiItems = data;
         else if (Array.isArray(data?.data)) apiItems = data.data;
         else if (Array.isArray(data?.data?.items)) apiItems = data.data.items;
@@ -123,15 +225,15 @@ const useGallery = (category) =>
 
         return apiItems;
       } catch (err) {
-        console.warn("API request failed, serving default gallery.", err);
-        return [];
+        console.error("Gallery API request failed:", err);
+        throw err;
       }
     },
   });
 
 const GalleryPage = () => {
   const [category, setCategory] = useState("all");
-  const { data: apiItems = [], isLoading } = useGallery(category);
+  const { data: apiItems = [], isLoading, isError } = useGallery(category);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   // Combine API results with Default Fallback Items
@@ -214,11 +316,54 @@ const GalleryPage = () => {
         />
       </Helmet>
 
-      <PageHero
-        eyebrow="LIFE ABROAD"
-        title="Campus & Student Life Gallery"
-        subtitle="A glimpse into campuses, hostels, and student life at our partner medical universities."
-      />
+      {/* Gallery Hero */}
+      <section className="relative min-h-[320px] overflow-hidden text-white sm:min-h-[350px]">
+        {/* Background Image */}
+        <motion.img
+          src={GALLERY_HERO_IMAGE}
+          alt="Medical university campus and student life"
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            opacity: { duration: 1 },
+            scale: { duration: 5, ease: "easeOut" },
+          }}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+
+        {/* Dark Navy Overlay */}
+        <div className="absolute inset-0 bg-[#071A38]/55" />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071A38]/70 via-[#102F5C]/50 to-[#071A38]/55" />
+
+        {/* Centered Content */}
+        <div className="relative z-10 flex min-h-[320px] items-center justify-center sm:min-h-[350px]">
+          <div className="section-container text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              {/* Eyebrow */}
+              <span className="mt-14 inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-sm">
+                LIFE ABROAD
+              </span>
+
+              {/* Title */}
+              <h1 className="mt-4 font-heading text-4xl font-extrabold text-white sm:text-5xl">
+                Campus & Student Life Gallery
+              </h1>
+
+              {/* Subtitle */}
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base">
+                A glimpse into campuses, hostels, and student life at our
+                partner medical universities.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       <div className="section-container relative py-16 font-sans">
         {/* Category Filters */}
@@ -245,7 +390,17 @@ const GalleryPage = () => {
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
-                <span>{c.replace("_", " ")}</span>
+                <span>
+                  {c === "all"
+                    ? "All"
+                    : c
+                        .split("_")
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1),
+                        )
+                        .join(" ")}
+                </span>
               </button>
             );
           })}
@@ -253,6 +408,17 @@ const GalleryPage = () => {
 
         {/* Gallery Masonry Layout */}
         <div className="mt-12 columns-1 gap-4 sm:columns-2 lg:columns-3">
+          {isError && (
+            <div className="mb-8 break-inside-avoid rounded-2xl border border-red-100 bg-red-50/60 p-8 text-center sm:col-span-2 lg:col-span-3">
+              <p className="font-heading text-lg font-bold text-navy-600">
+                Unable to load gallery
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-navy-400">
+                We couldn't load the gallery from the server right now. Please
+                try again later.
+              </p>
+            </div>
+          )}
           {/* Skeleton Loaders */}
           {isLoading &&
             Array.from({ length: 6 }).map((_, i) => (
@@ -264,6 +430,7 @@ const GalleryPage = () => {
 
           {/* Gallery Items */}
           {!isLoading &&
+            !isError &&
             items.map((item, i) => (
               <motion.div
                 key={item._id || i}

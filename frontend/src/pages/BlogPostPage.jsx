@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import DOMPurify from "dompurify";
 import {
   FaFacebookF,
   FaTwitter,
@@ -68,6 +69,13 @@ const BlogPostPage = () => {
     );
 
   const { blog, related } = data;
+
+  const sanitizedBody = DOMPurify.sanitize(blog.body || "", {
+    USE_PROFILES: {
+      html: true,
+    },
+  });
+
   const cleanTitle = stripHtml(blog.title);
   const cleanExcerpt = stripHtml(blog.excerpt);
   const imageUrl = blog.coverImage || blog.featuredImage?.url || DEFAULT_IMAGE;
@@ -191,7 +199,7 @@ const BlogPostPage = () => {
                 prose-blockquote:not-italic
                 prose-blockquote:text-navy-700
               "
-              dangerouslySetInnerHTML={{ __html: blog.body }}
+              dangerouslySetInnerHTML={{ __html: sanitizedBody }}
             />
 
             {/* Social Share Footer */}

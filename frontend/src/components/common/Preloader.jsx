@@ -2,11 +2,9 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Preloader = ({ show }) => {
-  // Brand Colors matching the logo image precisely
   const ORANGE = "#C8401A";
   const NAVY = "#0B2240";
 
-  // Stagger delays for sequential animation
   const medicoContainer = {
     hidden: { opacity: 0 },
     visible: {
@@ -35,7 +33,10 @@ const Preloader = ({ show }) => {
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+      transition: {
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1],
+      },
     },
   };
 
@@ -49,19 +50,22 @@ const Preloader = ({ show }) => {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white selection:bg-none"
+          transition={{
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white selection:bg-transparent"
+          role="status"
+          aria-label="Loading Medico Overseas"
+          aria-live="polite"
         >
-          {/* Logo Content Container */}
           <div className="relative z-10 flex flex-col items-center sm:flex-row sm:items-center sm:space-x-4">
-            {/* Left Column: Animated Text */}
             <div className="flex flex-col items-start font-sans font-bold tracking-tight">
-              {/* "Medico" */}
               <motion.div
                 variants={medicoContainer}
                 initial="hidden"
                 animate="visible"
-                className="flex text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight"
+                className="flex text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl"
                 style={{ color: ORANGE }}
               >
                 {medicoText.map((char, index) => (
@@ -74,16 +78,14 @@ const Preloader = ({ show }) => {
                 ))}
               </motion.div>
 
-              {/* "Overseas" with Integrated Stethoscope 'V' */}
               <div className="relative mt-[-4px] flex items-baseline">
                 <motion.div
                   variants={overseasContainer}
                   initial="hidden"
                   animate="visible"
-                  className="flex text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight"
+                  className="flex text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl"
                   style={{ color: NAVY }}
                 >
-                  {/* Letter "O" */}
                   {overseasBeforeV.map((char, index) => (
                     <motion.span
                       key={`ov-1-${index}`}
@@ -93,17 +95,16 @@ const Preloader = ({ show }) => {
                     </motion.span>
                   ))}
 
-                  {/* Animated Stethoscope replacing 'v' */}
                   <motion.div
                     variants={letterVariants}
-                    className="relative inline-block mx-[1px]"
+                    className="relative mx-[1px] inline-block"
                   >
                     <svg
-                      className="w-[1.15em] h-[1.35em] overflow-visible inline-block align-baseline"
-                      viewBox="0 0 100 120"
+                      className="inline-block h-[1.35em] w-[1.15em] overflow-visible align-baseline"
+                      viewBox="0 0 220 120"
                       fill="none"
+                      aria-hidden="true"
                     >
-                      {/* Stethoscope Tubing & Binaural Curve */}
                       <motion.path
                         d="M 15 25 Q 30 55 50 68 Q 70 55 85 25"
                         stroke={NAVY}
@@ -113,12 +114,12 @@ const Preloader = ({ show }) => {
                         initial={{ pathLength: 0 }}
                         animate={{ pathLength: 1 }}
                         transition={{
-                          duration: 1.0,
+                          duration: 1,
                           delay: 1.5,
                           ease: "easeInOut",
                         }}
                       />
-                      {/* Stethoscope Tail Extension */}
+
                       <motion.path
                         d="M 50 68 C 50 92, 70 112, 110 112 C 150 112, 180 98, 210 108"
                         stroke={NAVY}
@@ -132,7 +133,7 @@ const Preloader = ({ show }) => {
                           ease: "easeInOut",
                         }}
                       />
-                      {/* Chest Piece / Diaphragm */}
+
                       <motion.circle
                         cx="212"
                         cy="108"
@@ -140,8 +141,12 @@ const Preloader = ({ show }) => {
                         fill={NAVY}
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ delay: 3.6, duration: 0.3 }}
+                        transition={{
+                          delay: 3.6,
+                          duration: 0.3,
+                        }}
                       />
+
                       <motion.circle
                         cx="212"
                         cy="108"
@@ -149,12 +154,14 @@ const Preloader = ({ show }) => {
                         fill="#FFFFFF"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ delay: 3.7, duration: 0.2 }}
+                        transition={{
+                          delay: 3.7,
+                          duration: 0.2,
+                        }}
                       />
                     </svg>
                   </motion.div>
 
-                  {/* Letters "erseas" */}
                   {overseasAfterV.map((char, index) => (
                     <motion.span
                       key={`ov-2-${index}`}
@@ -167,7 +174,6 @@ const Preloader = ({ show }) => {
               </div>
             </div>
 
-            {/* Right Column: Graduation Cap, Globe & Flight Emblem */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -176,13 +182,13 @@ const Preloader = ({ show }) => {
                 delay: 0.4,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="mt-6 sm:mt-0 sm:ml-2"
+              className="mt-6 sm:ml-2 sm:mt-0"
             >
               <svg
                 viewBox="0 0 160 160"
                 className="h-32 w-32 sm:h-40 sm:w-40 lg:h-44 lg:w-44"
+                aria-hidden="true"
               >
-                {/* Globe Circle Outer Ring */}
                 <motion.circle
                   cx="80"
                   cy="95"
@@ -192,10 +198,12 @@ const Preloader = ({ show }) => {
                   fill="none"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, delay: 0.6 }}
+                  transition={{
+                    duration: 1.5,
+                    delay: 0.6,
+                  }}
                 />
 
-                {/* Star Pattern inside Globe */}
                 <motion.path
                   d="M 62 82 L 63 85 L 66 85 L 64 87 L 65 90 L 62 88 L 59 90 L 60 87 L 58 85 L 61 85 Z
                      M 78 75 L 79 78 L 82 78 L 80 80 L 81 83 L 78 81 L 75 83 L 76 80 L 74 78 L 77 78 Z
@@ -203,26 +211,35 @@ const Preloader = ({ show }) => {
                   fill={NAVY}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.7 }}
-                  transition={{ delay: 1.8, duration: 0.8 }}
+                  transition={{
+                    delay: 1.8,
+                    duration: 0.8,
+                  }}
                 />
 
-                {/* Graduation Cap Top */}
                 <motion.path
                   d="M 80 20 L 140 46 L 80 72 L 20 46 Z"
                   fill={NAVY}
                   initial={{ y: -12, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.9, delay: 0.8, ease: "easeOut" }}
+                  transition={{
+                    duration: 0.9,
+                    delay: 0.8,
+                    ease: "easeOut",
+                  }}
                 />
-                {/* Graduation Cap Base */}
+
                 <motion.path
                   d="M 40 55 V 78 C 40 88, 55 98, 80 98 C 105 98, 120 88, 120 78 V 55"
                   fill={NAVY}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 1.2, duration: 0.6 }}
+                  transition={{
+                    delay: 1.2,
+                    duration: 0.6,
+                  }}
                 />
-                {/* Tassel */}
+
                 <motion.path
                   d="M 38 48 V 75 M 36 75 H 40"
                   stroke={ORANGE}
@@ -230,10 +247,12 @@ const Preloader = ({ show }) => {
                   strokeLinecap="round"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ delay: 1.5, duration: 0.6 }}
+                  transition={{
+                    delay: 1.5,
+                    duration: 0.6,
+                  }}
                 />
 
-                {/* Orbit Trail */}
                 <motion.path
                   d="M 35 125 C 50 145, 110 135, 132 80"
                   stroke={ORANGE}
@@ -242,14 +261,21 @@ const Preloader = ({ show }) => {
                   fill="none"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.8, delay: 1.8, ease: "easeInOut" }}
+                  transition={{
+                    duration: 1.8,
+                    delay: 1.8,
+                    ease: "easeInOut",
+                  }}
                 />
 
-                {/* Airplane Icon */}
                 <motion.g
                   initial={{ scale: 0, x: -10, y: 10 }}
                   animate={{ scale: 1, x: 0, y: 0 }}
-                  transition={{ delay: 3.2, duration: 0.5, ease: "backOut" }}
+                  transition={{
+                    delay: 3.2,
+                    duration: 0.5,
+                    ease: "backOut",
+                  }}
                 >
                   <path
                     d="M 148 72 L 138 78 L 134 74 L 132 76 L 136 81 L 128 86 L 124 84 L 122 86 L 127 89 L 123 93 L 126 94 L 132 89 L 142 83 L 150 78 C 152 76, 151 73, 148 72 Z"
@@ -260,8 +286,10 @@ const Preloader = ({ show }) => {
             </motion.div>
           </div>
 
-          {/* Minimalist Bottom Progress Bar */}
-          <div className="absolute bottom-10 h-[3px] w-36 overflow-hidden rounded-full bg-slate-100">
+          <div
+            className="absolute bottom-10 h-[3px] w-36 overflow-hidden rounded-full bg-slate-100"
+            aria-hidden="true"
+          >
             <motion.div
               className="h-full w-full rounded-full"
               style={{ backgroundColor: ORANGE }}

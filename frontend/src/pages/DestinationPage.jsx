@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import toast from "react-hot-toast";
 import {
-  HiCheckCircle,
-  HiOutlineHome,
   HiOutlineGlobeAlt,
   HiOutlineAcademicCap,
-  HiOutlineDocumentText,
   HiOutlineChevronDown,
   HiOutlineShare,
   HiOutlineDownload,
@@ -14,57 +12,83 @@ import {
   HiOutlinePhone,
   HiOutlineSparkles,
   HiOutlineSun,
-  HiOutlineLocationMarker,
-  HiOutlineClock,
-  HiOutlineLibrary,
-  HiOutlineUserGroup,
-  HiOutlineChat,
 } from "react-icons/hi";
-import { FaWhatsapp, FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa";
-import PageHero from "../components/common/PageHero";
+import { FaWhatsapp } from "react-icons/fa";
 import EnquiryForm from "../components/home/forms/EnquiryForm";
 import { useCountry, useCountries } from "../hooks/useCountries";
 import { useBlogs } from "../hooks/useContent";
 
-const extractSlug = (param) => param.replace(/^mbbs-in-/, "");
+const extractSlug = (param = "") => String(param).replace(/^mbbs-in-/, "");
 
 const DestinationPage = () => {
   const { slug: rawSlug } = useParams();
   const slug = extractSlug(rawSlug || "");
+  const WHATSAPP_URL = "https://wa.me/916301878730";
   const { data, isLoading, isError } = useCountry(slug);
   const { data: countriesData } = useCountries();
   const { data: blogData } = useBlogs({ limit: 3 });
 
   // Interactive Checklist State
   const [checkedDocs, setCheckedDocs] = useState({});
-  const [activeTab, setActiveTab] = useState("overview");
 
   const toggleDoc = (idx) => {
     setCheckedDocs((prev) => ({ ...prev, [idx]: !prev[idx] }));
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Page link copied to clipboard!");
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Page link copied to clipboard!");
+    } catch (error) {
+      console.error("Copy link error:", error);
+      toast.error("Unable to copy the page link.");
+    }
   };
 
   const handleDownloadBrochure = async () => {
+    if (!data?.country) return;
+    const { country } = data;
+
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/brochures/${country.slug}`,
+      const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "/api").replace(
+        /\/$/,
+        "",
       );
 
+      const brochureUrl = `${apiBaseUrl}/countries/${encodeURIComponent(
+        country.slug,
+      )}/brochure`;
+
+      const response = await fetch(brochureUrl, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/pdf",
+        },
+      });
+
       if (!response.ok) {
-        throw new Error("Failed to generate brochure");
+        throw new Error(
+          `Brochure request failed with status ${response.status}`,
+        );
+      }
+
+      const contentType = response.headers.get("content-type") || "";
+
+      if (!contentType.toLowerCase().includes("application/pdf")) {
+        throw new Error("The server did not return a PDF file.");
       }
 
       const blob = await response.blob();
-
       const url = window.URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = `MBBS_in_${country.name}_Brochure.pdf`;
+      const safeCountryName = String(country.name || "Country")
+        .replace(/[^a-zA-Z0-9_-]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+
+      link.download = `MBBS_in_${safeCountryName || "Country"}_Brochure.pdf`;
 
       document.body.appendChild(link);
       link.click();
@@ -76,16 +100,15 @@ const DestinationPage = () => {
       alert("Unable to download brochure. Please try again.");
     }
   };
+
   if (isLoading) {
     return (
       <div className="section-container min-h-[500px] py-16 flex flex-col items-center justify-center">
         {/* Animated Floating Radar / Globe Visual */}
         <div className="relative flex items-center justify-center">
-          {/* Pulsing Outer Rings */}
           <div className="absolute h-28 w-28 animate-ping rounded-full bg-coral/20 duration-1000" />
           <div className="absolute h-20 w-20 animate-pulse rounded-full bg-navy-100" />
 
-          {/* Center Icon Badge */}
           <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl bg-coral text-white shadow-lg shadow-coral/30">
             <HiOutlineGlobeAlt
               size={32}
@@ -136,7 +159,6 @@ const DestinationPage = () => {
   const { country, universities = [] } = data;
   const recentBlogs = blogData?.blogs || [];
 
-  // Dynamic Related Destinations: Use country.relatedCountries if present, or filter from overall destinations
   const allCountries = countriesData?.countries || [];
   const relatedDestinations =
     country.relatedCountries?.length > 0
@@ -254,7 +276,7 @@ const DestinationPage = () => {
             </h1>
             <p className="text-xs sm:text-base leading-relaxed text-slate-300">
               {country.shortDescription ||
-                `Top NMC & WHO approved medical universities offering affordable MBBS programs in ${country.name}.`}
+                `Explore MBBS study opportunities, universities, fees, and admission information in ${country.name}.`}
             </p>
 
             {/* Quick Highlights Bar */}
@@ -490,7 +512,7 @@ const DestinationPage = () => {
                             )}
                             {!u.nmcApproved && !u.whoRecognized && (
                               <span className="text-[10px] text-slate-400">
-                                None
+                                Not Specified
                               </span>
                             )}
                           </div>
@@ -580,11 +602,6 @@ const DestinationPage = () => {
                                   Not specified
                                 </span>
                               )}
-                              {u.whoRecognized !== false && (
-                                <span className="rounded-full bg-sky-50 px-2 py-0.5 font-bold text-sky-600 text-[10px]">
-                                  WHO
-                                </span>
-                              )}
                             </div>
                           </td>
                         </tr>
@@ -642,12 +659,15 @@ const DestinationPage = () => {
                 <div className="flex justify-between pt-1 font-bold text-navy-600">
                   <span>Est. Annual Total:</span>
                   <span className="text-coral">
-                    {country.fees?.currency || "USD"}{" "}
-                    {(
-                      (country.fees?.tuitionPerYear || 0) +
-                      (country.fees?.hostelPerYear || 0) +
-                      (country.fees?.messPerYear || 0)
-                    ).toLocaleString() || "Not specified"}
+                    {country.fees?.tuitionPerYear != null ||
+                    country.fees?.hostelPerYear != null ||
+                    country.fees?.messPerYear != null
+                      ? `${country.fees?.currency || "USD"} ${(
+                          (country.fees?.tuitionPerYear || 0) +
+                          (country.fees?.hostelPerYear || 0) +
+                          (country.fees?.messPerYear || 0)
+                        ).toLocaleString()}`
+                      : "Not specified"}
                   </span>
                 </div>
               </div>
@@ -776,7 +796,7 @@ const DestinationPage = () => {
             </div>
           </section>
 
-          {/* 14. Related Destinations (Dynamic Data from API) */}
+          {/* 14. Related Destinations */}
           {relatedDestinations.length > 0 && (
             <section className="space-y-4">
               <h2 className="font-heading text-lg sm:text-xl font-bold text-navy-600">
@@ -833,7 +853,7 @@ const DestinationPage = () => {
             </h2>
             <p className="text-xs text-navy-500 leading-relaxed">
               {country.climateNotes ||
-                `Experiences pleasant summer temperatures (20°C to 28°C) and chilly winters. University hostels and campus halls are centrally heated for comfort.`}
+                "Climate information is currently unavailable for this destination."}
             </p>
           </section>
 
@@ -898,7 +918,7 @@ const DestinationPage = () => {
               Book Free Counselling
             </a>
             <a
-              href="https://wa.me/916301878730"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noreferrer"
               className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500 w-full sm:w-auto"

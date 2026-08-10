@@ -1,21 +1,88 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const testimonialSchema = new mongoose.Schema(
   {
-    studentName: { type: String, required: true, trim: true },
-    photo: { url: String, publicId: String },
-    country: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
-    university: { type: mongoose.Schema.Types.ObjectId, ref: 'University' },
-    quote: { type: String, required: true, maxlength: 1000 },
-    videoUrl: { type: String }, // optional YouTube/Vimeo link
-    rating: { type: Number, min: 1, max: 5, default: 5 },
-    isPublished: { type: Boolean, default: true },
-    isFeaturedOnHomepage: { type: Boolean, default: false },
-    displayOrder: { type: Number, default: 0 },
+    studentName: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 150,
+    },
+
+    photo: {
+      url: {
+        type: String,
+        trim: true,
+        maxlength: 2048,
+      },
+      publicId: {
+        type: String,
+        trim: true,
+        maxlength: 500,
+      },
+    },
+
+    country: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Country",
+    },
+
+    university: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "University",
+    },
+
+    quote: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 1000,
+    },
+
+    videoUrl: {
+      type: String,
+      trim: true,
+      maxlength: 2048,
+    },
+
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 5,
+    },
+
+    isPublished: {
+      type: Boolean,
+      default: true,
+    },
+
+    isFeaturedOnHomepage: {
+      type: Boolean,
+      default: false,
+    },
+
+    displayOrder: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100000,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    strict: true,
+  },
 );
 
-testimonialSchema.index({ isPublished: 1, isFeaturedOnHomepage: 1 });
+testimonialSchema.index({
+  isPublished: 1,
+  isFeaturedOnHomepage: 1,
+});
 
-module.exports = mongoose.model('Testimonial', testimonialSchema);
+testimonialSchema.index({
+  country: 1,
+  university: 1,
+});
+
+module.exports = mongoose.model("Testimonial", testimonialSchema);

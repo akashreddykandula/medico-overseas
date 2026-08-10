@@ -25,9 +25,18 @@ const LoginPage = () => {
     const result = await dispatch(login(formData));
     if (login.fulfilled.match(result)) {
       toast.success("Welcome back!");
+      const role = result.payload.user.role;
+
+      const defaultRedirect = role === "student" ? "/portal" : "/admin";
+      const requestedRedirect = location.state?.from;
+
       const redirectTo =
-        location.state?.from ||
-        (result.payload.user.role === "student" ? "/portal" : "/admin");
+        typeof requestedRedirect === "string" &&
+        requestedRedirect.startsWith("/") &&
+        !requestedRedirect.startsWith("//")
+          ? requestedRedirect
+          : defaultRedirect;
+
       navigate(redirectTo, { replace: true });
     } else {
       toast.error(result.payload || "Login failed");

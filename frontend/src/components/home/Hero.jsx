@@ -7,7 +7,6 @@ import { Autoplay } from "swiper/modules";
 
 import "swiper/css";
 
-// High-resolution medical university and international campus imagery
 const HERO_IMAGES = [
   {
     url: "https://images.unsplash.com/photo-1583373834259-46cc92173cb7?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -25,7 +24,12 @@ const HERO_IMAGES = [
     subtitle: "Yerevan State Medical University",
   },
   {
-    url: "https://images.unsplash.com/20/cambridge.JPG?q=80&w=1447&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    url: "https://images.unsplash.com/photo-1528181304800-259b08848526?q=80&w=1470&auto=format&fit=crop",
+    title: "Armenia Medical Universities",
+    subtitle: "Yerevan • Gyumri",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1558588942-930faae5a389?q=80&w=1470&auto=format&fit=crop",
     title: "Kazakhstan Medical Universities",
     subtitle: "Almaty • Astana",
   },
@@ -35,12 +39,12 @@ const HERO_IMAGES = [
     subtitle: "Tashkent • Samarkand",
   },
   {
-    url: "https://images.unsplash.com/photo-1565963479542-3cf82a9ee7e9?q=80&w=1346&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dp",
+    url: "https://images.unsplash.com/photo-1565963479542-3cf82a9ee7e9?q=80&w=1346&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaGdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Russia Medical Universities",
     subtitle: "Moscow • Kazan",
   },
   {
-    url: "https://plus.unsplash.com/premium_photo-1765987838916-bd0a10bbb476?q=80&w=1432&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    url: "https://plus.unsplash.com/premium_photo-1765987838916-bd0a10bbb476?q=80&w=1432&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaGdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Georgia Medical Universities",
     subtitle: "Tbilisi • Batumi",
   },
@@ -48,11 +52,6 @@ const HERO_IMAGES = [
     url: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1470&auto=format&fit=crop",
     title: "Kyrgyzstan Medical Universities",
     subtitle: "Bishkek • Osh",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1528181304800-259b08848526?q=80&w=1470&auto=format&fit=crop",
-    title: "Armenia Medical Universities",
-    subtitle: "Yerevan • Gyumri",
   },
   {
     url: "https://images.unsplash.com/photo-1681782421891-5088f13466ec?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -74,16 +73,15 @@ const STATS = [
 ];
 
 const Hero = () => {
-  // Parallax Scroll Effect
   const { scrollY } = useScroll();
   const yBg = useTransform(scrollY, [0, 500], [0, 100]);
 
   return (
-    <section className="relative min-h-[92vh] w-full overflow-hidden bg-navy pb-24 pt-36 flex items-center">
-      {/* 1. Scroll-Based Parallax Background Image Slider */}
+    <section className="relative flex min-h-[92vh] w-full items-center overflow-hidden bg-navy pb-24 pt-36">
       <motion.div
         style={{ y: yBg }}
-        className="absolute inset-0 pointer-events-none z-0"
+        className="pointer-events-none absolute inset-0 z-0"
+        aria-hidden="true"
       >
         <Swiper
           modules={[Autoplay]}
@@ -97,47 +95,47 @@ const Hero = () => {
           className="h-full w-full opacity-25"
         >
           {HERO_IMAGES.map((item, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={`${item.title}-${index}`}>
               <div
                 className="h-full w-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${item.url})` }}
+                style={{ backgroundImage: `url("${item.url}")` }}
               />
             </SwiperSlide>
           ))}
         </Swiper>
 
-        {/* Gradient Overlays for Text Contrast */}
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/80 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-transparent" />
       </motion.div>
 
-      {/* 2. Floating Ambient Glow Orbs */}
-      <div className="absolute -left-32 top-20 h-80 w-80 rounded-full bg-coral/20 blur-3xl animate-float pointer-events-none" />
       <div
-        className="absolute -right-24 bottom-10 h-96 w-96 rounded-full bg-navy-400/30 blur-3xl animate-float pointer-events-none"
-        style={{ animationDelay: "2s" }}
+        className="pointer-events-none absolute -left-32 top-20 h-80 w-80 animate-float rounded-full bg-coral/20 blur-3xl"
+        aria-hidden="true"
       />
 
-      {/* 3. Main Hero Content */}
+      <div
+        className="pointer-events-none absolute -right-24 bottom-10 h-96 w-96 animate-float rounded-full bg-navy-400/30 blur-3xl"
+        style={{ animationDelay: "2s" }}
+        aria-hidden="true"
+      />
+
       <div className="section-container relative z-10 w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl flex flex-col items-start"
+          className="flex max-w-4xl flex-col items-start"
         >
-          {/* Tag Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
             className="inline-flex items-center gap-2 rounded-full border border-coral/30 bg-coral/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-md"
           >
-            <HiAcademicCap className="text-coral text-sm" />
+            <HiAcademicCap className="text-sm text-coral" aria-hidden="true" />
             <span>NMC / WHO RECOGNIZED UNIVERSITIES</span>
           </motion.div>
 
-          {/* Main Headline */}
           <h1 className="mt-6 font-heading text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl">
             Study <span className="text-coral">MBBS Abroad</span>
             <br />
@@ -146,7 +144,6 @@ const Hero = () => {
             Medical Universities
           </h1>
 
-          {/* Subtext */}
           <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">
             Get expert admission guidance for NMC-approved universities in
             Georgia, Russia, Uzbekistan, Kazakhstan, Armenia, and more. We
@@ -154,25 +151,28 @@ const Hero = () => {
             post-arrival support—all under one roof.
           </p>
 
-          {/* Call to Action Buttons */}
-          <div className="mt-8 flex flex-wrap gap-4 w-full sm:w-auto">
+          <div className="mt-8 flex w-full flex-wrap gap-4 sm:w-auto">
             <a
               href="#enquiry"
               className="btn-primary group flex items-center justify-center gap-2"
             >
-              Get Free Counselling{" "}
-              <HiPhone className="transition-transform duration-300 group-hover:translate-x-1" />
+              Get Free Counselling
+              <HiPhone
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              />
             </a>
+
             <Link
               to="/portal/apply"
               className="btn-outline flex items-center justify-center gap-2 !border-white/30 !text-white hover:!bg-white hover:!text-navy"
             >
-              <HiArrowRight className="text-coral" /> Apply Now
+              <HiArrowRight className="text-coral" aria-hidden="true" />
+              Apply Now
             </Link>
           </div>
 
-          {/* Stats Bar */}
-          <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-8 w-full pt-8 border-t border-white/10">
+          <div className="mt-14 grid w-full grid-cols-2 gap-8 border-t border-white/10 pt-8 sm:grid-cols-4">
             {STATS.map(([value, label], index) => (
               <motion.div
                 key={label}
@@ -183,7 +183,7 @@ const Hero = () => {
                 <p className="font-heading text-2xl font-bold text-coral sm:text-3xl">
                   {value}
                 </p>
-                <p className="text-xs text-navy-200 mt-1">{label}</p>
+                <p className="mt-1 text-xs text-navy-200">{label}</p>
               </motion.div>
             ))}
           </div>

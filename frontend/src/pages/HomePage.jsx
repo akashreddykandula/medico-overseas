@@ -1,10 +1,10 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import {
-  HiOutlineCheckCircle,
   HiOutlineAcademicCap,
   HiOutlineShieldCheck,
   HiOutlineUserGroup,
+  HiSparkles,
 } from "react-icons/hi";
 import Hero from "../components/home/Hero";
 import WhyStudyAbroad from "../components/home/WhyStudyAbroad";
@@ -59,9 +59,24 @@ const HomePage = () => (
     <BlogHighlights />
 
     {/* Split Layout Section: Logo & Value Proposition on Left | Form on Right */}
-    <section className="bg-navy py-20">
+    <section className="bg-white py-20">
       <div className="container mx-auto px-4">
-        <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl bg-white p-6 shadow-2xl sm:p-10 lg:p-12">
+        {/* Section Header */}
+        <div className="mx-auto mb-12 max-w-2xl text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-coral-100 bg-coral-50/80 px-4 py-1 text-xs font-bold uppercase tracking-wider text-coral shadow-xs">
+            <HiSparkles size={14} aria-hidden="true" />
+            Free Consultation
+          </span>
+          <h2 className="mt-3 font-heading text-3xl font-extrabold text-navy-700 sm:text-4xl lg:text-5xl">
+            Book Your Free Counselling Session
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
+            Speak directly with our senior educational advisors to plan your
+            MBBS journey abroad.
+          </p>
+        </div>
+
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl bg-white p-6 shadow-xl border border-slate-100 sm:p-10 lg:p-12">
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
             {/* Left Side: Logo & Trust Highlights */}
             <div className="space-y-6 lg:col-span-5">
@@ -74,9 +89,9 @@ const HomePage = () => (
               </div>
 
               <div>
-                <h2 className="font-heading text-2xl font-bold tracking-tight text-navy-700 sm:text-3xl">
+                <h3 className="font-heading text-2xl font-bold tracking-tight text-navy-700 sm:text-3xl">
                   Start Your Medical Career Journey Today
-                </h2>
+                </h3>
                 <p className="mt-3 text-xs leading-relaxed text-slate-600 sm:text-sm">
                   Join thousands of Indian students studying MBBS abroad at top
                   NMC & WHO-recognized universities with complete transparency
@@ -86,8 +101,8 @@ const HomePage = () => (
 
               {/* Trust Badges */}
               <div className="space-y-3 pt-2">
-                <div className="flex items-start gap-3 rounded-2xl bg-navy-50/60 p-3.5">
-                  <div className="rounded-xl bg-white p-2 text-coral shadow-sm">
+                <div className="flex items-start gap-3 rounded-2xl bg-slate-50/80 p-3.5 border border-slate-100">
+                  <div className="rounded-xl bg-white p-2 text-coral shadow-xs">
                     <HiOutlineAcademicCap size={20} />
                   </div>
                   <div>
@@ -95,13 +110,14 @@ const HomePage = () => (
                       NMC & WHO Recognized
                     </h4>
                     <p className="mt-0.5 text-[11px] text-slate-500">
-                      100% eligible for NEXT & FMGE exams in India.
+                      Guidance for applicable Indian licensing and registration
+                      requirements.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 rounded-2xl bg-navy-50/60 p-3.5">
-                  <div className="rounded-xl bg-white p-2 text-coral shadow-sm">
+                <div className="flex items-start gap-3 rounded-2xl bg-slate-50/80 p-3.5 border border-slate-100">
+                  <div className="rounded-xl bg-white p-2 text-coral shadow-xs">
                     <HiOutlineShieldCheck size={20} />
                   </div>
                   <div>
@@ -114,8 +130,8 @@ const HomePage = () => (
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 rounded-2xl bg-navy-50/60 p-3.5">
-                  <div className="rounded-xl bg-white p-2 text-coral shadow-sm">
+                <div className="flex items-start gap-3 rounded-2xl bg-slate-50/80 p-3.5 border border-slate-100">
+                  <div className="rounded-xl bg-white p-2 text-coral shadow-xs">
                     <HiOutlineUserGroup size={20} />
                   </div>
                   <div>

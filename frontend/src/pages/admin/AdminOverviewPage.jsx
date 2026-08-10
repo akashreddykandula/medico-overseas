@@ -22,7 +22,6 @@ import {
   HiOutlineNewspaper,
 } from "react-icons/hi";
 import { useAdminAnalytics } from "../../hooks/useAdminAnalytics";
-import api from "../../lib/api";
 const COLORS = [
   "#1F3864",
   "#E15B3F",
