@@ -25,6 +25,7 @@ const applicationRoutes = require("./routes/applicationRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const brochureRoutes = require("./routes/brochureRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 connectDB();
 
@@ -166,6 +167,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/leads", leadRoutes);
 app.use("/api/countries", countryRoutes);
 app.use("/api/universities", universityRoutes);
+app.use("/api/uploads", uploadRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/faqs", faqRoutes);

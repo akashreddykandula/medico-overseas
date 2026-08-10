@@ -48,24 +48,60 @@ const AdminCountriesPage = () => {
     },
   });
 
-  // Convert uploaded local image file to Data URL
-  const handleFileUpload = (e, setValue) => {
+  const handleFileUpload = async (e, setValue) => {
     const file = e.target.files?.[0];
+
     if (!file) return;
 
+    // Client-side validation
     if (file.size > 5 * 1024 * 1024) {
       toast.error("Image size should be less than 5MB");
+      e.target.value = "";
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setValue("heroImage.url", reader.result);
-      toast.success("Image selected!");
-    };
-    reader.readAsDataURL(file);
-  };
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      toast.error("Only JPG, PNG, and WebP images are allowed");
+      e.target.value = "";
+      return;
+    }
 
+    try {
+      const formData = new FormData();
+
+      // IMPORTANT:
+      // Backend uses upload.single("file")
+      formData.append("file", file);
+
+      // IMPORTANT:
+      // Backend route is POST /api/uploads/image
+      const { data } = await api.post(
+        "/uploads/image?folder=medico-overseas/countries",
+        formData,
+      );
+
+      const imageUrl = data?.data?.url;
+
+      if (!imageUrl) {
+        throw new Error("Image URL was not returned by upload API");
+      }
+
+      // Store Cloudinary URL in React Hook Form
+      setValue("heroImage.url", imageUrl, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Image upload failed:", error);
+
+      toast.error(error.response?.data?.message || "Failed to upload image");
+    } finally {
+      // Allow selecting the same file again
+      e.target.value = "";
+    }
+  };
   const createMutation = useMutation({
     mutationFn: (payload) => api.post("/countries", payload),
     onSuccess: () => {

@@ -274,12 +274,12 @@ const AdminUniversitiesPage = () => {
     //
     // Sending Base64 here was causing the 413 Payload Too Large
     // error because the server JSON body limit is 10KB.
-    if (imageInputType === "file" && createLogoFile) {
-      toast.error(
-        "Secure image upload endpoint must be configured before uploading files.",
-      );
-      return;
-    }
+    // if (imageInputType === "file" && createLogoFile) {
+    //   toast.error(
+    //     "Secure image upload endpoint must be configured before uploading files.",
+    //   );
+    //   return;
+    // }
 
     createMutation.mutate({
       name: typeof formData.name === "string" ? formData.name.trim() : "",

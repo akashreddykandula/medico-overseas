@@ -86,8 +86,8 @@ const FaqsPage = () => {
         title="Frequently Asked Questions"
         subtitle="Everything students and parents commonly ask about the MBBS-abroad journey."
         transparent={false}
+        backgroundImage={FAQ_HERO_IMAGE}
       />
-
       <div className="section-container relative max-w-4xl py-16 font-sans">
         {/* Decorative Background Ambient Glows */}
         <div className="pointer-events-none absolute left-1/2 top-12 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-coral/5 blur-3xl" />

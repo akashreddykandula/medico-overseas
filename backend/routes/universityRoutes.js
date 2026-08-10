@@ -7,6 +7,7 @@ const {
   deleteUniversity,
 } = require("../controllers/universityController");
 const { protect, authorize, optionalAuth } = require("../middleware/auth");
+const upload = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -53,7 +54,7 @@ router.use(protect, authorize("super_admin", "admin", "content_manager"));
 // - Mongoose schema validation remains enabled.
 // ------------------------------------------------------------
 
-router.post("/", createUniversity);
+router.post("/", upload.single("logo"), createUniversity);
 
 // ------------------------------------------------------------
 // UPDATE UNIVERSITY

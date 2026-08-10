@@ -4,6 +4,7 @@ const Country = require("../models/Country");
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
 
 // ------------------------------------------------------------
 // SECURITY HELPERS
@@ -485,6 +486,27 @@ const getUniversityBySlug = asyncHandler(async (req, res) => {
 // ------------------------------------------------------------
 
 const createUniversity = asyncHandler(async (req, res) => {
+  // ----------------------------------------------------------
+
+  // CLOUDINARY LOGO UPLOAD
+
+  // ----------------------------------------------------------
+
+  if (req.file) {
+    try {
+      const uploadedLogo = await uploadToCloudinary(req.file.buffer, {
+        folder: "medico-overseas/universities",
+      });
+
+      req.body.logo = {
+        url: uploadedLogo.url,
+
+        publicId: uploadedLogo.publicId,
+      };
+    } catch (error) {
+      throw new ApiError(500, "Failed to upload university logo");
+    }
+  }
   // Defense-in-depth authorization.
   // Route middleware already protects this endpoint.
   if (
