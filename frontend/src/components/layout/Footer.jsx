@@ -1,181 +1,194 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  HiLocationMarker,
-  HiPhone,
-  HiMail,
-  HiChevronRight,
-} from "react-icons/hi";
-import {
   FaFacebookF,
   FaInstagram,
   FaYoutube,
   FaLinkedinIn,
 } from "react-icons/fa";
-import { useCountries } from "../../hooks/useCountries";
+import {
+  HiOutlineLocationMarker,
+  HiOutlinePhone,
+  HiOutlineMail,
+  HiChevronRight,
+} from "react-icons/hi";
 
-const SOCIAL_LINKS = [
-  { Icon: FaFacebookF, href: "https://facebook.com", label: "Facebook" },
-  { Icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
-  { Icon: FaYoutube, href: "https://youtube.com", label: "YouTube" },
-  { Icon: FaLinkedinIn, href: "https://linkedin.com", label: "LinkedIn" },
+const QUICK_LINKS = [
+  { name: "About Us", path: "/about" },
+  { name: "Blogs", path: "/blog" },
+  { name: "Testimonials", path: "/testimonials" },
+  { name: "Gallery", path: "/gallery" },
+  { name: "FAQs", path: "/faqs" },
+  { name: "Contact", path: "/contact" },
+  { name: "Privacy Policy", path: "/privacy-policy" },
+  { name: "Terms & Conditions", path: "/terms-and-conditions" },
+];
+
+const STUDY_DESTINATIONS = [
+  { name: "MBBS in Armenia 🇦🇲", path: "/destinations/mbbs-in-armenia" },
+  { name: "MBBS in Georgia 🇬🇪", path: "/destinations/mbbs-in-georgia" },
+  { name: "MBBS in Kyrgyzstan 🇰🇬", path: "/destinations/mbbs-in-kyrgyzstan" },
+  { name: "MBBS in Russia 🇷🇺", path: "/destinations/mbbs-in-russia" },
+  { name: "MBBS in Uzbekistan 🇺🇿", path: "/destinations/mbbs-in-uzbekistan" },
+  { name: "MBBS in Vietnam 🇻🇳", path: "/destinations/mbbs-in-vietnam" },
 ];
 
 const Footer = () => {
-  const { data: countries = [] } = useCountries();
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-[#0F2540] text-slate-200 pt-16 pb-8 border-t border-slate-800">
-      {/* Background Ambient Glow */}
-      <div className="pointer-events-none absolute left-0 top-0 h-96 w-96 bg-coral/5 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 bottom-0 h-96 w-96 bg-blue-500/5 blur-3xl" />
+    <footer className="relative overflow-hidden bg-[#071A38] pt-16 sm:pt-20 pb-8 text-white border-t border-white/10">
+      {/* Premium Ambient Background Backlights */}
+      <div
+        className="pointer-events-none absolute -left-20 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-coral/10 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl"
+        aria-hidden="true"
+      />
 
-      <div className="section-container relative z-10 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-12 pb-12">
-        {/* Brand & Logo Column */}
-        <div className="space-y-5 lg:col-span-4">
-          <Link
-            to="/"
-            className="inline-block rounded-2xl bg-white p-3 shadow-md transition-transform hover:scale-[1.02]"
-          >
-            <img
-              src="/medicologo-removebg-preview.png"
-              alt="Medico Overseas Logo"
-              className="h-10 w-auto object-contain"
-            />
-          </Link>
+      <div className="section-container relative z-10 px-4 sm:px-6">
+        {/* Main Footer Content Grid */}
+        <div className="grid grid-cols-1 gap-10 sm:gap-12 lg:grid-cols-12 pb-12 border-b border-white/10">
+          {/* Column 1: Logo, Tagline & Social Links */}
+          <div className="space-y-6 lg:col-span-4">
+            <Link
+              to="/"
+              className="inline-block transition-transform duration-300 hover:scale-105"
+            >
+              <div className="rounded-2xl bg-white p-3 shadow-lg shadow-black/20 inline-block border border-white/20">
+                <img
+                  src="/medicologo-removebg-preview.png"
+                  alt="Medico Overseas Logo"
+                  className="h-14 sm:h-16 w-auto object-contain"
+                />
+              </div>
+            </Link>
 
-          <p className="text-xs leading-relaxed text-slate-300 max-w-sm">
-            Your trusted, safety-first partner for MBBS admissions abroad —
-            providing end-to-end guidance from university selection to licensing
-            exams.
-          </p>
+            <p className="text-xs sm:text-sm leading-relaxed text-slate-300 max-w-sm">
+              Your trusted, safety-first partner for MBBS admissions abroad —
+              providing end-to-end guidance from university selection to
+              licensing exams.
+            </p>
 
-          <div className="flex items-center gap-3 pt-2">
-            {SOCIAL_LINKS.map(({ Icon, href, label }, i) => (
-              <a
-                key={i}
-                href={href}
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-coral hover:shadow-lg hover:shadow-coral/30"
-                aria-label={label}
-              >
-                <Icon size={14} />
-              </a>
-            ))}
+            {/* Social Icons */}
+            <div className="flex items-center gap-3 pt-2">
+              {[
+                { icon: FaFacebookF, href: "#", label: "Facebook" },
+                { icon: FaInstagram, href: "#", label: "Instagram" },
+                { icon: FaYoutube, href: "#", label: "YouTube" },
+                { icon: FaLinkedinIn, href: "#", label: "LinkedIn" },
+              ].map((social, i) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={i}
+                    href={social.href}
+                    aria-label={social.label}
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition-all duration-300 hover:border-coral hover:bg-coral hover:text-white hover:shadow-lg hover:shadow-coral/25 hover:-translate-y-1"
+                  >
+                    <Icon size={16} />
+                  </a>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Quick Links Column */}
-        <div className="lg:col-span-2">
-          <h4 className="mb-4 font-heading text-xs font-bold uppercase tracking-widest text-white border-b border-slate-800 pb-2">
-            Quick Links
-          </h4>
-          <ul className="space-y-2.5 text-xs font-medium">
-            {[
-              ["About Us", "/about"],
-              ["Blogs", "/blog"],
-              ["Testimonials", "/testimonials"],
-              ["Gallery", "/gallery"],
-              ["FAQs", "/faqs"],
-              ["Contact", "/contact"],
-            ].map(([label, to]) => (
-              <li key={to}>
-                <Link
-                  to={to}
-                  className="group flex items-center gap-1.5 text-slate-300 transition-colors duration-200 hover:text-coral"
-                >
-                  <HiChevronRight
-                    size={12}
-                    className="text-coral opacity-0 transition-all duration-200 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
-                  />
-                  <span>{label}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+          {/* Column 2: Quick Links (Now includes Privacy Policy & Terms) */}
+          <div className="lg:col-span-2">
+            <h4 className="font-heading text-sm font-bold uppercase tracking-wider text-white">
+              Quick Links
+            </h4>
+            <div className="mt-2 h-0.5 w-8 rounded-full bg-coral" />
 
-        {/* Study Destinations Column */}
-        <div className="lg:col-span-3">
-          <h4 className="mb-4 font-heading text-xs font-bold uppercase tracking-widest text-white border-b border-slate-800 pb-2">
-            Study Destinations
-          </h4>
-          <ul className="space-y-2.5 text-xs font-medium">
-            {countries.map((c) => (
-              <li key={c._id}>
-                <Link
-                  to={`/destinations/mbbs-in-${c.slug}`}
-                  className="group flex items-center gap-1.5 text-slate-300 transition-colors duration-200 hover:text-coral"
-                >
-                  <HiChevronRight
-                    size={12}
-                    className="text-coral opacity-0 transition-all duration-200 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
-                  />
-                  <span>MBBS in {c.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+            <ul className="mt-5 space-y-2.5">
+              {QUICK_LINKS.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.path}
+                    className="group inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-300 transition-colors duration-200 hover:text-coral"
+                  >
+                    <HiChevronRight className="h-3.5 w-3.5 text-coral/60 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-coral" />
+                    <span>{link.name}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* Get in Touch Column */}
-        <div className="lg:col-span-3">
-          <h4 className="mb-4 font-heading text-xs font-bold uppercase tracking-widest text-white border-b border-slate-800 pb-2">
-            Get in Touch
-          </h4>
-          <ul className="space-y-3 text-xs">
-            <li className="flex items-start gap-3 text-slate-300">
-              <div className="mt-0.5 rounded-lg bg-coral/10 p-1.5 text-coral shrink-0">
-                <HiLocationMarker size={16} />
+          {/* Column 3: Study Destinations */}
+          <div className="lg:col-span-3">
+            <h4 className="font-heading text-sm font-bold uppercase tracking-wider text-white">
+              Study Destinations
+            </h4>
+            <div className="mt-2 h-0.5 w-8 rounded-full bg-coral" />
+
+            <ul className="mt-5 space-y-2.5">
+              {STUDY_DESTINATIONS.map((dest) => (
+                <li key={dest.name}>
+                  <Link
+                    to={dest.path}
+                    className="group inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-300 transition-colors duration-200 hover:text-coral"
+                  >
+                    <HiChevronRight className="h-3.5 w-3.5 text-coral/60 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-coral" />
+                    <span>{dest.name}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Get in Touch */}
+          <div className="space-y-4 lg:col-span-3">
+            <h4 className="font-heading text-sm font-bold uppercase tracking-wider text-white">
+              Get In Touch
+            </h4>
+            <div className="mt-2 h-0.5 w-8 rounded-full bg-coral" />
+
+            <div className="mt-5 space-y-3">
+              {/* Address Badge */}
+              <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md transition-all duration-300 hover:border-coral/40">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-coral/15 text-coral">
+                  <HiOutlineLocationMarker size={18} />
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed pt-0.5">
+                  123 Education Tower, MG Road, Hyderabad, Telangana, India
+                </p>
               </div>
-              <span className="leading-relaxed">
-                123 Education Tower, MG Road, Hyderabad, Telangana, India
-              </span>
-            </li>
-            <li className="flex items-center gap-3 text-slate-300">
-              <div className="rounded-lg bg-coral/10 p-1.5 text-coral shrink-0">
-                <HiPhone size={16} />
-              </div>
+
+              {/* Phone Badge */}
               <a
                 href="tel:+916301878730"
-                className="transition-colors hover:text-coral font-medium"
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md transition-all duration-300 hover:border-coral/40 group"
               >
-                +91 6301878730
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-coral/15 text-coral transition-all duration-300 group-hover:bg-coral group-hover:text-white">
+                  <HiOutlinePhone size={18} />
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-slate-200 transition-colors group-hover:text-coral">
+                  +91 6301878730
+                </span>
               </a>
-            </li>
-            <li className="flex items-center gap-3 text-slate-300">
-              <div className="rounded-lg bg-coral/10 p-1.5 text-coral shrink-0">
-                <HiMail size={16} />
-              </div>
+
+              {/* Email Badge */}
               <a
                 href="mailto:info@medicooverseas.com"
-                className="transition-colors hover:text-coral font-medium"
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md transition-all duration-300 hover:border-coral/40 group"
               >
-                info@medicooverseas.com
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-coral/15 text-coral transition-all duration-300 group-hover:bg-coral group-hover:text-white">
+                  <HiOutlineMail size={18} />
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-slate-200 transition-colors group-hover:text-coral truncate">
+                  info@medicooverseas.com
+                </span>
               </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Copyright Bar */}
-      <div className="border-t border-slate-800/80 pt-6 mt-4">
-        <div className="section-container flex flex-col items-center justify-between gap-4 text-xs text-slate-400 sm:flex-row">
-          <p>
-            © {new Date().getFullYear()} Medico Overseas. All rights reserved.
-          </p>
-          <div className="flex gap-6 font-medium">
-            <Link
-              to="/privacy-policy"
-              className="transition-colors hover:text-coral"
-            >
-              Privacy Policy
-            </Link>
-            <Link to="/terms" className="transition-colors hover:text-coral">
-              Terms of Use
-            </Link>
+            </div>
           </div>
+        </div>
+
+        {/* Bottom Bar: Clean Copyright Bar */}
+        <div className="mt-8 text-center text-xs text-slate-400">
+          <p>© {currentYear} Medico Overseas. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -34,7 +34,7 @@ const BlogHighlights = () => {
 
           <Link
             to="/blog"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 sm:px-5 py-2.5 text-xs font-bold text-white backdrop-blur-md transition-all hover:bg-coral hover:border-coral self-start sm:self-auto"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 sm:px-5 py-2.5 text-xs font-bold text-white backdrop-blur-md transition-colors duration-200 hover:bg-coral hover:border-coral self-start sm:self-auto"
           >
             View All Posts
             <HiArrowRight size={14} aria-hidden="true" />
@@ -55,7 +55,7 @@ const BlogHighlights = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group overflow-hidden rounded-2xl sm:rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl transition-all duration-500 hover:border-coral/50 hover:shadow-coral/20 hover:-translate-y-2 flex flex-col justify-between"
+                className="group overflow-hidden rounded-2xl sm:rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl transition-transform transition-colors duration-300 ease-out hover:border-coral/50 hover:shadow-coral/20 hover:-translate-y-2 flex flex-col justify-between"
               >
                 <Link
                   to={`/blog/${encodeURIComponent(post.slug || "")}`}
@@ -64,7 +64,7 @@ const BlogHighlights = () => {
                 >
                   <div className="relative h-40 sm:h-48 w-full overflow-hidden bg-white/5">
                     <div
-                      className="h-full w-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110"
+                      className="h-full w-full bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-105"
                       style={
                         imageUrl
                           ? { backgroundImage: `url("${imageUrl}")` }
@@ -75,7 +75,7 @@ const BlogHighlights = () => {
                         imageUrl ? post.title || "Blog image" : undefined
                       }
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#071A38] via-transparent to-transparent opacity-60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#071A38] via-transparent to-transparent opacity-60 pointer-events-none" />
                   </div>
 
                   <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between">
@@ -84,7 +84,7 @@ const BlogHighlights = () => {
                         {post.category || "general"}
                       </span>
 
-                      <h3 className="mt-2.5 sm:mt-3 line-clamp-2 font-heading text-base sm:text-lg font-bold text-white transition-colors duration-300 group-hover:text-coral">
+                      <h3 className="mt-2.5 sm:mt-3 line-clamp-2 font-heading text-base sm:text-lg font-bold text-white transition-colors duration-200 group-hover:text-coral">
                         {post.title || "Untitled blog post"}
                       </h3>
 
@@ -94,7 +94,7 @@ const BlogHighlights = () => {
                     </div>
 
                     <div className="mt-5 sm:mt-6 pt-3.5 sm:pt-4 border-t border-white/10 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-coral transition-all duration-300 group-hover:gap-2.5 group-hover:text-white">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-coral transition-all duration-200 group-hover:gap-2.5 group-hover:text-white">
                         Read More <HiArrowRight aria-hidden="true" />
                       </span>
                       <span className="text-[9px] sm:text-[10px] font-medium text-slate-400 uppercase tracking-widest">

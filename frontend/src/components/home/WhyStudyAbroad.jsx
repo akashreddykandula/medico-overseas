@@ -55,7 +55,7 @@ const cardVariants = {
 };
 
 const WhyStudyAbroad = () => (
-  <section className="relative overflow-hidden bg-white py-24 text-navy-800">
+  <section className="relative overflow-hidden bg-white py-16 sm:py-24 text-navy-800">
     {/* Soft Ambient Background Backlights */}
     <div
       className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[450px] w-[450px] rounded-full bg-sky-500/5 blur-[120px]"
@@ -66,7 +66,7 @@ const WhyStudyAbroad = () => (
       aria-hidden="true"
     />
 
-    <div className="section-container relative z-10">
+    <div className="section-container relative z-10 px-4 sm:px-6">
       {/* Header Badge & Title */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -75,16 +75,16 @@ const WhyStudyAbroad = () => (
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         className="mx-auto max-w-2xl text-center"
       >
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-coral-100 bg-coral-50/80 px-4 py-1 text-xs font-bold uppercase tracking-wider text-coral shadow-2xs backdrop-blur-md">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-coral-100 bg-coral-50/80 px-3.5 sm:px-4 py-1 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-coral shadow-2xs backdrop-blur-md">
           <HiSparkles size={14} aria-hidden="true" />
           Smart Career Choice
         </span>
 
-        <h2 className="mt-4 font-heading text-3xl font-extrabold text-navy-700 sm:text-4xl lg:text-5xl">
+        <h2 className="mt-3 sm:mt-4 font-heading text-2xl sm:text-4xl lg:text-5xl font-extrabold text-navy-700 tracking-tight">
           Why Study MBBS Abroad?
         </h2>
 
-        <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+        <p className="mt-2.5 sm:mt-4 text-xs sm:text-base leading-relaxed text-slate-600">
           Thousands of Indian students choose to study medicine abroad every
           year — here's why it might be right for you too.
         </p>
@@ -96,7 +96,7 @@ const WhyStudyAbroad = () => (
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4"
+        className="mt-10 sm:mt-16 grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4"
       >
         {REASONS.map((reason, index) => {
           const Icon = reason.icon;
@@ -105,43 +105,37 @@ const WhyStudyAbroad = () => (
             <motion.div
               key={reason.title}
               variants={cardVariants}
-              whileHover={{
-                y: -8,
-                transition: { duration: 0.3, ease: "easeOut" },
-              }}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-100 bg-white p-7 shadow-xl shadow-slate-100/60 transition-all duration-500 hover:border-coral/40 hover:shadow-2xl hover:shadow-coral/10"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-100 bg-white p-5 sm:p-7 shadow-xl shadow-slate-100/60 transition-transform transition-shadow duration-300 ease-out hover:-translate-y-2 hover:border-coral/40 hover:shadow-2xl hover:shadow-coral/10"
             >
-              {/* Subtle Animated Glow Effect on Hover */}
-              <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none">
-                <div className="absolute -inset-[100%] bg-[conic-gradient(from_0deg,#ff6b6b_0deg,transparent_120deg,#38bdf8_240deg,transparent_360deg)] opacity-10" />
-              </div>
+              {/* Clean Glow Light Sweep Overlay */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-coral/5 via-transparent to-sky-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
               {/* Watermark Index Counter */}
-              <span className="pointer-events-none absolute right-5 top-4 font-heading text-4xl font-black text-slate-100 transition-colors duration-300 group-hover:text-coral/10">
+              <span className="pointer-events-none absolute right-4 sm:right-5 top-3 sm:top-4 font-heading text-3xl sm:text-4xl font-black text-slate-100 transition-colors duration-300 group-hover:text-coral/10">
                 0{index + 1}
               </span>
 
               <div className="relative z-10">
                 {/* Icon Container */}
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50/80 text-coral shadow-xs transition-all duration-300 group-hover:scale-110 group-hover:border-coral group-hover:bg-coral group-hover:text-white group-hover:shadow-lg group-hover:shadow-coral/25">
+                <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-xl sm:rounded-2xl border border-slate-100 bg-slate-50/80 text-coral shadow-2xs transition-all duration-300 group-hover:scale-110 group-hover:border-coral group-hover:bg-coral group-hover:text-white group-hover:shadow-lg group-hover:shadow-coral/25">
                   <Icon
-                    size={28}
+                    size={26}
                     aria-hidden="true"
                     className="transition-transform duration-300 group-hover:rotate-6"
                   />
                 </div>
 
-                <h3 className="mt-6 font-heading text-xl font-bold text-navy-700 transition-colors duration-300 group-hover:text-coral">
+                <h3 className="mt-5 sm:mt-6 font-heading text-lg sm:text-xl font-bold text-navy-700 transition-colors duration-300 group-hover:text-coral">
                   {reason.title}
                 </h3>
 
-                <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-500">
+                <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-slate-500">
                   {reason.desc}
                 </p>
               </div>
 
               {/* Bottom Subtle Bar */}
-              <div className="relative z-10 mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className="relative z-10 mt-5 sm:mt-6 pt-3.5 sm:pt-4 border-t border-slate-100 flex items-center justify-between">
                 <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase group-hover:text-coral transition-colors">
                   Key Advantage
                 </span>

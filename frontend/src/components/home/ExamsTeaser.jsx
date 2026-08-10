@@ -88,13 +88,10 @@ const ExamsTeaser = () => {
             <motion.div
               key={exam.slug}
               variants={cardVariants}
-              whileHover={{ y: -6, transition: { duration: 0.25 } }}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl bg-white/5 border border-white/10 p-5 sm:p-7 backdrop-blur-xl shadow-2xl transition-all duration-500 hover:border-coral/50 hover:shadow-coral/20 sm:flex-row sm:items-start sm:gap-6"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl bg-white/5 border border-white/10 p-5 sm:p-7 backdrop-blur-xl shadow-2xl transition-transform transition-shadow duration-300 ease-out hover:border-coral/50 hover:shadow-coral/20 hover:-translate-y-1.5 sm:flex-row sm:items-start sm:gap-6"
             >
-              {/* Subtle Animated Glow Effect on Hover */}
-              <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none">
-                <div className="absolute -inset-[100%] bg-[conic-gradient(from_0deg,#ff6b6b_0deg,transparent_120deg,#38bdf8_240deg,transparent_360deg)] opacity-15" />
-              </div>
+              {/* Clean Glow Overlay on Hover */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-coral/15 via-transparent to-sky-500/15 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
               <div
                 className="relative z-10 flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-white/10 text-coral shadow-inner border border-white/10 backdrop-blur-md transition-all duration-300 group-hover:scale-105 group-hover:bg-coral group-hover:text-white"

@@ -45,7 +45,7 @@ const DestinationsGrid = () => {
 
   return (
     <section className="relative overflow-hidden bg-[#071A38] py-16 sm:py-24 text-white">
-      {/* Background Decorative Ambient Glows matching ExamsTeaser */}
+      {/* Background Decorative Ambient Glows */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 sm:h-96 sm:w-96 rounded-full bg-coral/10 blur-3xl" />
       <div className="pointer-events-none absolute right-5 sm:right-10 top-10 h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-sky-500/10 blur-3xl" />
 
@@ -86,7 +86,6 @@ const DestinationsGrid = () => {
               if (!country?._id || !country?.slug) return null;
 
               const bgUrl = getCountryImage(country);
-              // Dynamic duration lookup with safe fallback
               const duration = Number(country?.durationYears) || 6;
 
               return (
@@ -99,22 +98,10 @@ const DestinationsGrid = () => {
                     duration: 0.5,
                     delay: index * 0.08,
                   }}
-                  className="group relative h-72 sm:h-80 overflow-hidden rounded-2xl sm:rounded-3xl bg-white/5 border border-white/10 p-1 backdrop-blur-xl shadow-2xl transition-all duration-500 hover:border-coral/50 hover:shadow-coral/20 hover:-translate-y-2"
+                  className="group relative h-72 sm:h-80 overflow-hidden rounded-2xl sm:rounded-3xl bg-white/5 border border-white/10 p-1 backdrop-blur-xl shadow-2xl transition-transform transition-shadow duration-300 ease-out hover:border-coral/50 hover:shadow-coral/20 hover:-translate-y-2"
                 >
-                  {/* Animated Border Trail Highlight Effect */}
-                  <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none">
-                    <motion.div
-                      animate={{
-                        rotate: [0, 360],
-                      }}
-                      transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                      className="absolute -inset-[100%] bg-[conic-gradient(from_0deg,#ff6b6b_0deg,transparent_120deg,#38bdf8_240deg,transparent_360deg)] opacity-30"
-                    />
-                  </div>
+                  {/* Clean Light Sweep Overlay on Hover */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-coral/20 via-transparent to-sky-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                   {/* Inner Card Container matching #071A38 theme */}
                   <div className="relative h-full w-full overflow-hidden rounded-[18px] sm:rounded-[22px] bg-[#071A38]">

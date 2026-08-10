@@ -86,31 +86,40 @@ const EnquiryForm = ({
     }
   };
 
-  const inputClass = `w-full rounded-xl border px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm outline-none transition-all duration-200 ${
+  const inputClass = `w-full rounded-2xl border px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm outline-none transition-all duration-300 ${
     isDark
-      ? "border-white/15 bg-white/10 text-white placeholder-white/50 focus:border-coral focus:ring-1 focus:ring-coral"
-      : "border-slate-200 bg-white text-navy-800 placeholder-slate-400 focus:border-coral focus:ring-1 focus:ring-coral"
+      ? "border-white/10 bg-white/5 text-white placeholder-white/40 shadow-inner focus:border-coral focus:bg-white/10 focus:ring-2 focus:ring-coral/20"
+      : "border-slate-200/90 bg-slate-50/50 text-navy-800 placeholder-slate-400/80 shadow-xs focus:border-coral focus:bg-white focus:ring-2 focus:ring-coral/20 hover:border-slate-300"
   }`;
 
-  const labelClass = `mb-1 block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider ${
-    isDark ? "text-white/80" : "text-navy-600"
+  const labelClass = `mb-1.5 block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider ${
+    isDark ? "text-white/80" : "text-navy-700"
   }`;
 
-  const errorClass = "mt-1 text-[10px] sm:text-[11px] font-semibold text-coral";
+  const errorClass =
+    "mt-1.5 text-[10px] sm:text-[11px] font-semibold text-coral flex items-center gap-1";
 
   return (
     <div id="enquiry" className="relative w-full overflow-hidden">
+      {/* Decorative Form Background Backlight Glow */}
+      <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-coral/10 blur-3xl" />
+      <div className="pointer-events-none absolute -left-16 -bottom-16 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl" />
+
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-3 sm:space-y-3.5"
+        className="relative z-10 space-y-3.5 sm:space-y-4"
       >
-        <div className="space-y-1 sm:space-y-1.5 border-b border-slate-100/20 pb-2.5 sm:pb-3">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-coral/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-coral">
-            <HiOutlineSparkles size={12} /> Free Expert Advice
+        {/* Form Header */}
+        <div
+          className={`space-y-1.5 border-b pb-3.5 sm:pb-4 ${isDark ? "border-white/10" : "border-slate-100"}`}
+        >
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-coral/20 bg-coral/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-coral backdrop-blur-md">
+            <HiOutlineSparkles size={12} className="animate-pulse" /> Free
+            Expert Advice
           </div>
 
           <h3
-            className={`font-heading text-base sm:text-lg font-bold tracking-tight leading-snug ${
+            className={`font-heading text-base sm:text-xl font-extrabold tracking-tight leading-snug ${
               isDark ? "text-white" : "text-navy-700"
             }`}
           >
@@ -144,8 +153,8 @@ const EnquiryForm = ({
           {errors.name && <p className={errorClass}>{errors.name.message}</p>}
         </div>
 
-        {/* Phone & Email - Stacks smoothly on small mobile screens */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* Phone & Email */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
           <div>
             <label className={labelClass}>Phone*</label>
             <input
@@ -199,7 +208,7 @@ const EnquiryForm = ({
         </div>
 
         {/* City & NEET Score */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
           <div>
             <label className={labelClass}>City</label>
             <input
@@ -244,29 +253,39 @@ const EnquiryForm = ({
         {/* Interested Country */}
         <div>
           <label className={labelClass}>Interested Country</label>
-          <select className={inputClass} {...register("interestedCountry")}>
-            <option value="" className={isDark ? "text-navy-900" : ""}>
-              Select a study destination
-            </option>
+          <div className="relative">
+            <select
+              className={`${inputClass} appearance-none cursor-pointer pr-10`}
+              {...register("interestedCountry")}
+            >
+              <option value="" className={isDark ? "text-navy-900" : ""}>
+                Select a study destination
+              </option>
 
-            {Array.isArray(countries) &&
-              countries.map((country) => (
-                <option
-                  key={country._id}
-                  value={country._id}
-                  className={isDark ? "text-navy-900" : ""}
-                >
-                  MBBS in {country.name}
-                </option>
-              ))}
-          </select>
+              {Array.isArray(countries) &&
+                countries.map((country) => (
+                  <option
+                    key={country._id}
+                    value={country._id}
+                    className={isDark ? "text-navy-900" : ""}
+                  >
+                    MBBS in {country.name}
+                  </option>
+                ))}
+            </select>
+            <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+              </svg>
+            </div>
+          </div>
         </div>
 
         {/* Message */}
         <div>
           <label className={labelClass}>Message or Question</label>
           <textarea
-            rows={2}
+            rows={2.5}
             maxLength={2000}
             className={`${inputClass} resize-none`}
             placeholder="Ask us anything regarding university fees, hostel, or admission..."
@@ -275,21 +294,30 @@ const EnquiryForm = ({
         </div>
 
         {/* Action Button & Security Badge */}
-        <div className="pt-1">
+        <div className="pt-2">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full rounded-xl bg-coral py-3 px-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white shadow-md transition-all hover:opacity-95 hover:shadow-lg active:scale-[0.98] disabled:opacity-60 min-h-[44px]"
+            className="group relative w-full overflow-hidden rounded-2xl bg-coral py-3.5 px-4 text-xs sm:text-sm font-extrabold uppercase tracking-wider text-white shadow-lg shadow-coral/25 transition-all duration-300 hover:bg-coral-600 hover:shadow-xl hover:shadow-coral/35 active:scale-[0.98] disabled:opacity-60 min-h-[48px]"
           >
-            {isSubmitting
-              ? "Connecting with Expert..."
-              : "Get Free Counselling"}
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              {isSubmitting ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <span>Connecting with Expert...</span>
+                </>
+              ) : (
+                <span>Get Free Counselling</span>
+              )}
+            </span>
+            {/* Subtle Button Shimmer Glow Effect */}
+            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
           </button>
 
-          <div className="mt-2.5 flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] text-slate-400">
+          <div className="mt-3 flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] font-medium text-slate-400">
             <HiOutlineShieldCheck
               className="text-emerald-500 shrink-0"
-              size={14}
+              size={15}
             />
             <span>100% Confidential & Zero Spam Guarantee</span>
           </div>
@@ -301,7 +329,10 @@ const EnquiryForm = ({
           }`}
         >
           By submitting, you agree to our{" "}
-          <a href="/privacy-policy" className="underline hover:text-coral">
+          <a
+            href="/privacy-policy"
+            className="font-semibold underline hover:text-coral transition-colors"
+          >
             Privacy Policy
           </a>
           .
