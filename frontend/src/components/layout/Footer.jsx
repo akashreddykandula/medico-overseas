@@ -21,7 +21,7 @@ const QUICK_LINKS = [
   { name: "FAQs", path: "/faqs" },
   { name: "Contact", path: "/contact" },
   { name: "Privacy Policy", path: "/privacy-policy" },
-  { name: "Terms & Conditions", path: "/terms-and-conditions" },
+  { name: "Terms & Conditions", path: "/terms" },
 ];
 
 const STUDY_DESTINATIONS = [
