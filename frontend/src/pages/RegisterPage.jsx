@@ -49,11 +49,11 @@ const RegisterPage = () => {
         aria-hidden="true"
       />
 
-      {/* Outer Card Shell */}
-      <div className="relative z-10 flex w-full max-w-5xl overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white shadow-2xl backdrop-blur-xl">
-        {/* Left Side: Clean Form Area */}
-        <div className="flex w-full flex-col justify-between p-5 sm:p-10 lg:p-12 lg:w-1/2 bg-white">
-          {/* Header Bar with Back Arrow & Logo */}
+      {/* Outer Card Shell - Identical Dimensions to LoginPage */}
+      <div className="relative z-10 flex w-full max-w-4xl max-h-[88vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white shadow-2xl backdrop-blur-xl">
+        {/* Left Side: Form Area */}
+        <div className="flex w-full flex-col justify-between p-4 sm:p-7 lg:p-8 lg:w-1/2 bg-white overflow-y-auto">
+          {/* Header Bar with Back Arrow & Image Logo (Identical to LoginPage) */}
           <div className="flex items-center justify-between gap-4">
             <Link
               to="/"
@@ -77,22 +77,21 @@ const RegisterPage = () => {
           </div>
 
           {/* Main Title & Form */}
-          <div className="my-6 sm:my-8">
+          <div className="my-3 sm:my-4">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E15B3F]/20 bg-[#E15B3F]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E15B3F]">
               <HiOutlineSparkles size={12} /> Student Registration
             </div>
 
-            <h1 className="mt-3 font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-[#1F3864]">
+            <h1 className="mt-2 font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-[#1F3864]">
               Create your account!
             </h1>
-            <p className="mt-1.5 text-xs sm:text-sm text-slate-500 leading-relaxed">
-              Track your application, upload documents, and message your
-              counsellor.
+            <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+              Track applications, upload documents, and contact counsellors.
             </p>
 
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mt-6 space-y-3.5 sm:space-y-4"
+              className="mt-4 space-y-2.5 sm:space-y-3"
             >
               {/* Full Name */}
               <div>
@@ -102,7 +101,7 @@ const RegisterPage = () => {
                 <input
                   type="text"
                   placeholder="e.g. Rahul Sharma"
-                  className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
+                  className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 py-2 sm:py-2.5 text-xs text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
                   {...register("name", {
                     required: "Name is required",
                     validate: (value) =>
@@ -125,7 +124,7 @@ const RegisterPage = () => {
                 <input
                   type="email"
                   placeholder="you@example.com"
-                  className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
+                  className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 py-2 sm:py-2.5 text-xs text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
                   {...register("email", { required: "Email is required" })}
                 />
                 {errors.email && (
@@ -144,7 +143,7 @@ const RegisterPage = () => {
                   type="tel"
                   inputMode="tel"
                   placeholder="10-digit mobile number"
-                  className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
+                  className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 py-2 sm:py-2.5 text-xs text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
                   {...register("phone", {
                     required: "Phone is required",
                     pattern: {
@@ -160,9 +159,8 @@ const RegisterPage = () => {
                 )}
               </div>
 
-              {/* Password & Confirm Password in Grid on Desktop */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {/* Password */}
+              {/* Password & Confirm Password side-by-side */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
                   <label className="mb-1 block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#1F3864]">
                     Password*
@@ -171,7 +169,7 @@ const RegisterPage = () => {
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="At least 8 chars"
-                      className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 sm:px-4 py-2.5 sm:py-3 pr-10 text-xs sm:text-sm text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
+                      className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 py-2 sm:py-2.5 pr-10 text-xs text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
                       {...register("password", {
                         required: "Password is required",
                         minLength: {
@@ -189,9 +187,9 @@ const RegisterPage = () => {
                       }
                     >
                       {showPassword ? (
-                        <HiEyeOff size={18} />
+                        <HiEyeOff size={16} />
                       ) : (
-                        <HiEye size={18} />
+                        <HiEye size={16} />
                       )}
                     </button>
                   </div>
@@ -202,7 +200,6 @@ const RegisterPage = () => {
                   )}
                 </div>
 
-                {/* Confirm Password */}
                 <div>
                   <label className="mb-1 block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#1F3864]">
                     Confirm Password*
@@ -211,7 +208,7 @@ const RegisterPage = () => {
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Repeat password"
-                      className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 sm:px-4 py-2.5 sm:py-3 pr-10 text-xs sm:text-sm text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
+                      className="w-full rounded-2xl border border-slate-200/90 bg-slate-50/50 px-3.5 py-2 sm:py-2.5 pr-10 text-xs text-[#1F3864] placeholder-slate-400 outline-none transition-all duration-200 focus:border-[#E15B3F] focus:bg-white focus:ring-2 focus:ring-[#E15B3F]/20"
                       {...register("confirmPassword", {
                         validate: (value) =>
                           value === watch("password") ||
@@ -229,9 +226,9 @@ const RegisterPage = () => {
                       }
                     >
                       {showConfirmPassword ? (
-                        <HiEyeOff size={18} />
+                        <HiEyeOff size={16} />
                       ) : (
-                        <HiEye size={18} />
+                        <HiEye size={16} />
                       )}
                     </button>
                   </div>
@@ -244,11 +241,11 @@ const RegisterPage = () => {
               </div>
 
               {/* Submit Button */}
-              <div className="pt-2">
+              <div className="pt-1">
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="group relative w-full overflow-hidden rounded-2xl bg-[#E15B3F] py-3.5 px-4 text-xs sm:text-sm font-extrabold uppercase tracking-wider text-white shadow-lg shadow-[#E15B3F]/25 transition-all duration-300 hover:bg-[#d04f35] hover:shadow-xl hover:shadow-[#E15B3F]/35 active:scale-[0.98] disabled:opacity-60 min-h-[48px]"
+                  className="group relative w-full overflow-hidden rounded-2xl bg-[#E15B3F] py-3 px-4 text-xs font-extrabold uppercase tracking-wider text-white shadow-lg shadow-[#E15B3F]/25 transition-all duration-300 hover:bg-[#d04f35] hover:shadow-xl hover:shadow-[#E15B3F]/35 active:scale-[0.98] disabled:opacity-60 min-h-[44px]"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {status === "loading" ? (
@@ -260,11 +257,32 @@ const RegisterPage = () => {
                       <span>Create Account</span>
                     )}
                   </span>
-                  {/* Button Shimmer */}
                   <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                 </button>
               </div>
             </form>
+
+            <p className="mt-3 text-center text-[9px] leading-relaxed text-slate-400">
+              This site is protected by reCAPTCHA and the Google{" "}
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-slate-500"
+              >
+                Privacy Policy
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://policies.google.com/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-slate-500"
+              >
+                Terms of Service
+              </a>{" "}
+              apply.
+            </p>
           </div>
 
           {/* Footer Navigation */}
@@ -287,11 +305,9 @@ const RegisterPage = () => {
               "url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80')",
           }}
         >
-          {/* Dark Navy Overlay Gradients */}
           <div className="absolute inset-0 bg-[#1F3864]/85 backdrop-blur-[2px]" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#071A38] via-[#1F3864]/60 to-[#071A38]/70" />
 
-          {/* Ambient Glow */}
           <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#E15B3F]/25 blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col justify-center h-full text-white">
@@ -305,10 +321,9 @@ const RegisterPage = () => {
 
             <p className="mt-3 text-xs lg:text-sm text-slate-300 leading-relaxed">
               Get direct university admission guidance, upload documents
-              securely, and get 1-on-1 counseling support.
+              securely, and receive 1-on-1 counseling support.
             </p>
 
-            {/* Feature Pills */}
             <div className="mt-8 space-y-3">
               {[
                 "NMC & WHO Recognized Universities",

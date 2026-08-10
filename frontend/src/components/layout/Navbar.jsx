@@ -6,262 +6,11 @@ import { useCountries } from "../../hooks/useCountries";
 
 // --- BRAND CONSTANTS ---
 const ORANGE = "#E15B3F";
-const NAVY = "1F3864 ";
+const NAVY = "#1F3864";
 
 //#E15B3F
 
 //D94A28
-
-// --- PRELOADER COMPONENT ---
-// export const Preloader = ({ show }) => {
-//   const medicoContainer = {
-//     hidden: { opacity: 0 },
-//     visible: {
-//       opacity: 1,
-//       transition: { staggerChildren: 0.12, delayChildren: 0.3 },
-//     },
-//   };
-
-//   const overseasContainer = {
-//     hidden: { opacity: 0 },
-//     visible: {
-//       opacity: 1,
-//       transition: { staggerChildren: 0.12, delayChildren: 1.2 },
-//     },
-//   };
-
-//   const letterVariants = {
-//     hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
-//     visible: {
-//       opacity: 1,
-//       y: 0,
-//       filter: "blur(0px)",
-//       transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-//     },
-//   };
-
-//   const medicoText = "Medico".split("");
-//   const overseasBeforeV = "O".split("");
-//   const overseasAfterV = "erseas".split("");
-
-//   return (
-//     <AnimatePresence>
-//       {show && (
-//         <motion.div
-//           initial={{ opacity: 1 }}
-//           exit={{ opacity: 0, scale: 0.98 }}
-//           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-//           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#F9FBFD] selection:bg-none"
-//         >
-//           <motion.div
-//             initial={{ opacity: 0, scale: 0.8 }}
-//             animate={{ opacity: 0.18, scale: 1 }}
-//             transition={{ duration: 2.2, ease: "easeOut" }}
-//             className="absolute h-[28rem] w-[28rem] rounded-full bg-[#E15B3F] blur-3xl pointer-events-none"
-//           />
-
-//           <div className="relative z-10 flex flex-col items-center sm:flex-row sm:items-center sm:space-x-3">
-//             <div className="flex flex-col items-start font-sans font-bold tracking-tight">
-//               <motion.div
-//                 variants={medicoContainer}
-//                 initial="hidden"
-//                 animate="visible"
-//                 className="flex text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight"
-//                 style={{ color: ORANGE }}
-//               >
-//                 {medicoText.map((char, index) => (
-//                   <motion.span
-//                     key={`medico-${index}`}
-//                     variants={letterVariants}
-//                   >
-//                     {char}
-//                   </motion.span>
-//                 ))}
-//               </motion.div>
-
-//               <div className="relative mt-[-6px] flex items-baseline">
-//                 <motion.div
-//                   variants={overseasContainer}
-//                   initial="hidden"
-//                   animate="visible"
-//                   className="flex text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight"
-//                   style={{ color: NAVY }}
-//                 >
-//                   {overseasBeforeV.map((char, index) => (
-//                     <motion.span
-//                       key={`ov-1-${index}`}
-//                       variants={letterVariants}
-//                     >
-//                       {char}
-//                     </motion.span>
-//                   ))}
-
-//                   <motion.div
-//                     variants={letterVariants}
-//                     className="relative inline-block mx-[1px]"
-//                   >
-//                     <svg
-//                       className="w-[1.1em] h-[1.3em] overflow-visible inline-block align-baseline"
-//                       viewBox="0 0 100 120"
-//                       fill="none"
-//                     >
-//                       <motion.path
-//                         d="M 15 20 Q 30 50 50 65 Q 70 50 85 20"
-//                         stroke={NAVY}
-//                         strokeWidth="11"
-//                         strokeLinecap="round"
-//                         strokeLinejoin="round"
-//                         initial={{ pathLength: 0 }}
-//                         animate={{ pathLength: 1 }}
-//                         transition={{
-//                           duration: 1.2,
-//                           delay: 1.8,
-//                           ease: "easeInOut",
-//                         }}
-//                       />
-//                       <motion.path
-//                         d="M 50 65 C 50 90, 70 110, 110 110 C 150 110, 180 95, 210 105"
-//                         stroke={NAVY}
-//                         strokeWidth="10"
-//                         strokeLinecap="round"
-//                         initial={{ pathLength: 0 }}
-//                         animate={{ pathLength: 1 }}
-//                         transition={{
-//                           duration: 1.8,
-//                           delay: 2.6,
-//                           ease: "easeInOut",
-//                         }}
-//                       />
-//                       <motion.circle
-//                         cx="212"
-//                         cy="105"
-//                         r="10"
-//                         fill={NAVY}
-//                         initial={{ scale: 0 }}
-//                         animate={{ scale: 1 }}
-//                         transition={{ delay: 4.2, duration: 0.4 }}
-//                       />
-//                       <motion.circle
-//                         cx="212"
-//                         cy="105"
-//                         r="5"
-//                         fill="#F9FBFD"
-//                         initial={{ scale: 0 }}
-//                         animate={{ scale: 1 }}
-//                         transition={{ delay: 4.3, duration: 0.3 }}
-//                       />
-//                     </svg>
-//                   </motion.div>
-
-//                   {overseasAfterV.map((char, index) => (
-//                     <motion.span
-//                       key={`ov-2-${index}`}
-//                       variants={letterVariants}
-//                     >
-//                       {char}
-//                     </motion.span>
-//                   ))}
-//                 </motion.div>
-//               </div>
-//             </div>
-
-//             <motion.div
-//               initial={{ scale: 0.7, opacity: 0, rotate: -4 }}
-//               animate={{ scale: 1, opacity: 1, rotate: 0 }}
-//               transition={{
-//                 duration: 1.6,
-//                 delay: 0.5,
-//                 ease: [0.16, 1, 0.3, 1],
-//               }}
-//               className="mt-6 sm:mt-0 sm:ml-2"
-//             >
-//               <svg
-//                 viewBox="0 0 160 160"
-//                 className="h-32 w-32 sm:h-40 sm:w-40 lg:h-44 lg:w-44"
-//               >
-//                 <motion.circle
-//                   cx="80"
-//                   cy="95"
-//                   r="36"
-//                   stroke={ORANGE}
-//                   strokeWidth="6"
-//                   fill="none"
-//                   initial={{ pathLength: 0 }}
-//                   animate={{ pathLength: 1 }}
-//                   transition={{ duration: 1.8, delay: 0.8 }}
-//                 />
-//                 <motion.path
-//                   d="M 62 82 L 63 85 L 66 85 L 64 87 L 65 90 L 62 88 L 59 90 L 60 87 L 58 85 L 61 85 Z M 78 75 L 79 78 L 82 78 L 80 80 L 81 83 L 78 81 L 75 83 L 76 80 L 74 78 L 77 78 Z M 92 88 L 93 91 L 96 91 L 94 93 L 95 96 L 92 94 L 89 96 L 90 93 L 88 91 L 91 91 Z"
-//                   fill={NAVY}
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: 0.65 }}
-//                   transition={{ delay: 2.0, duration: 1.0 }}
-//                 />
-//                 <motion.path
-//                   d="M 80 20 L 140 46 L 80 72 L 20 46 Z"
-//                   fill={NAVY}
-//                   initial={{ y: -16, opacity: 0 }}
-//                   animate={{ y: 0, opacity: 1 }}
-//                   transition={{ duration: 1.1, delay: 1.0, ease: "easeOut" }}
-//                 />
-//                 <motion.path
-//                   d="M 40 55 V 78 C 40 88, 55 98, 80 98 C 105 98, 120 88, 120 78 V 55"
-//                   fill={NAVY}
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: 1 }}
-//                   transition={{ delay: 1.5, duration: 0.8 }}
-//                 />
-//                 <motion.path
-//                   d="M 38 48 V 75 M 36 75 H 40"
-//                   stroke={ORANGE}
-//                   strokeWidth="3"
-//                   strokeLinecap="round"
-//                   initial={{ pathLength: 0 }}
-//                   animate={{ pathLength: 1 }}
-//                   transition={{ delay: 1.8, duration: 0.8 }}
-//                 />
-//                 <motion.path
-//                   d="M 35 125 C 50 145, 110 135, 132 80"
-//                   stroke={ORANGE}
-//                   strokeWidth="4"
-//                   strokeLinecap="round"
-//                   fill="none"
-//                   initial={{ pathLength: 0 }}
-//                   animate={{ pathLength: 1 }}
-//                   transition={{ duration: 2.0, delay: 2.2, ease: "easeInOut" }}
-//                 />
-//                 <motion.g
-//                   initial={{ scale: 0, x: -15, y: 15 }}
-//                   animate={{ scale: 1, x: 0, y: 0 }}
-//                   transition={{ delay: 4.0, duration: 0.6, ease: "backOut" }}
-//                 >
-//                   <path
-//                     d="M 148 72 L 138 78 L 134 74 L 132 76 L 136 81 L 128 86 L 124 84 L 122 86 L 127 89 L 123 93 L 126 94 L 132 89 L 142 83 L 150 78 C 152 76, 151 73, 148 72 Z"
-//                     fill={ORANGE}
-//                   />
-//                 </motion.g>
-//               </svg>
-//             </motion.div>
-//           </div>
-
-//           <div className="absolute bottom-12 h-[3px] w-40 overflow-hidden rounded-full bg-slate-200">
-//             <motion.div
-//               className="h-full w-full rounded-full"
-//               style={{ backgroundColor: ORANGE }}
-//               initial={{ x: "-100%" }}
-//               animate={{ x: "100%" }}
-//               transition={{
-//                 repeat: Infinity,
-//                 duration: 2.6,
-//                 ease: "easeInOut",
-//               }}
-//             />
-//           </div>
-//         </motion.div>
-//       )}
-//     </AnimatePresence>
-//   );
-// };
 
 const EXAM_LINKS = [
   { label: "FMGE Exam", to: "/exams/fmge" },
@@ -315,11 +64,11 @@ const Navbar = ({ onMobileMenuChange }) => {
       <header
         className={`fixed top-0 z-50 w-full transition-all duration-300 ${
           scrolled
-            ? "border-b border-slate-100 bg-white/95 backdrop-blur-xl shadow-md py-1"
-            : "border-b border-transparent bg-white/90 backdrop-blur-md py-2"
+            ? "border-b border-slate-100 bg-white/95 backdrop-blur-xl shadow-md py-0"
+            : "border-b border-transparent bg-white/90 backdrop-blur-md py-0"
         }`}
       >
-        <nav className="section-container flex h-16 items-center justify-between">
+        <nav className="section-container flex h-14 items-center justify-between">
           <Link
             to="/"
             aria-label="Medico Overseas home"
@@ -328,7 +77,7 @@ const Navbar = ({ onMobileMenuChange }) => {
             <img
               src="/medicologo-removebg-preview.png"
               alt="Medico OverSeas Logo"
-              className="h-9 w-auto max-w-[150px] object-contain shrink"
+              className="h-11 w-auto max-w-[180px] object-contain shrink"
             />
           </Link>
 
@@ -526,7 +275,7 @@ const Navbar = ({ onMobileMenuChange }) => {
             }}
             aria-label="Open menu"
           >
-            <HiMenu size={24} />
+            <HiMenu size={28} />
           </button>
         </nav>
 

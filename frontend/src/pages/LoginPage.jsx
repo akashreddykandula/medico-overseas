@@ -61,9 +61,9 @@ const LoginPage = () => {
       />
 
       {/* Outer Card Shell */}
-      <div className="relative z-10 flex w-full max-w-5xl overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white shadow-2xl backdrop-blur-xl">
+      <div className="relative z-10 flex w-full max-w-4xl max-h-[88vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white shadow-2xl backdrop-blur-xl">
         {/* Left Side: Clean Form Area */}
-        <div className="flex w-full flex-col justify-between p-5 sm:p-10 lg:p-12 lg:w-1/2 bg-white">
+        <div className="flex w-full flex-col justify-between p-4 sm:p-7 lg:p-8 lg:w-1/2 bg-white">
           {/* Header Bar with Back Arrow & Logo */}
           <div className="flex items-center justify-between gap-4">
             <Link
@@ -88,7 +88,7 @@ const LoginPage = () => {
           </div>
 
           {/* Main Title & Form */}
-          <div className="my-6 sm:my-8">
+          <div className="my-4 sm:my-5">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E15B3F]/20 bg-[#E15B3F]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E15B3F]">
               <HiOutlineSparkles size={12} /> Student & Portal Access
             </div>
@@ -102,7 +102,7 @@ const LoginPage = () => {
 
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mt-6 sm:mt-8 space-y-4 sm:space-y-5"
+              className="mt-5 sm:mt-6 space-y-3 sm:space-y-4"
             >
               {/* Email Input */}
               <div>
@@ -189,6 +189,27 @@ const LoginPage = () => {
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
               </button>
             </form>
+            <p className="mt-3 text-center text-[9px] leading-relaxed text-slate-400">
+              This site is protected by reCAPTCHA and the Google{" "}
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-slate-500"
+              >
+                Privacy Policy
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://policies.google.com/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-slate-500"
+              >
+                Terms of Service
+              </a>{" "}
+              apply.
+            </p>
           </div>
 
           {/* Footer Navigation */}

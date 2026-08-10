@@ -189,6 +189,27 @@ const Footer = () => {
         {/* Bottom Bar: Clean Copyright Bar */}
         <div className="mt-8 text-center text-xs text-slate-400">
           <p>© {currentYear} Medico Overseas. All rights reserved.</p>
+          <p className="mt-3 text-center text-[9px] leading-relaxed text-slate-400">
+            This site is protected by reCAPTCHA and the Google{" "}
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-slate-500"
+            >
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://policies.google.com/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-slate-500"
+            >
+              Terms of Service
+            </a>{" "}
+            apply.
+          </p>
         </div>
       </div>
     </footer>

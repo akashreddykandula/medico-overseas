@@ -68,3 +68,7 @@ main {
   background: #6f96d2;
 }
 /* Position Google reCAPTCHA badge above WhatsApp button */
+/* Google reCAPTCHA */
+.grecaptcha-badge {
+  visibility: hidden !important;
+}

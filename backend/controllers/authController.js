@@ -237,7 +237,10 @@ const refresh = asyncHandler(async (req, res) => {
   const token = req.cookies?.refreshToken;
 
   if (typeof token !== "string" || !token.trim() || token.length > 2048) {
-    throw new ApiError(401, "Refresh token missing");
+    throw new ApiError(
+      401,
+      "Please check your login credentials and try again",
+    );
   }
 
   if (!process.env.JWT_REFRESH_SECRET) {
