@@ -119,9 +119,7 @@ const TestimonialsPage = () => {
   const allTestimonials =
     dbTestimonials && dbTestimonials.length > 0
       ? dbTestimonials
-      : import.meta.env.DEV
-        ? DEMO_TESTIMONIALS
-        : [];
+      : DEMO_TESTIMONIALS;
 
   // Filter testimonials based on active category
   const filteredTestimonials =

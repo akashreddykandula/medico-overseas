@@ -119,7 +119,7 @@ const Hero = () => {
         aria-hidden="true"
       />
 
-      <div className="section-container relative z-10 w-full">
+      <div className="section-container relative z-10 w-full ">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -130,7 +130,7 @@ const Hero = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-coral/30 bg-coral/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-md"
+            className="inline-flex items-center gap-2 rounded-full border border-coral/30 bg-coral/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-coral-200 backdrop-blur-md "
           >
             <HiAcademicCap className="text-sm text-coral" aria-hidden="true" />
             <span>NMC / WHO RECOGNIZED UNIVERSITIES</span>
