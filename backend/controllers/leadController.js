@@ -5,7 +5,7 @@ const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
 const { verifyRecaptcha } = require("../services/recaptchaService");
 const User = require("../models/User");
-
+const { sendEmail } = require("../services/emailService");
 // ============================================================
 // SECURITY CONFIGURATION
 // ============================================================
@@ -166,7 +166,35 @@ const createLead = asyncHandler(async (req, res) => {
     source: safeSource,
     sourcePageUrl: sanitizeText(sourcePageUrl, 2048),
   });
+  try {
+    await sendEmail({
+      to: process.env.LEAD_NOTIFY_EMAIL,
+      subject: `New Lead Received - ${lead.name}`,
+      html: `
+      <h2>New Lead Received</h2>
 
+      <p><strong>Name:</strong> ${lead.name || "N/A"}</p>
+      <p><strong>Phone:</strong> ${lead.phone || "N/A"}</p>
+      <p><strong>Email:</strong> ${lead.email || "N/A"}</p>
+      <p><strong>City:</strong> ${lead.city || "N/A"}</p>
+      <p><strong>NEET Score:</strong> ${
+        lead.neetScore !== undefined ? lead.neetScore : "N/A"
+      }</p>
+      <p><strong>Source:</strong> ${lead.source || "N/A"}</p>
+      <p><strong>Message:</strong> ${lead.message || "N/A"}</p>
+      <p><strong>Lead ID:</strong> ${lead._id}</p>
+
+      <hr />
+
+      <p>A new lead has been submitted through the Medico Overseas website.</p>
+    `,
+    });
+  } catch (emailError) {
+    console.error(
+      "Failed to send lead notification email:",
+      emailError.message,
+    );
+  }
   res
     .status(201)
     .json(
