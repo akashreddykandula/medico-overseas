@@ -68,7 +68,7 @@ const StudentProfilePage = () => {
           </div>
         </div>
 
-        {/* Developer / Info Note Banner */}
+        {/* Developer / Info Note Banner
         <div className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-3.5 text-center">
           <p className="text-xs leading-relaxed text-navy-300">
             Profile editing (NEET score, address, DOB) can be wired to{" "}
@@ -77,7 +77,7 @@ const StudentProfilePage = () => {
             </code>{" "}
             — add that endpoint when ready.
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
