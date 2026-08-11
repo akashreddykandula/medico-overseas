@@ -179,11 +179,11 @@ const BlogPostPage = () => {
           </header>
 
           {/* Featured Cover Image */}
-          <div className="mt-8 sm:mt-10 overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-100 bg-white shadow-lg sm:shadow-xl">
+          <div className="mt-8 sm:mt-10 mx-auto w-full max-w-2xl overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-100 bg-white shadow-lg">
             <img
               src={imageUrl}
               alt={cleanTitle}
-              className="aspect-[16/9] w-full object-cover transition-transform duration-700 hover:scale-[1.01]"
+              className="h-auto max-h-[420px] w-full object-cover transition-transform duration-700 hover:scale-[1.01]"
               onError={(e) => {
                 e.target.src = DEFAULT_IMAGE;
               }}
@@ -193,59 +193,7 @@ const BlogPostPage = () => {
           {/* Article Main Body HTML Render */}
           <div className="mt-8 sm:mt-12 rounded-2xl sm:rounded-3xl border border-slate-100 bg-white p-5 sm:p-10 lg:p-12 shadow-sm">
             <div
-              className="
-                prose
-                prose-slate
-                prose-base
-                sm:prose-lg
-                max-w-none
-                prose-headings:font-heading
-                prose-headings:font-bold
-                prose-headings:text-navy-700
-                prose-headings:scroll-mt-24
-                prose-h2:text-xl
-                sm:prose-h2:text-2xl
-                prose-h2:mt-8
-                prose-h2:mb-4
-                prose-h2:pb-2
-                prose-h2:border-b
-                prose-h2:border-slate-100
-                prose-h3:text-lg
-                sm:prose-h3:text-xl
-                prose-h3:mt-6
-                prose-h3:mb-3
-                prose-p:text-slate-600
-                prose-p:leading-relaxed
-                prose-p:mb-4
-                prose-li:text-slate-600
-                prose-li:leading-relaxed
-                prose-strong:text-navy-800
-                prose-strong:font-semibold
-                prose-a:font-semibold
-                prose-a:text-coral
-                prose-a:no-underline
-                hover:prose-a:underline
-                prose-img:rounded-xl
-                sm:prose-img:rounded-2xl
-                prose-img:shadow-md
-                prose-img:mx-auto
-                prose-blockquote:border-l-4
-                prose-blockquote:border-coral
-                prose-blockquote:bg-coral-50/40
-                prose-blockquote:py-3
-                prose-blockquote:px-5
-                prose-blockquote:rounded-r-xl
-                prose-blockquote:not-italic
-                prose-blockquote:text-navy-700
-                prose-blockquote:my-6
-                prose-table:block
-                prose-table:overflow-x-auto
-                prose-th:bg-slate-50
-                prose-th:p-3
-                prose-td:p-3
-                prose-td:border-t
-                prose-td:border-slate-100
-              "
+              className="blog-content max-w-none"
               dangerouslySetInnerHTML={{ __html: sanitizedBody }}
             />
 
