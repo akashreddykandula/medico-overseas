@@ -139,8 +139,24 @@ const AdminCounsellorsPage = () => {
           <tbody className="divide-y divide-navy-50">
             {isLoading ? (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-navy-400">
-                  Loading counsellors...
+                <td colSpan={4} className="p-0">
+                  {[1, 2, 3, 4].map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-center justify-between border-b border-navy-50 px-4 py-3.5 animate-pulse"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-navy-100 shrink-0" />
+                        <div className="space-y-1.5">
+                          <div className="h-3.5 w-32 rounded bg-navy-100" />
+                          <div className="h-2.5 w-20 rounded bg-navy-50" />
+                        </div>
+                      </div>
+                      <div className="h-3.5 w-28 rounded bg-navy-50 hidden sm:block" />
+                      <div className="h-5 w-16 rounded-full bg-coral/15" />
+                      <div className="h-7 w-16 rounded-lg bg-navy-100" />
+                    </div>
+                  ))}
                 </td>
               </tr>
             ) : counsellors.length === 0 ? (

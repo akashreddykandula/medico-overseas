@@ -119,14 +119,26 @@ const FaqsPage = () => {
 
         {/* Loading State */}
         {isLoading && (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="relative flex h-10 w-10 items-center justify-center">
-              <div className="absolute h-full w-full animate-spin rounded-full border-2 border-coral border-t-transparent" />
-              <HiOutlineBookOpen className="text-coral" size={16} />
+          <div className="space-y-8 py-8">
+            {/* Search Bar Skeleton */}
+            <div className="mx-auto h-12 max-w-xl animate-pulse rounded-2xl bg-navy-50" />
+
+            {/* Knowledge Base Categories Grid */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <div
+                  key={item}
+                  className="animate-pulse rounded-2xl border border-slate-100 bg-white p-5 space-y-3 shadow-sm"
+                >
+                  <div className="h-10 w-10 rounded-xl bg-coral/10" />
+                  <div className="h-4 w-1/2 rounded bg-navy-100" />
+                  <div className="space-y-1.5 pt-1">
+                    <div className="h-3 w-full rounded bg-navy-50" />
+                    <div className="h-3 w-3/4 rounded bg-navy-50" />
+                  </div>
+                </div>
+              ))}
             </div>
-            <p className="mt-4 text-xs font-bold uppercase tracking-wider text-navy-400">
-              Loading Help Center...
-            </p>
           </div>
         )}
 

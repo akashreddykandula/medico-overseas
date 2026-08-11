@@ -37,17 +37,39 @@ const StudentDashboardPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-coral border-t-transparent" />
-          <p className="text-xs font-semibold text-navy-400">
-            Loading your application...
-          </p>
+      <div className="mx-auto max-w-3xl space-y-6 py-6">
+        {/* Progress Tracker Skeleton */}
+        <div className="animate-pulse rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+          <div className="flex justify-between items-center gap-2">
+            {[1, 2, 3, 4].map((step) => (
+              <div key={step} className="flex flex-1 items-center gap-2">
+                <div className="h-8 w-8 rounded-full bg-navy-100 shrink-0" />
+                <div className="h-3 w-full rounded bg-navy-50 hidden sm:block" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Application Details Card Skeleton */}
+        <div className="animate-pulse rounded-2xl border border-slate-100 bg-white p-6 space-y-4 shadow-sm">
+          <div className="flex justify-between items-center border-b border-navy-50 pb-4">
+            <div className="space-y-2">
+              <div className="h-5 w-48 rounded bg-navy-100" />
+              <div className="h-3 w-32 rounded bg-navy-50" />
+            </div>
+            <div className="h-6 w-24 rounded-full bg-coral/15" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div className="h-10 rounded-xl bg-navy-50" />
+            <div className="h-10 rounded-xl bg-navy-50" />
+            <div className="h-10 rounded-xl bg-navy-50" />
+            <div className="h-10 rounded-xl bg-navy-50" />
+          </div>
         </div>
       </div>
     );
   }
-
   // No application exists
   if (!application) {
     return (

@@ -655,11 +655,30 @@ const AdminBlogsPage = () => {
           </thead>
           <tbody className="divide-y divide-navy-50">
             {isLoading && (
-              <tr>
-                <td colSpan={6} className="px-4 py-6 text-center text-navy-400">
-                  Loading...
-                </td>
-              </tr>
+              <>
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <tr key={item} className="animate-pulse">
+                    <td className="px-4 py-3.5">
+                      <div className="h-8 w-8 rounded-lg bg-navy-100" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-32 rounded bg-navy-100" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-24 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-20 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-5 w-16 rounded-full bg-coral/15" />
+                    </td>
+                    <td className="px-4 py-3.5 text-right">
+                      <div className="ml-auto h-6 w-14 rounded-md bg-navy-100" />
+                    </td>
+                  </tr>
+                ))}
+              </>
             )}
             {blogs.map((b) => (
               <tr

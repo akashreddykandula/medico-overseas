@@ -187,15 +187,30 @@ const StudentDocumentsPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-coral border-t-transparent" />
-        <p className="mt-3 text-sm font-medium text-navy-400">
-          Loading your document checklist...
-        </p>
+      <div className="mx-auto max-w-2xl space-y-4 py-8">
+        <div className="flex items-center justify-between pb-2">
+          <div className="h-5 w-48 animate-pulse rounded-lg bg-navy-100" />
+          <div className="h-4 w-20 animate-pulse rounded bg-navy-50" />
+        </div>
+
+        {[1, 2, 3, 4].map((item) => (
+          <div
+            key={item}
+            className="animate-pulse flex items-center justify-between rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+          >
+            <div className="flex items-center gap-3 w-3/4">
+              <div className="h-8 w-8 rounded-xl bg-coral/10 shrink-0" />
+              <div className="space-y-1.5 w-full">
+                <div className="h-4 w-1/2 rounded bg-navy-100" />
+                <div className="h-3 w-1/3 rounded bg-navy-50" />
+              </div>
+            </div>
+            <div className="h-7 w-20 rounded-lg bg-navy-100 shrink-0" />
+          </div>
+        ))}
       </div>
     );
   }
-
   const docByType = (type) =>
     application?.documents?.find((d) => d.type === type);
 

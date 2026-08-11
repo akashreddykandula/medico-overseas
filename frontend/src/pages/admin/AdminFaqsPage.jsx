@@ -402,8 +402,23 @@ const AdminFaqsPage = () => {
           <tbody className="divide-y divide-navy-50">
             {isLoading && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-navy-400">
-                  Loading FAQs...
+                <td colSpan={6} className="p-0">
+                  {[1, 2, 3, 4, 5].map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-center justify-between border-b border-navy-50 px-4 py-3.5 animate-pulse"
+                    >
+                      <div className="flex items-center gap-3 w-1/3">
+                        <div className="h-4 w-4 rounded bg-coral/20 shrink-0" />
+                        <div className="h-3.5 w-full rounded bg-navy-100" />
+                      </div>
+                      <div className="h-3.5 w-1/4 rounded bg-navy-50 hidden sm:block" />
+                      <div className="h-5 w-20 rounded-full bg-navy-100 hidden md:block" />
+                      <div className="h-3.5 w-12 rounded bg-navy-50 hidden lg:block" />
+                      <div className="h-5 w-16 rounded-full bg-emerald-50" />
+                      <div className="h-6 w-14 rounded-md bg-navy-100" />
+                    </div>
+                  ))}
                 </td>
               </tr>
             )}

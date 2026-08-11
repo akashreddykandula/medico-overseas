@@ -219,17 +219,39 @@ const AdminLeadsPage = () => {
           </thead>
           <tbody className="divide-y divide-navy-50 font-medium text-navy-600">
             {isLoading && (
-              <tr>
-                <td
-                  colSpan={8}
-                  className="px-4 py-10 text-center text-navy-400"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-coral border-t-transparent" />
-                    <span>Loading leads...</span>
-                  </div>
-                </td>
-              </tr>
+              <>
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <tr
+                    key={item}
+                    className="animate-pulse border-b border-navy-50"
+                  >
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-28 rounded bg-navy-100" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-36 rounded bg-navy-100" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-24 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-5 w-20 rounded-full bg-navy-100" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-5 w-20 rounded-full bg-coral/15" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-24 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-16 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-3.5 text-right">
+                      <div className="ml-auto h-6 w-14 rounded-md bg-navy-100" />
+                    </td>
+                  </tr>
+                ))}
+              </>
             )}
             {!isLoading && leads.length === 0 && (
               <tr>

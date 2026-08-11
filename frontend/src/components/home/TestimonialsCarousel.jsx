@@ -151,15 +151,32 @@ const TestimonialsCarousel = () => {
   if (isLoading) {
     return (
       <section className="bg-white py-16 sm:py-24 text-navy-600">
-        <div className="section-container text-center">
-          <div className="flex flex-col items-center justify-center gap-3">
-            <div
-              className="h-8 w-8 animate-spin rounded-full border-3 border-coral border-t-transparent"
-              aria-hidden="true"
-            />
-            <p className="text-xs font-semibold uppercase tracking-wider text-navy-400">
-              Loading student reviews...
-            </p>
+        <div className="section-container">
+          <div className="mx-auto max-w-md text-center">
+            <div className="mx-auto h-6 w-32 animate-pulse rounded-full bg-navy-100" />
+            <div className="mx-auto mt-3 h-8 w-64 animate-pulse rounded-lg bg-navy-100" />
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                className="animate-pulse rounded-2xl border border-slate-100 bg-slate-50/50 p-6 space-y-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 rounded-full bg-navy-100 shrink-0" />
+                  <div className="space-y-2 w-full">
+                    <div className="h-4 w-1/2 rounded bg-navy-100" />
+                    <div className="h-3 w-1/3 rounded bg-navy-50" />
+                  </div>
+                </div>
+                <div className="space-y-2 pt-2">
+                  <div className="h-3 w-full rounded bg-navy-50" />
+                  <div className="h-3 w-5/6 rounded bg-navy-50" />
+                  <div className="h-3 w-4/6 rounded bg-navy-50" />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

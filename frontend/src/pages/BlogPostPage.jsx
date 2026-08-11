@@ -38,12 +38,31 @@ const BlogPostPage = () => {
 
   if (isLoading)
     return (
-      <div className="section-container min-h-[60vh] py-40 text-center">
-        <div className="flex flex-col items-center justify-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-3 border-coral border-t-transparent" />
-          <p className="text-xs font-semibold uppercase tracking-wider text-navy-400">
-            Loading article content...
-          </p>
+      <div className="section-container min-h-[60vh] py-12 sm:py-20">
+        <div className="mx-auto max-w-3xl space-y-6">
+          {/* Category Badge & Date Skeleton */}
+          <div className="flex items-center gap-3">
+            <div className="h-5 w-24 animate-pulse rounded-full bg-coral/20" />
+            <div className="h-4 w-28 animate-pulse rounded bg-navy-100" />
+          </div>
+
+          {/* Title Skeleton */}
+          <div className="space-y-2">
+            <div className="h-8 w-11/12 animate-pulse rounded-lg bg-navy-100 sm:h-10" />
+            <div className="h-8 w-3/4 animate-pulse rounded-lg bg-navy-100 sm:h-10" />
+          </div>
+
+          {/* Featured Image Skeleton */}
+          <div className="h-64 sm:h-80 w-full animate-pulse rounded-2xl bg-navy-100" />
+
+          {/* Text Paragraphs Skeleton */}
+          <div className="space-y-3 pt-4">
+            <div className="h-4 w-full animate-pulse rounded bg-navy-50" />
+            <div className="h-4 w-11/12 animate-pulse rounded bg-navy-50" />
+            <div className="h-4 w-4/5 animate-pulse rounded bg-navy-50" />
+            <div className="h-4 w-full animate-pulse rounded bg-navy-50" />
+            <div className="h-4 w-2/3 animate-pulse rounded bg-navy-50" />
+          </div>
         </div>
       </div>
     );

@@ -781,11 +781,30 @@ const AdminApplicationsPage = () => {
           </thead>
           <tbody className="divide-y divide-navy-50">
             {isLoading && (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-navy-400">
-                  Loading applications...
-                </td>
-              </tr>
+              <>
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <tr key={item} className="animate-pulse">
+                    <td className="px-4 py-4">
+                      <div className="h-4 w-28 rounded bg-navy-100" />
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 w-36 rounded bg-navy-100" />
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 w-24 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-5 w-20 rounded-full bg-coral/15" />
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 w-16 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-4 text-right">
+                      <div className="ml-auto h-7 w-16 rounded-lg bg-navy-100" />
+                    </td>
+                  </tr>
+                ))}
+              </>
             )}
             {!isLoading && applications.length === 0 && (
               <tr>

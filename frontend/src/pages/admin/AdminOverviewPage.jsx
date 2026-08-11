@@ -90,12 +90,41 @@ const AdminOverviewPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-3 border-coral border-t-transparent" />
-          <p className="text-xs font-semibold tracking-wider text-navy-400 uppercase">
-            Loading analytics engine...
-          </p>
+      <div className="space-y-6 py-6">
+        {/* Metric Cards Skeleton */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((item) => (
+            <div
+              key={item}
+              className="animate-pulse rounded-2xl border border-slate-100 bg-white p-5 space-y-3 shadow-sm"
+            >
+              <div className="flex items-center justify-between">
+                <div className="h-3 w-20 rounded bg-navy-100" />
+                <div className="h-8 w-8 rounded-xl bg-coral/10" />
+              </div>
+              <div className="h-7 w-28 rounded bg-navy-100" />
+              <div className="h-3 w-16 rounded bg-emerald-50" />
+            </div>
+          ))}
+        </div>
+
+        {/* Main Chart Section Skeleton */}
+        <div className="animate-pulse rounded-2xl border border-slate-100 bg-white p-6 space-y-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="h-4 w-36 rounded bg-navy-100" />
+            <div className="h-8 w-24 rounded-lg bg-navy-50" />
+          </div>
+          <div className="flex h-64 items-end gap-3 pt-4">
+            {[40, 65, 30, 85, 50, 75, 90, 60, 45, 70, 80, 55].map(
+              (height, i) => (
+                <div
+                  key={i}
+                  className="w-full rounded-t-lg bg-navy-50"
+                  style={{ height: `${height}%` }}
+                />
+              ),
+            )}
+          </div>
         </div>
       </div>
     );

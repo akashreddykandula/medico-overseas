@@ -98,14 +98,33 @@ const AdminStudentsPage = () => {
 
           <tbody className="divide-y divide-navy-50">
             {isLoading && (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="px-4 py-10 text-center text-navy-400"
-                >
-                  Loading students...
-                </td>
-              </tr>
+              <>
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <tr
+                    key={item}
+                    className="animate-pulse border-b border-navy-50"
+                  >
+                    <td className="px-4 py-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-full bg-navy-100 shrink-0" />
+                        <div className="h-4 w-32 rounded bg-navy-100" />
+                      </div>
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-36 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-4 w-28 rounded bg-navy-50" />
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <div className="h-5 w-20 rounded-full bg-coral/15" />
+                    </td>
+                    <td className="px-4 py-3.5 text-right">
+                      <div className="ml-auto h-6 w-14 rounded-md bg-navy-100" />
+                    </td>
+                  </tr>
+                ))}
+              </>
             )}
 
             {isError && (
