@@ -1,45 +1,6 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-// ============================================================
-// SMTP CONFIGURATION
-// ============================================================
-
-const smtpPort = Number(process.env.SMTP_PORT) || 587;
-
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: smtpPort,
-
-  // Preserve existing SMTP behavior.
-  secure: smtpPort === 465,
-
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-
-  // Prevent SMTP connections from hanging indefinitely.
-  connectionTimeout: 10_000,
-  greetingTimeout: 10_000,
-  socketTimeout: 15_000,
-
-  // Do not allow untrusted certificate configuration from
-  // application input.
-  tls: {
-    rejectUnauthorized: true,
-  },
-});
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("SMTP connection failed:", error.message);
-  } else {
-    console.log("SMTP server is ready");
-  }
-});
-
-// ============================================================
-// SEND EMAIL
-// ============================================================
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendEmail = async ({ to, subject, html }) => {
   if (typeof to !== "string" || !to.trim()) {
@@ -54,19 +15,22 @@ const sendEmail = async ({ to, subject, html }) => {
     throw new Error("Email content is invalid");
   }
 
-  // Nodemailer handles header encoding, but explicitly remove
-  // CR/LF from the subject to prevent header-injection attempts.
   const safeSubject = subject.replace(/[\r\n]/g, " ").trim();
 
-  return transporter.sendMail({
+  const { data, error } = await resend.emails.send({
     from: process.env.EMAIL_FROM,
-    to: to.trim(),
+    to: [to.trim()],
     subject: safeSubject,
     html,
   });
+
+  if (error) {
+    throw new Error(error.message || "Failed to send email");
+  }
+
+  return data;
 };
 
 module.exports = {
   sendEmail,
-  transporter,
 };
