@@ -387,7 +387,8 @@ const Navbar = ({ onMobileMenuChange }) => {
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className="ml-auto flex h-full w-full max-w-xs flex-col bg-white p-6 shadow-2xl"
             >
-              <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
+              {/* Header section */}
+              <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-4">
                 <img
                   src="/medicologo-removebg-preview.png"
                   alt="Medico Overseas Logo"
@@ -405,75 +406,79 @@ const Navbar = ({ onMobileMenuChange }) => {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-1 overflow-y-auto pr-1">
-                {NAV_LINKS.map((link) => (
+              {/* Scrollable links + Action buttons directly underneath */}
+              <div className="flex flex-1 flex-col overflow-y-auto pr-1">
+                <div className="flex flex-col gap-1">
+                  {NAV_LINKS.map((link) => (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      onClick={() => setMobileOpen(false)}
+                      className="rounded-2xl px-4 py-3 text-sm font-bold text-slate-800 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+
+                  <MobileAccordion title="Destinations">
+                    {countries.map((c) => (
+                      <Link
+                        key={c._id}
+                        to={`/destinations/mbbs-in-${c.slug}`}
+                        onClick={() => setMobileOpen(false)}
+                        className="block rounded-xl px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
+                      >
+                        MBBS in {c.name}
+                      </Link>
+                    ))}
+                  </MobileAccordion>
+
+                  <MobileAccordion title="Exams">
+                    {EXAM_LINKS.map((e) => (
+                      <Link
+                        key={e.to}
+                        to={e.to}
+                        onClick={() => setMobileOpen(false)}
+                        className="block rounded-xl px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
+                      >
+                        {e.label}
+                      </Link>
+                    ))}
+                  </MobileAccordion>
+
                   <Link
-                    key={link.to}
-                    to={link.to}
+                    to="/blog"
                     onClick={() => setMobileOpen(false)}
                     className="rounded-2xl px-4 py-3 text-sm font-bold text-slate-800 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
                   >
-                    {link.label}
+                    Blogs
                   </Link>
-                ))}
+                  <Link
+                    to="/contact"
+                    onClick={() => setMobileOpen(false)}
+                    className="rounded-2xl px-4 py-3 text-sm font-bold text-slate-800 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
+                  >
+                    Contact
+                  </Link>
+                </div>
 
-                <MobileAccordion title="Destinations">
-                  {countries.map((c) => (
-                    <Link
-                      key={c._id}
-                      to={`/destinations/mbbs-in-${c.slug}`}
-                      onClick={() => setMobileOpen(false)}
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
-                    >
-                      MBBS in {c.name}
-                    </Link>
-                  ))}
-                </MobileAccordion>
-
-                <MobileAccordion title="Exams">
-                  {EXAM_LINKS.map((e) => (
-                    <Link
-                      key={e.to}
-                      to={e.to}
-                      onClick={() => setMobileOpen(false)}
-                      className="block rounded-xl px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
-                    >
-                      {e.label}
-                    </Link>
-                  ))}
-                </MobileAccordion>
-
-                <Link
-                  to="/blog"
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-2xl px-4 py-3 text-sm font-bold text-slate-800 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
-                >
-                  Blogs
-                </Link>
-                <Link
-                  to="/contact"
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-2xl px-4 py-3 text-sm font-bold text-slate-800 transition-colors hover:bg-[#E15B3F]/10 hover:text-[#E15B3F]"
-                >
-                  Contact
-                </Link>
-              </div>
-
-              <div className="mt-auto space-y-2 border-t border-slate-100 pt-4">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="block w-full rounded-full border border-slate-200 py-3 text-center text-xs font-bold text-slate-800"
-                >
-                  Portal Login
-                </Link>
-                <Link
-                  to="/contact#enquiry"
-                  onClick={() => setMobileOpen(false)}
-                  className="block w-full rounded-full bg-[#E15B3F] py-3 text-center text-xs font-bold text-white shadow-lg shadow-[#E15B3F]/30"
-                >
-                  Get Free Counselling
-                </Link>
+                {/* CTAs flow right after the links with a clean, compact gap */}
+                <div className="mt-4 space-y-2 border-t border-slate-100 pt-4">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="block w-full rounded-full border border-slate-200 py-3 text-center text-xs font-bold text-slate-800"
+                  >
+                    Portal Login
+                  </Link>
+                  <Link
+                    to="/contact#enquiry"
+                    onClick={() => setMobileOpen(false)}
+                    className="block w-full rounded-full bg-[#E15B3F] py-3 text-center text-xs font-bold text-white shadow-lg shadow-[#E15B3F]/30"
+                  >
+                    Get Free Counselling
+                  </Link>
+                </div>
               </div>
             </motion.div>
           </motion.div>
