@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -216,6 +216,9 @@ const AdminCountriesPage = () => {
   };
 
   const onSubmitEdit = (formData) => {
+    console.log("EDITING COUNTRY ID:", editingCountry?._id);
+
+    console.log("EDIT FORM DATA:", formData);
     updateMutation.mutate({
       id: editingCountry._id,
       payload: {
@@ -302,71 +305,66 @@ const AdminCountriesPage = () => {
   const handleStartEdit = (country) => {
     setEditingCountry(country);
     setShowForm(false);
+    setImageInputType("url");
+  };
+  useEffect(() => {
+    if (!editingCountry) {
+      resetEdit({});
+      return;
+    }
 
     resetEdit({
-      name: country.name || "",
-      shortDescription: country.shortDescription || "",
-      overview: country.overview || "",
+      name: editingCountry.name || "",
+      shortDescription: editingCountry.shortDescription || "",
+      overview: editingCountry.overview || "",
 
-      isPublished: String(country.isPublished ?? true),
+      isPublished: String(editingCountry.isPublished ?? true),
 
       heroImage: {
-        url: country.heroImage?.url || country.heroImage || "",
+        url: editingCountry.heroImage?.url || editingCountry.heroImage || "",
       },
 
-      // Destination Information
-      capital: country.capital || "",
-      currency: country.currency || "",
-      flightDuration: country.flightDuration || "",
-      timeDifference: country.timeDifference || "",
-      internationalAirports: country.internationalAirports || "",
+      capital: editingCountry.capital || "",
+      currency: editingCountry.currency || "",
+      flightDuration: editingCountry.flightDuration || "",
+      timeDifference: editingCountry.timeDifference || "",
+      internationalAirports: editingCountry.internationalAirports || "",
 
-      // MBBS Information
-      durationYears: country.durationYears ?? 6,
-      mediumOfInstruction: country.mediumOfInstruction || "English",
+      durationYears: editingCountry.durationYears ?? 6,
+      mediumOfInstruction: editingCountry.mediumOfInstruction || "English",
 
-      // Fee Structure (Leave empty if undefined or zero to display placeholder)
-      tuitionPerYear: country.fees?.tuitionPerYear
-        ? country.fees.tuitionPerYear
-        : "",
-      hostelPerYear: country.fees?.hostelPerYear
-        ? country.fees.hostelPerYear
-        : "",
-      messPerYear: country.fees?.messPerYear ? country.fees.messPerYear : "",
-      oneTimeCosts: country.fees?.oneTimeCosts ? country.fees.oneTimeCosts : "",
-      feeCurrency: country.fees?.currency || "USD",
+      tuitionPerYear: editingCountry.fees?.tuitionPerYear ?? "",
+      hostelPerYear: editingCountry.fees?.hostelPerYear ?? "",
+      messPerYear: editingCountry.fees?.messPerYear ?? "",
+      oneTimeCosts: editingCountry.fees?.oneTimeCosts ?? "",
+      feeCurrency: editingCountry.fees?.currency || "USD",
 
-      // Eligibility
-      minAge: country.eligibility?.minAge ?? 17,
-      neetRequired: String(country.eligibility?.neetRequired ?? true),
-      minAcademicPercent: country.eligibility?.minAcademicPercent ?? 50,
-      eligibilityNotes: country.eligibility?.notes || "",
+      minAge: editingCountry.eligibility?.minAge ?? 17,
+      neetRequired: String(editingCountry.eligibility?.neetRequired ?? true),
+      minAcademicPercent: editingCountry.eligibility?.minAcademicPercent ?? 50,
+      eligibilityNotes: editingCountry.eligibility?.notes || "",
 
-      // Required Documents
-      requiredDocuments: (country.requiredDocuments || []).join("\n"),
-      visaProcess: country.visaProcess || "",
+      requiredDocuments: (editingCountry.requiredDocuments || []).join("\n"),
 
-      monthlyLivingCost: country.livingCost?.monthlyEstimate
-        ? country.livingCost.monthlyEstimate
-        : "",
-      livingCostCurrency: country.livingCost?.currency || "USD",
-      livingCostNotes: country.livingCost?.notes || "",
+      visaProcess: editingCountry.visaProcess || "",
 
-      // Admission Process
-      admissionProcess: (country.admissionProcess || [])
+      monthlyLivingCost: editingCountry.livingCost?.monthlyEstimate ?? "",
+      livingCostCurrency: editingCountry.livingCost?.currency || "USD",
+      livingCostNotes: editingCountry.livingCost?.notes || "",
+
+      admissionProcess: (editingCountry.admissionProcess || [])
         .map((item) => `${item.step} | ${item.description}`)
         .join("\n"),
 
-      // FAQs
-      faqs: (country.faqs || [])
+      faqs: (editingCountry.faqs || [])
         .map((item) => `${item.question} | ${item.answer}`)
         .join("\n"),
 
-      // Climate & Student Life
-      climateNotes: country.climateNotes || "",
-      studentLifeNotes: country.studentLifeNotes || "",
+      climateNotes: editingCountry.climateNotes || "",
+
+      studentLifeNotes: editingCountry.studentLifeNotes || "",
     });
-  };
+  }, [editingCountry, resetEdit]);
 
   return (
     <div className="space-y-4">
@@ -809,7 +807,10 @@ Step 6 | Complete university registration`}
             </h3>
             <button
               type="button"
-              onClick={() => setEditingCountry(null)}
+              onClick={() => {
+                setEditingCountry(null);
+                resetEdit({});
+              }}
               className="text-navy-400 hover:text-navy-600"
             >
               <HiOutlineX size={18} />
@@ -1247,7 +1248,10 @@ Medical Fitness Certificate`}
             </button>
             <button
               type="button"
-              onClick={() => setEditingCountry(null)}
+              onClick={() => {
+                setEditingCountry(null);
+                resetEdit({});
+              }}
               className="rounded-lg border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
             >
               Cancel
