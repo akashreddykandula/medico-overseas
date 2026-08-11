@@ -29,6 +29,13 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: true,
   },
 });
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("SMTP connection failed:", error.message);
+  } else {
+    console.log("SMTP server is ready");
+  }
+});
 
 // ============================================================
 // SEND EMAIL
