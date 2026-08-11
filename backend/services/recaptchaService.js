@@ -30,13 +30,6 @@ const verifyRecaptcha = async (token) => {
       maxContentLength: 1024 * 1024,
       maxBodyLength: 1024 * 1024,
     });
-    console.log("reCAPTCHA Google response:", {
-      success: data?.success,
-      score: data?.score,
-      action: data?.action,
-      hostname: data?.hostname,
-      errorCodes: data?.["error-codes"],
-    });
 
     return Boolean(
       data && data.success && (data.score === undefined || data.score >= 0.5),

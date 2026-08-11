@@ -6,6 +6,7 @@ const ApiResponse = require("../utils/ApiResponse");
 const { verifyRecaptcha } = require("../services/recaptchaService");
 const User = require("../models/User");
 const { sendEmail } = require("../services/emailService");
+
 // ============================================================
 // SECURITY CONFIGURATION
 // ============================================================
@@ -139,7 +140,7 @@ const createLead = asyncHandler(async (req, res) => {
   }
 
   // ----------------------------------------------------------
-  // reCAPTCHA
+  // reCAPTCHA Verification
   // ----------------------------------------------------------
 
   const humanVerified = await verifyRecaptcha(recaptchaToken);
@@ -149,7 +150,7 @@ const createLead = asyncHandler(async (req, res) => {
   }
 
   // ----------------------------------------------------------
-  // Explicit payload construction
+  // Explicit Payload Construction & DB Insertion
   // ----------------------------------------------------------
 
   const lead = await Lead.create({
@@ -166,36 +167,58 @@ const createLead = asyncHandler(async (req, res) => {
     source: safeSource,
     sourcePageUrl: sanitizeText(sourcePageUrl, 2048),
   });
-  try {
-    await sendEmail({
-      to: process.env.LEAD_NOTIFY_EMAIL,
-      subject: `New Lead Received - ${lead.name}`,
+
+  // ----------------------------------------------------------
+  // Send Admin Email in Background (Non-blocking)
+  // ----------------------------------------------------------
+
+  const recipientEmail = process.env.LEAD_NOTIFY_EMAIL;
+
+  if (recipientEmail) {
+    sendEmail({
+      to: recipientEmail,
+      subject: `New Lead Received - ${lead.name || "Unknown"}`,
       html: `
-      <h2>New Lead Received</h2>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
+          <h2 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
+            New Lead Received
+          </h2>
 
-      <p><strong>Name:</strong> ${lead.name || "N/A"}</p>
-      <p><strong>Phone:</strong> ${lead.phone || "N/A"}</p>
-      <p><strong>Email:</strong> ${lead.email || "N/A"}</p>
-      <p><strong>City:</strong> ${lead.city || "N/A"}</p>
-      <p><strong>NEET Score:</strong> ${
-        lead.neetScore !== undefined ? lead.neetScore : "N/A"
-      }</p>
-      <p><strong>Source:</strong> ${lead.source || "N/A"}</p>
-      <p><strong>Message:</strong> ${lead.message || "N/A"}</p>
-      <p><strong>Lead ID:</strong> ${lead._id}</p>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+            <tr><td style="padding: 6px 0; font-weight: bold; width: 140px;">Name:</td><td>${lead.name || "N/A"}</td></tr>
+            <tr><td style="padding: 6px 0; font-weight: bold;">Phone:</td><td>${lead.phone || "N/A"}</td></tr>
+            <tr><td style="padding: 6px 0; font-weight: bold;">Email:</td><td>${lead.email || "N/A"}</td></tr>
+            <tr><td style="padding: 6px 0; font-weight: bold;">City:</td><td>${lead.city || "N/A"}</td></tr>
+            <tr><td style="padding: 6px 0; font-weight: bold;">NEET Score:</td><td>${lead.neetScore ?? "N/A"}</td></tr>
+            <tr><td style="padding: 6px 0; font-weight: bold;">Source:</td><td>${lead.source || "N/A"}</td></tr>
+            <tr><td style="padding: 6px 0; font-weight: bold;">Message:</td><td>${lead.message || "N/A"}</td></tr>
+            <tr><td style="padding: 6px 0; font-weight: bold;">Lead ID:</td><td><code>${lead._id}</code></td></tr>
+          </table>
 
-      <hr />
+          <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
 
-      <p>A new lead has been submitted through the Medico Overseas website.</p>
-    `,
+          <p style="font-size: 13px; color: #64748b;">
+            A new lead has been submitted through the <strong>Medico Overseas</strong> website.
+          </p>
+        </div>
+      `,
+    }).catch((error) => {
+      console.error(
+        `Lead notification email failed for Lead ID ${lead._id}:`,
+        error.message,
+      );
     });
-  } catch (emailError) {
-    console.error(
-      "Failed to send lead notification email:",
-      emailError.message,
+  } else {
+    console.warn(
+      `LEAD_NOTIFY_EMAIL missing in environment variables. Email notification skipped for Lead ID ${lead._id}.`,
     );
   }
-  res
+
+  // ----------------------------------------------------------
+  // Respond Immediately
+  // ----------------------------------------------------------
+
+  return res
     .status(201)
     .json(
       new ApiResponse(
