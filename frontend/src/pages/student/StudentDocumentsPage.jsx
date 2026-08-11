@@ -103,11 +103,18 @@ const DocumentSlot = ({ type, label, existingDoc }) => {
             {existingDoc ? (
               existingDoc.verified ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-600 border border-green-200/50">
-                  <HiCheckCircle size={14} /> Verified
+                  <HiCheckCircle size={14} />
+                  Verified
+                </span>
+              ) : existingDoc.rejectionReason ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600 border border-red-200/50">
+                  <HiOutlineExclamationCircle size={14} />
+                  Rejected
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-600 border border-amber-200/50">
-                  <HiOutlineClock size={14} /> Pending
+                  <HiOutlineClock size={14} />
+                  Pending Review
                 </span>
               )
             ) : (
@@ -213,7 +220,10 @@ const StudentDocumentsPage = () => {
   }
   const docByType = (type) =>
     application?.documents?.find((d) => d.type === type);
+  const requiredDocuments = application?.requiredDocuments || [];
 
+  const isDocumentsRequired =
+    application?.currentStage === "documents_required";
   return (
     <div className="max-w-5xl">
       {/* Title & Guidelines Header */}
@@ -232,13 +242,113 @@ const StudentDocumentsPage = () => {
       </div>
 
       {/* Responsive Document Slots Grid */}
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-        {DOCUMENT_TYPES.map(([type, label]) => (
+      {/* Required Documents From Counsellor */}
+      {isDocumentsRequired && (
+        <div className="mt-6 rounded-2xl border border-coral/20 bg-coral-50/40 p-5">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-coral text-white">
+              <HiOutlineExclamationCircle size={21} />
+            </div>
+
+            <div>
+              <h3 className="font-heading text-sm font-bold text-navy-600">
+                Documents Required
+              </h3>
+
+              <p className="mt-1 text-xs leading-relaxed text-navy-400">
+                Your counsellor has requested the following documents. Please
+                upload all required documents to continue your application.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 space-y-3">
+            {requiredDocuments.map((document) => {
+              const uploadedDocument = docByType(document.type);
+
+              return (
+                <div
+                  key={document._id || document.type}
+                  className="rounded-xl border border-navy-100 bg-white p-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+                          uploadedDocument?.verified
+                            ? "bg-green-50 text-green-600"
+                            : uploadedDocument
+                              ? "bg-amber-50 text-amber-600"
+                              : "bg-navy-50 text-navy-400"
+                        }`}
+                      >
+                        {uploadedDocument?.verified ? (
+                          <HiCheckCircle size={19} />
+                        ) : (
+                          <HiOutlineDocumentText size={19} />
+                        )}
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-semibold text-navy-600">
+                          {document.label}
+                        </p>
+
+                        {document.instructions && (
+                          <p className="mt-1 text-xs leading-relaxed text-navy-400">
+                            {document.instructions}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold ${
+                        uploadedDocument?.verified
+                          ? "bg-green-50 text-green-600"
+                          : uploadedDocument
+                            ? "bg-amber-50 text-amber-600"
+                            : "bg-red-50 text-red-500"
+                      }`}
+                    >
+                      {uploadedDocument?.verified
+                        ? "Verified"
+                        : uploadedDocument
+                          ? "Uploaded"
+                          : "Required"}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Upload Requested Documents */}
+      <div className="mt-6">
+        <h3 className="font-heading text-base font-bold text-navy-600">
+          Upload Documents
+        </h3>
+
+        <p className="mt-1 text-xs text-navy-400">
+          Upload the documents requested by your counsellor below.
+        </p>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+        {(isDocumentsRequired
+          ? requiredDocuments
+          : DOCUMENT_TYPES.map(([type, label]) => ({
+              type,
+              label,
+            }))
+        ).map((document) => (
           <DocumentSlot
-            key={type}
-            type={type}
-            label={label}
-            existingDoc={docByType(type)}
+            key={document.type}
+            type={document.type}
+            label={document.label}
+            existingDoc={docByType(document.type)}
           />
         ))}
       </div>

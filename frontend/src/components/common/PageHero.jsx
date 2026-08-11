@@ -57,12 +57,12 @@ const PageHero = ({
     )}
 
     {/* Existing Mesh Background for transparent mode */}
-    {transparent && (
+    {/* {transparent && (
       <div
         className="pointer-events-none absolute inset-0 bg-mesh-navy opacity-70"
         aria-hidden="true"
       />
-    )}
+    )} */}
 
     {/* Content */}
     <div

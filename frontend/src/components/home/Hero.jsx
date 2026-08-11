@@ -77,7 +77,7 @@ const Hero = () => {
   const yBg = useTransform(scrollY, [0, 500], [0, 100]);
 
   return (
-    <section className="relative flex min-h-[92vh] w-full items-center overflow-hidden bg-navy pb-24 pt-36">
+    <section className="relative flex min-h-[92vh] w-full items-center overflow-hidden bg-navy pb-24 pt-36 -mt-12">
       <motion.div
         style={{ y: yBg }}
         className="pointer-events-none absolute inset-0 z-0"

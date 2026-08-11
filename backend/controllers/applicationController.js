@@ -207,8 +207,8 @@ const getMyApplication = asyncHandler(async (req, res) => {
     .populate("assignedCounsellor", "name")
     .populate("documents.verifiedBy", "name")
     .populate("stageHistory.updatedBy", "name")
+    .populate("requiredDocuments.requestedBy", "name")
     .lean();
-
   res.status(200).json(
     new ApiResponse(200, {
       application: application || null,
@@ -627,7 +627,12 @@ const updateStage = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Invalid request body");
   }
 
-  const { stage, counsellorRemark, estimatedCompletionDate } = req.body;
+  const {
+    stage,
+    counsellorRemark,
+    estimatedCompletionDate,
+    requiredDocuments,
+  } = req.body;
 
   if (
     typeof stage !== "string" ||
@@ -635,7 +640,41 @@ const updateStage = asyncHandler(async (req, res) => {
   ) {
     throw new ApiError(400, "Invalid stage");
   }
+  let cleanRequiredDocuments = [];
 
+  if (stage === "documents_required") {
+    if (!Array.isArray(requiredDocuments) || requiredDocuments.length === 0) {
+      throw new ApiError(400, "Please select at least one required document");
+    }
+
+    cleanRequiredDocuments = requiredDocuments.map((document) => {
+      if (!document || typeof document !== "object") {
+        throw new ApiError(400, "Invalid required document");
+      }
+
+      const { type, label, instructions } = document;
+
+      if (
+        typeof type !== "string" ||
+        !Application.DOCUMENT_TYPES.includes(type)
+      ) {
+        throw new ApiError(400, `Invalid document type: ${type}`);
+      }
+
+      if (typeof label !== "string" || !label.trim()) {
+        throw new ApiError(400, "Document label is required");
+      }
+
+      return {
+        type,
+        label: sanitizeText(label, 100),
+        instructions: sanitizeText(instructions, 500),
+        required: true,
+        requestedAt: new Date(),
+        requestedBy: user._id,
+      };
+    });
+  }
   const cleanRemark = sanitizeText(counsellorRemark, 1000);
 
   let parsedCompletionDate;
@@ -678,28 +717,22 @@ const updateStage = asyncHandler(async (req, res) => {
       "Access denied. You are not assigned to this application.",
     );
   }
-
   application.currentStage = stage;
 
-  await application.save();
-
-  const lastEntry =
-    application.stageHistory[application.stageHistory.length - 1];
-
-  if (lastEntry && lastEntry.stage === stage) {
-    if (cleanRemark) {
-      lastEntry.counsellorRemark = cleanRemark;
-    }
-
-    if (parsedCompletionDate) {
-      lastEntry.estimatedCompletionDate = parsedCompletionDate;
-    }
-
-    lastEntry.updatedBy = user._id;
-
-    await application.save();
+  // Save the documents requested by the counsellor.
+  if (stage === "documents_required") {
+    application.requiredDocuments = cleanRequiredDocuments;
   }
 
+  // Pass stage-update information to the pre-save middleware.
+  // The middleware will place these values into the new
+  // stageHistory entry automatically.
+  application._pendingCounsellorRemark = cleanRemark || undefined;
+  application._pendingEstimatedCompletionDate =
+    parsedCompletionDate || undefined;
+  application._pendingUpdatedBy = user._id;
+
+  await application.save();
   res
     .status(200)
     .json(new ApiResponse(200, { application }, "Application stage updated"));

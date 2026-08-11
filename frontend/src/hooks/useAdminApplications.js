@@ -1,23 +1,38 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '../lib/api';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
+import api from "../lib/api";
 
 export const useAdminApplications = (params) =>
   useQuery({
-    queryKey: ['admin-applications', params],
+    queryKey: ["admin-applications", params],
     queryFn: async () => {
-      const { data } = await api.get('/applications', { params });
+      const { data } = await api.get("/applications", { params });
       return data.data;
     },
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
 export const useUpdateApplicationStage = () => {
-  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, stage, counsellorRemark, estimatedCompletionDate }) => {
-      const { data } = await api.patch(`/applications/${id}/stage`, { stage, counsellorRemark, estimatedCompletionDate });
-      return data.data.application;
+    mutationFn: async ({
+      id,
+      stage,
+      counsellorRemark,
+      estimatedCompletionDate,
+      requiredDocuments,
+    }) => {
+      const response = await api.patch(`/applications/${id}/stage`, {
+        stage,
+        counsellorRemark,
+        estimatedCompletionDate,
+        requiredDocuments,
+      });
+
+      return response.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-applications'] }),
   });
 };

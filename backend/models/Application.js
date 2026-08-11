@@ -20,6 +20,7 @@ const DOCUMENT_TYPES = [
 
 const APPLICATION_STAGES = [
   "application_submitted",
+  "documents_required",
   "documents_verified",
   "university_shortlisted",
   "application_sent",
@@ -115,6 +116,51 @@ const documentSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    strict: true,
+  },
+);
+// ============================================================
+// REQUIRED DOCUMENT SCHEMA
+// ============================================================
+
+const requiredDocumentSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: DOCUMENT_TYPES,
+      required: true,
+    },
+
+    label: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 100,
+    },
+
+    instructions: {
+      type: String,
+      trim: true,
+      maxlength: 500,
+    },
+
+    required: {
+      type: Boolean,
+      default: true,
+    },
+
+    requestedAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    requestedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  },
+  {
+    _id: true,
     strict: true,
   },
 );
@@ -243,7 +289,14 @@ const applicationSchema = new mongoose.Schema(
         message: "Too many documents",
       },
     },
-
+    requiredDocuments: {
+      type: [requiredDocumentSchema],
+      default: [],
+      validate: {
+        validator: (value) => Array.isArray(value) && value.length <= 50,
+        message: "Too many required document entries",
+      },
+    },
     notifications: {
       type: [notificationSchema],
       default: [],
@@ -273,6 +326,10 @@ applicationSchema.pre("save", function trackStage(next) {
   if (this.isModified("currentStage")) {
     this.stageHistory.push({
       stage: this.currentStage,
+      counsellorRemark: this._pendingCounsellorRemark || undefined,
+      estimatedCompletionDate:
+        this._pendingEstimatedCompletionDate || undefined,
+      updatedBy: this._pendingUpdatedBy || undefined,
     });
 
     this.notifications.push({
@@ -281,6 +338,11 @@ applicationSchema.pre("save", function trackStage(next) {
         " ",
       )}`,
     });
+
+    // Remove temporary values after they have been used.
+    this._pendingCounsellorRemark = undefined;
+    this._pendingEstimatedCompletionDate = undefined;
+    this._pendingUpdatedBy = undefined;
   }
 
   next();

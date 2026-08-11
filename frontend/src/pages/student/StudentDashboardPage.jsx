@@ -15,6 +15,7 @@ import { useMyApplication } from "../../hooks/useApplication";
 
 const STAGES = [
   "application_submitted",
+  "documents_required",
   "documents_verified",
   "university_shortlisted",
   "application_sent",
