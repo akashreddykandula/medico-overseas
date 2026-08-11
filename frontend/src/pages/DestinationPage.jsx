@@ -240,19 +240,6 @@ const DestinationPage = () => {
       </Helmet>
 
       {/* 1. Breadcrumb Navigation */}
-      <div className="bg-navy-900 py-2.5 text-xs text-slate-300 overflow-x-auto whitespace-nowrap scrollbar-none">
-        <div className="section-container flex items-center gap-2">
-          <Link to="/" className="hover:text-coral shrink-0">
-            Home
-          </Link>
-          <span>/</span>
-          <span className="text-slate-400 shrink-0">Destinations</span>
-          <span>/</span>
-          <span className="font-semibold text-coral shrink-0">
-            MBBS in {country.name}
-          </span>
-        </div>
-      </div>
 
       {/* 2. Country Banner Section & Hero */}
       <div className="relative overflow-hidden bg-navy-800 py-8 sm:py-12 text-white">
@@ -268,7 +255,7 @@ const DestinationPage = () => {
 
         <div className="section-container relative z-10 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-center">
           <div className="space-y-4 lg:col-span-2">
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-coral/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-coral sm:text-xs">
+            <div className="mt-12 inline-flex items-center gap-2 rounded-full bg-coral/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-coral sm:text-xs">
               <HiOutlineGlobeAlt size={16} /> Study Abroad
             </div>
             <h1 className="font-heading text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl">

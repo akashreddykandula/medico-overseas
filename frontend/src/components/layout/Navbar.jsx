@@ -89,7 +89,7 @@ const Navbar = ({ onMobileMenuChange }) => {
         scrolled ? "py-2.5" : "py-4"
       }`}
     >
-      <div className="section-container mx-auto px-4 lg:px-8">
+      <div className="section-container mx-auto px-1 lg:px-4">
         <nav
           className={`flex h-14 items-center justify-between rounded-full border px-4 lg:px-6 transition-all duration-500 ${
             scrolled

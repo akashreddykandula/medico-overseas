@@ -13,17 +13,7 @@ const EnquiryForm = ({
 }) => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const { data: countries = [] } = useCountries();
-  console.log(
-    "reCAPTCHA SITE KEY:",
 
-    import.meta.env.VITE_RECAPTCHA_SITE_KEY,
-  );
-
-  console.log(
-    "executeRecaptcha:",
-
-    executeRecaptcha,
-  );
   const {
     register,
     handleSubmit,
