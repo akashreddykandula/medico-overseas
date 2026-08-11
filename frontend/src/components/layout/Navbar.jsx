@@ -253,7 +253,7 @@ const Navbar = ({ onMobileMenuChange }) => {
           <div className="hidden items-center gap-3 lg:flex">
             <Link
               to="/login"
-              className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-navy-700 transition-all hover:border-coral hover:bg-coral-50/40 hover:text-coral"
+              className="rounded-xl border border-slate-800 px-4 py-2 text-xs font-bold text-navy-700 transition-all hover:border-coral hover:bg-coral-50/40 hover:text-coral"
             >
               Portal Login
             </Link>
