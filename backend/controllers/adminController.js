@@ -103,6 +103,136 @@ const getCounsellors = asyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, { counsellors }));
 });
+// @desc    Update a counsellor
+// @route   PUT /api/admin/counsellors/:id
+// @access  Private (super_admin/admin)
+const updateCounsellor = asyncHandler(async (req, res) => {
+  const counsellorId = req.params.id;
+
+  // 1. Validate MongoDB ObjectId
+  if (!mongoose.Types.ObjectId.isValid(counsellorId)) {
+    throw new ApiError(400, "Invalid counsellor ID format");
+  }
+
+  const targetId = new mongoose.Types.ObjectId(counsellorId);
+
+  // 2. Get and sanitize input
+  let { name, email, phone, password, isActive } = req.body;
+
+  if (name !== undefined) {
+    name = sanitizeInputString(name);
+
+    if (!name) {
+      throw new ApiError(400, "Name cannot be empty");
+    }
+
+    if (name.length > 100) {
+      throw new ApiError(400, "Name cannot exceed 100 characters");
+    }
+  }
+
+  if (email !== undefined) {
+    email = sanitizeInputString(email).toLowerCase();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || email.length > 255 || !emailRegex.test(email)) {
+      throw new ApiError(400, "Please provide a valid email");
+    }
+
+    // Prevent duplicate email
+    const existingUser = await User.findOne({
+      email: String(email),
+      _id: { $ne: targetId },
+    });
+
+    if (existingUser) {
+      throw new ApiError(400, "A user with this email already exists");
+    }
+  }
+
+  if (phone !== undefined) {
+    phone = sanitizeInputString(phone);
+
+    if (phone.length > 20) {
+      throw new ApiError(400, "Phone number cannot exceed 20 characters");
+    }
+  }
+
+  // 3. Password validation
+  if (password !== undefined && password !== "") {
+    if (typeof password !== "string" || password.length < 8) {
+      throw new ApiError(400, "Password must be at least 8 characters");
+    }
+
+    if (password.length > 128) {
+      throw new ApiError(400, "Password cannot exceed 128 characters");
+    }
+  }
+
+  // 4. Build update object
+  const updateData = {};
+
+  if (name !== undefined) updateData.name = name;
+  if (email !== undefined) updateData.email = email;
+  if (phone !== undefined) updateData.phone = phone;
+
+  if (isActive !== undefined) {
+    updateData.isActive = isActive === true || isActive === "true";
+  }
+
+  // 5. Find counsellor first
+  const counsellor = await User.findOne({
+    _id: targetId,
+    role: "counsellor",
+  }).select("+password");
+
+  if (!counsellor) {
+    throw new ApiError(404, "Counsellor not found");
+  }
+
+  // 6. Update normal fields
+  Object.assign(counsellor, updateData);
+
+  // 7. Password update
+  // Using document.save() is important because your User model
+  // hashes passwords inside the pre-save hook.
+  if (password !== undefined && password !== "") {
+    counsellor.password = password;
+  }
+
+  try {
+    await counsellor.save();
+  } catch (error) {
+    if (
+      error.code === 11000 ||
+      (error.message && error.message.includes("E11000"))
+    ) {
+      throw new ApiError(400, "A user with this email already exists");
+    }
+
+    throw error;
+  }
+
+  // 8. Remove sensitive fields from response
+  const counsellorData = counsellor.toObject();
+
+  delete counsellorData.password;
+  delete counsellorData.refreshToken;
+  delete counsellorData.passwordResetToken;
+  delete counsellorData.passwordResetExpires;
+  delete counsellorData.emailVerificationToken;
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { counsellor: counsellorData },
+        "Counsellor updated successfully",
+      ),
+    );
+});
 
 // @desc    Get all students
 // @route   GET /api/admin/students
@@ -162,6 +292,7 @@ const deleteCounsellor = asyncHandler(async (req, res) => {
 module.exports = {
   createCounsellor,
   getCounsellors,
+  updateCounsellor,
   deleteCounsellor,
   getStudents,
 };

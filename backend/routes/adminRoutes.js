@@ -7,6 +7,7 @@ const {
 const {
   createCounsellor,
   getCounsellors,
+  updateCounsellor,
   deleteCounsellor,
   getStudents,
 } = require("../controllers/adminController");
@@ -23,13 +24,6 @@ const router = express.Router();
 // ============================================================
 // GLOBAL ADMIN AUTHENTICATION
 // ============================================================
-//
-// SECURITY:
-// Every route in this router requires:
-// 1. Authentication
-// 2. An approved administrative/management role
-//
-// Individual routes apply stricter authorization where required.
 
 router.use(protect, authorize("super_admin", "admin", "marketing_manager"));
 
@@ -47,13 +41,20 @@ router.get(
 // COUNSELLOR MANAGEMENT
 // ============================================================
 
-// Only super_admin can create counsellors.
+// Create counsellor
 router.post("/counsellors", authorize("super_admin"), createCounsellor);
 
-// super_admin/admin can view counsellors.
+// Get counsellors
 router.get("/counsellors", authorize("super_admin", "admin"), getCounsellors);
 
-// Only super_admin can permanently delete counsellors.
+// Update counsellor
+router.put(
+  "/counsellors/:id",
+  authorize("super_admin", "admin"),
+  updateCounsellor,
+);
+
+// Delete counsellor
 router.delete("/counsellors/:id", authorize("super_admin"), deleteCounsellor);
 
 // ============================================================
@@ -61,15 +62,11 @@ router.delete("/counsellors/:id", authorize("super_admin"), deleteCounsellor);
 // ============================================================
 
 // Only super_admin/admin can access student records.
-// marketing_manager is intentionally excluded.
 router.get("/students", authorize("super_admin", "admin"), getStudents);
 
 // ============================================================
 // LEAD EXPORTS
 // ============================================================
-//
-// super_admin/admin/marketing_manager can export leads,
-// matching the existing access policy.
 
 router.get(
   "/export/leads/excel",
