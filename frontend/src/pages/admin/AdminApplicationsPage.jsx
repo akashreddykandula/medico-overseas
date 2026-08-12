@@ -16,6 +16,7 @@ import {
   HiOutlinePhone,
   HiOutlineMail,
 } from "react-icons/hi";
+import { CgSpinner } from "react-icons/cg";
 import { useCounsellors } from "../../hooks/useCounsellors";
 import {
   useAdminApplications,
@@ -68,6 +69,7 @@ const AdminApplicationsPage = () => {
   const [rejectionReason, setRejectionReason] = useState("");
   const [requiredDocuments, setRequiredDocuments] = useState([]);
   const [isAssigning, setIsAssigning] = useState(false);
+  const [actionLoading, setActionLoading] = useState(null);
 
   const { data, isLoading, refetch } = useAdminApplications({
     stage: stageFilter || undefined,
@@ -135,6 +137,7 @@ const AdminApplicationsPage = () => {
   };
 
   const handleDelete = async (id) => {
+    setActionLoading("deleting");
     try {
       await api.delete(`/applications/${id}`);
       toast.success("Application deleted successfully");
@@ -145,6 +148,8 @@ const AdminApplicationsPage = () => {
       toast.error(
         err.response?.data?.message || "Failed to delete application",
       );
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -172,6 +177,11 @@ const AdminApplicationsPage = () => {
       return;
     }
 
+    const actionKey = verified
+      ? `verify_${documentId}`
+      : `reject_${documentId}`;
+    setActionLoading(actionKey);
+
     try {
       await api.patch(
         `/applications/${applicationId}/documents/${documentId}/verify`,
@@ -193,6 +203,8 @@ const AdminApplicationsPage = () => {
       toast.error(
         err.response?.data?.message || "Failed to update document status",
       );
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -339,6 +351,9 @@ const AdminApplicationsPage = () => {
                     <p className="text-[11px] text-navy-400">CRM Assignment</p>
                   </div>
                 </div>
+                {isAssigning && (
+                  <CgSpinner size={18} className="animate-spin text-coral" />
+                )}
               </div>
               <div className="space-y-3 text-xs">
                 <div>
@@ -357,7 +372,7 @@ const AdminApplicationsPage = () => {
                       handleAssignCounsellor(selectedApp._id, e.target.value)
                     }
                     disabled={isAssigning}
-                    className="w-full rounded-xl border border-navy-100 bg-navy-50/50 px-3 py-2 text-xs font-semibold text-navy-600 focus:border-coral focus:outline-none disabled:opacity-50"
+                    className="w-full rounded-xl border border-navy-100 bg-navy-50/50 px-3 py-2 text-xs font-semibold text-navy-600 focus:border-coral focus:outline-none disabled:opacity-50 cursor-pointer"
                   >
                     <option value="" disabled>
                       Select Counsellor...
@@ -406,102 +421,128 @@ const AdminApplicationsPage = () => {
                       </p>
                     </div>
                   ) : (
-                    selectedApp.documents.map((doc) => (
-                      <div
-                        key={doc._id}
-                        className="rounded-2xl border border-navy-100/80 bg-white p-4 shadow-sm transition-all hover:border-navy-200"
-                      >
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                          <div className="flex items-start gap-3 min-w-0">
-                            <div className="rounded-xl bg-coral-50 p-2.5 text-coral shrink-0">
-                              <HiOutlineDocumentText size={20} />
+                    selectedApp.documents.map((doc) => {
+                      const isVerifying = actionLoading === `verify_${doc._id}`;
+                      const isActioning = actionLoading?.includes(doc._id);
+
+                      return (
+                        <div
+                          key={doc._id}
+                          className="rounded-2xl border border-navy-100/80 bg-white p-4 shadow-sm transition-all hover:border-navy-200"
+                        >
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex items-start gap-3 min-w-0">
+                              <div className="rounded-xl bg-coral-50 p-2.5 text-coral shrink-0">
+                                <HiOutlineDocumentText size={20} />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-sm font-bold text-navy-600">
+                                  {doc.documentName?.trim() || label(doc.type)}
+                                </p>
+                                <p className="text-[11px] font-semibold text-coral mt-0.5">
+                                  Type: {label(doc.type)}
+                                </p>
+                                <p className="truncate text-xs text-navy-400 mt-0.5">
+                                  {doc.fileName || "Document File"}
+                                </p>
+                                {doc.description?.trim() && (
+                                  <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                                    <span className="font-semibold text-navy-500">
+                                      Description:{" "}
+                                    </span>
+                                    {doc.description}
+                                  </p>
+                                )}
+                                <p className="text-[10px] text-navy-300 mt-1">
+                                  Uploaded:{" "}
+                                  {doc.uploadedAt
+                                    ? new Date(doc.uploadedAt).toLocaleString()
+                                    : "—"}
+                                </p>
+                              </div>
                             </div>
-                            <div className="min-w-0">
-                              <p className="text-sm font-bold text-navy-600">
-                                {label(doc.type)}
-                              </p>
-                              <p className="truncate text-xs text-navy-400 mt-0.5">
-                                {doc.fileName || "Document File"}
-                              </p>
-                              <p className="text-[10px] text-navy-300 mt-1">
-                                Uploaded:{" "}
-                                {doc.uploadedAt
-                                  ? new Date(doc.uploadedAt).toLocaleString()
-                                  : "—"}
-                              </p>
+
+                            <div className="shrink-0">
+                              {doc.verified ? (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600 border border-emerald-200/60">
+                                  <HiOutlineCheckCircle size={15} /> Verified
+                                </span>
+                              ) : doc.rejectionReason ? (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-600 border border-red-200/60">
+                                  <HiOutlineXCircle size={15} /> Rejected
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-600 border border-amber-200/60">
+                                  Pending Review
+                                </span>
+                              )}
                             </div>
                           </div>
 
-                          <div className="shrink-0">
-                            {doc.verified ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600 border border-emerald-200/60">
-                                <HiOutlineCheckCircle size={15} /> Verified
+                          {doc.rejectionReason && (
+                            <div className="mt-3 rounded-xl bg-red-50/80 p-3 text-xs text-red-700 border border-red-100">
+                              <span className="font-bold uppercase tracking-wider text-[10px] text-red-500 block mb-0.5">
+                                Rejection Reason
                               </span>
-                            ) : doc.rejectionReason ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-600 border border-red-200/60">
-                                <HiOutlineXCircle size={15} /> Rejected
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-600 border border-amber-200/60">
-                                Pending Review
-                              </span>
+                              {doc.rejectionReason}
+                            </div>
+                          )}
+
+                          <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-navy-50 pt-3">
+                            <a
+                              href={doc.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-xl border border-navy-100 bg-white px-3.5 py-1.5 text-xs font-semibold text-navy-600 transition-colors hover:bg-navy-50"
+                            >
+                              <HiOutlineExternalLink size={15} /> View File
+                            </a>
+
+                            {!doc.verified && (
+                              <>
+                                <button
+                                  type="button"
+                                  disabled={isActioning}
+                                  onClick={() =>
+                                    handleDocumentVerification(
+                                      selectedApp._id,
+                                      doc._id,
+                                      true,
+                                    )
+                                  }
+                                  className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+                                >
+                                  {isVerifying ? (
+                                    <CgSpinner
+                                      className="animate-spin"
+                                      size={15}
+                                    />
+                                  ) : (
+                                    <HiOutlineCheckCircle size={15} />
+                                  )}
+                                  Verify
+                                </button>
+
+                                <button
+                                  type="button"
+                                  disabled={isActioning}
+                                  onClick={() => {
+                                    setDocumentAction({
+                                      applicationId: selectedApp._id,
+                                      documentId: doc._id,
+                                    });
+                                    setRejectionReason("");
+                                  }}
+                                  className="inline-flex items-center gap-1.5 rounded-xl bg-red-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+                                >
+                                  <HiOutlineXCircle size={15} /> Reject
+                                </button>
+                              </>
                             )}
                           </div>
                         </div>
-
-                        {doc.rejectionReason && (
-                          <div className="mt-3 rounded-xl bg-red-50/80 p-3 text-xs text-red-700 border border-red-100">
-                            <span className="font-bold uppercase tracking-wider text-[10px] text-red-500 block mb-0.5">
-                              Rejection Reason
-                            </span>
-                            {doc.rejectionReason}
-                          </div>
-                        )}
-
-                        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-navy-50 pt-3">
-                          <a
-                            href={doc.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-navy-100 bg-white px-3.5 py-1.5 text-xs font-semibold text-navy-600 transition-colors hover:bg-navy-50"
-                          >
-                            <HiOutlineExternalLink size={15} /> View File
-                          </a>
-
-                          {!doc.verified && (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleDocumentVerification(
-                                    selectedApp._id,
-                                    doc._id,
-                                    true,
-                                  )
-                                }
-                                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
-                              >
-                                <HiOutlineCheckCircle size={15} /> Verify
-                              </button>
-
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setDocumentAction({
-                                    applicationId: selectedApp._id,
-                                    documentId: doc._id,
-                                  });
-                                  setRejectionReason("");
-                                }}
-                                className="inline-flex items-center gap-1.5 rounded-xl bg-red-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
-                              >
-                                <HiOutlineXCircle size={15} /> Reject
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    ))
+                      );
+                    })
                   )}
                 </div>
               </div>
@@ -671,7 +712,7 @@ const AdminApplicationsPage = () => {
                           handleAssignCounsellor(app._id, e.target.value)
                         }
                         disabled={isAssigning}
-                        className="rounded-lg border border-navy-100 bg-white px-2 py-1 text-xs text-navy-600 focus:border-coral focus:outline-none disabled:opacity-50"
+                        className="rounded-lg border border-navy-100 bg-white px-2 py-1 text-xs text-navy-600 focus:border-coral focus:outline-none disabled:opacity-50 cursor-pointer"
                       >
                         <option value="" disabled>
                           Assign Counsellor...
@@ -777,6 +818,9 @@ const AdminApplicationsPage = () => {
             <div className="mt-5 flex justify-end gap-2">
               <button
                 type="button"
+                disabled={
+                  actionLoading === `reject_${documentAction.documentId}`
+                }
                 onClick={() => {
                   setDocumentAction(null);
                   setRejectionReason("");
@@ -787,6 +831,9 @@ const AdminApplicationsPage = () => {
               </button>
               <button
                 type="button"
+                disabled={
+                  actionLoading === `reject_${documentAction.documentId}`
+                }
                 onClick={() =>
                   handleDocumentVerification(
                     documentAction.applicationId,
@@ -794,8 +841,11 @@ const AdminApplicationsPage = () => {
                     false,
                   )
                 }
-                className="rounded-xl bg-red-500 px-4 py-2 text-xs font-semibold text-white hover:opacity-90"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-red-500 px-4 py-2 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
               >
+                {actionLoading === `reject_${documentAction.documentId}` && (
+                  <CgSpinner className="animate-spin" size={15} />
+                )}
                 Reject Document
               </button>
             </div>
@@ -963,6 +1013,7 @@ const AdminApplicationsPage = () => {
             <div className="mt-5 flex justify-end gap-2">
               <button
                 onClick={() => setStageUpdateModal(null)}
+                disabled={updateStage.isPending}
                 className="rounded-xl border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
               >
                 Cancel
@@ -970,8 +1021,11 @@ const AdminApplicationsPage = () => {
               <button
                 onClick={confirmStageChange}
                 disabled={updateStage.isPending}
-                className="rounded-xl bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
               >
+                {updateStage.isPending && (
+                  <CgSpinner className="animate-spin" size={15} />
+                )}
                 {updateStage.isPending ? "Updating..." : "Confirm Update"}
               </button>
             </div>
@@ -994,14 +1048,19 @@ const AdminApplicationsPage = () => {
             <div className="mt-5 flex justify-end gap-2">
               <button
                 onClick={() => setDeleteConfirmId(null)}
+                disabled={actionLoading === "deleting"}
                 className="rounded-xl border border-navy-100 px-4 py-2 text-xs font-semibold text-navy-600 hover:bg-navy-50"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleDelete(deleteConfirmId)}
-                className="rounded-xl bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                disabled={actionLoading === "deleting"}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-coral px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
               >
+                {actionLoading === "deleting" && (
+                  <CgSpinner className="animate-spin" size={15} />
+                )}
                 Delete
               </button>
             </div>

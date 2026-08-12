@@ -53,7 +53,18 @@ const documentSchema = new mongoose.Schema(
       trim: true,
       maxlength: 255,
     },
-
+    documentName: {
+      type: String,
+      trim: true,
+      maxlength: 200,
+      default: null,
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: 1000,
+      default: null,
+    },
     url: {
       type: String,
       required: true,

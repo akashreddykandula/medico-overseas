@@ -369,8 +369,16 @@ const uploadDocument = asyncHandler(async (req, res) => {
   if (!req.file) {
     throw new ApiError(400, "No file provided");
   }
+  const type =
+    typeof req.body.type === "string" ? req.body.type.trim().toLowerCase() : "";
 
-  const { type } = req.body;
+  const documentName =
+    typeof req.body.documentName === "string"
+      ? req.body.documentName.trim()
+      : "";
+
+  const description =
+    typeof req.body.description === "string" ? req.body.description.trim() : "";
 
   // ----------------------------------------------------------
   // Document type validation
@@ -378,6 +386,33 @@ const uploadDocument = asyncHandler(async (req, res) => {
 
   if (typeof type !== "string" || !Application.DOCUMENT_TYPES.includes(type)) {
     throw new ApiError(400, "Invalid document type");
+  }
+
+  // ----------------------------------------------------------
+  // OTHER DOCUMENT DETAILS
+  // ----------------------------------------------------------
+
+  let cleanDocumentName = null;
+  let cleanDescription = null;
+
+  if (type === "other") {
+    if (typeof documentName !== "string" || !documentName.trim()) {
+      throw new ApiError(400, "Document name is required for Other documents");
+    }
+
+    cleanDocumentName = sanitizeText(documentName, 200);
+
+    if (!cleanDocumentName) {
+      throw new ApiError(400, "Document name is required");
+    }
+
+    if (description !== undefined && description !== null) {
+      if (typeof description !== "string") {
+        throw new ApiError(400, "Invalid document description");
+      }
+
+      cleanDescription = sanitizeText(description, 1000) || null;
+    }
   }
 
   // ----------------------------------------------------------
@@ -436,7 +471,6 @@ const uploadDocument = asyncHandler(async (req, res) => {
   }
 
   const isPdf = req.file.mimetype === "application/pdf";
-
   const safeUserId = String(user._id);
 
   // ----------------------------------------------------------
@@ -457,21 +491,41 @@ const uploadDocument = asyncHandler(async (req, res) => {
   // Replace existing document of same type
   // ----------------------------------------------------------
 
-  const existing = application.documents.find(
-    (document) => document.type === type,
-  );
+  // const existing = application.documents.find(
+  //   (document) => document.type === type,
+  // );
 
-  if (existing && existing.publicId) {
-    await deleteFromCloudinary(
-      existing.publicId,
-      getCloudinaryResourceType(existing),
-    ).catch(() => {});
-  }
+  // if (existing && existing.publicId) {
+  //   await deleteFromCloudinary(
+  //     existing.publicId,
+  //     getCloudinaryResourceType(existing),
+  //   ).catch(() => {});
+  // }
 
-  if (existing) {
-    application.documents = application.documents.filter(
-      (document) => document.type !== type,
-    );
+  // if (existing) {
+  //   application.documents = application.documents.filter(
+  //     (document) => document.type !== type,
+  //   );
+  // }
+
+  let existing = null;
+
+  if (type !== "other") {
+    existing = application.documents.find((document) => document.type === type);
+
+    if (existing && existing.publicId) {
+      await deleteFromCloudinary(
+        existing.publicId,
+
+        getCloudinaryResourceType(existing),
+      ).catch(() => {});
+    }
+
+    if (existing) {
+      application.documents = application.documents.filter(
+        (document) => document.type !== type,
+      );
+    }
   }
 
   // ----------------------------------------------------------
@@ -482,9 +536,18 @@ const uploadDocument = asyncHandler(async (req, res) => {
     .replace(/[\/\\]/g, "_")
     .replace(/[\r\n]/g, "_");
 
+  // ----------------------------------------------------------
+  // Save document
+  // ----------------------------------------------------------
+
   application.documents.push({
     type,
     fileName: safeFileName || "uploaded-document",
+
+    // Only populated for "Other" documents
+    documentName: cleanDocumentName,
+    description: cleanDescription,
+
     url: result.secure_url,
     publicId: result.public_id,
   });
@@ -493,13 +556,7 @@ const uploadDocument = asyncHandler(async (req, res) => {
 
   res
     .status(201)
-    .json(
-      new ApiResponse(
-        201,
-        { application },
-        existing ? "Document replaced" : "Document uploaded",
-      ),
-    );
+    .json(new ApiResponse(201, { application }, "Document uploaded"));
 });
 
 // ============================================================
