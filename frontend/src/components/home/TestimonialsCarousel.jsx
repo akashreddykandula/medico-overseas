@@ -240,18 +240,26 @@ const TestimonialsCarousel = () => {
               const rating = getSafeRating(t?.rating);
               const photoUrl = getSafeImageUrl(t?.photo?.url);
 
+              // Construct Location Label dynamically (University, Country)
+              const universityName = t?.university?.name;
+              const countryName = t?.country?.name;
+              const locationLabel =
+                universityName && countryName
+                  ? `${universityName}, ${countryName}`
+                  : universityName || countryName || "Medical Student";
+
               return (
                 <SwiperSlide
                   key={t?._id || `testimonial-${index}`}
                   className="h-auto"
                 >
-                  <div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-white/90 p-5 sm:p-7 text-navy-600 backdrop-blur-xl shadow-md sm:shadow-lg shadow-slate-100/70 transition-all duration-300 hover:-translate-y-1.5 hover:border-coral/40 hover:shadow-xl hover:shadow-coral/10">
+                  <div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-white/90 p-5 sm:p-7 text-navy-600 backdrop-blur-xl shadow-md sm:shadow-lg shadow-slate-100/70 transition-all duration-300 hover:-translate-y-1.5 hover:border-coral/40 hover:shadow-xl hover:shadow-coral/10 min-w-0 w-full">
                     {/* Decorative Corner Watermark */}
                     <div className="pointer-events-none absolute -right-3 -top-3 sm:-right-4 sm:-top-4 text-slate-100/80 transition-colors duration-300 group-hover:text-coral/10">
                       <HiOutlineAcademicCap className="w-20 h-20 sm:w-28 sm:h-28" />
                     </div>
 
-                    <div className="relative z-10">
+                    <div className="relative z-10 min-w-0 w-full">
                       <div className="flex items-center justify-between gap-2">
                         <div
                           className="flex gap-0.5 sm:gap-1 text-amber-400"
@@ -272,26 +280,27 @@ const TestimonialsCarousel = () => {
                         </span>
                       </div>
 
-                      <p className="mt-3.5 sm:mt-5 text-xs sm:text-sm italic leading-relaxed text-slate-600">
+                      <p className="mt-3.5 sm:mt-5 text-xs sm:text-sm italic leading-relaxed text-slate-600 break-words line-clamp-4">
                         &quot;{t?.quote || ""}&quot;
                       </p>
                     </div>
 
-                    <div className="relative z-10 mt-5 sm:mt-6 flex items-center gap-3 sm:gap-3.5 border-t border-slate-100 pt-3.5 sm:pt-5">
+                    <div className="relative z-10 mt-5 sm:mt-6 flex items-center gap-3 sm:gap-3.5 border-t border-slate-100 pt-3.5 sm:pt-5 min-w-0 w-full">
                       {photoUrl ? (
                         <img
                           src={photoUrl}
-                          alt=""
-                          aria-hidden="true"
+                          alt={t?.studentName || "Student"}
                           loading="lazy"
                           referrerPolicy="no-referrer"
                           className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-full border-2 border-white bg-slate-100 object-cover shadow-xs ring-2 ring-slate-100 transition-transform duration-300 group-hover:scale-105"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                          }}
                         />
                       ) : (
-                        <div
-                          className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-full border-2 border-white bg-slate-100 shadow-xs ring-2 ring-slate-100"
-                          aria-hidden="true"
-                        />
+                        <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-full border-2 border-white bg-navy-50 font-bold text-navy-400 shadow-xs ring-2 ring-slate-100">
+                          {t?.studentName?.charAt(0)?.toUpperCase() || "S"}
+                        </div>
                       )}
 
                       <div className="min-w-0 flex-1">
@@ -299,10 +308,11 @@ const TestimonialsCarousel = () => {
                           {t?.studentName || "Medical Student"}
                         </p>
 
-                        <p className="truncate text-[11px] sm:text-xs font-medium text-slate-500">
-                          {t?.university?.name ||
-                            t?.country?.name ||
-                            "Medical Student"}
+                        <p
+                          className="truncate text-[11px] sm:text-xs font-medium text-slate-500"
+                          title={locationLabel}
+                        >
+                          {locationLabel}
                         </p>
 
                         {t?.batch && (

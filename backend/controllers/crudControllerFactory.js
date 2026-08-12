@@ -80,21 +80,57 @@ const createCrudController = (Model, options = {}) => {
       throw new ApiError(400, "Invalid request data");
     }
 
+    const schemaFields = getSchemaFields();
+
+    const topLevelSchemaFields = new Set(
+      [...schemaFields].map((field) => field.split(".")[0]),
+    );
+
     const allowedFields = new Set(
       Array.isArray(explicitFields) && explicitFields.length
         ? explicitFields
-        : getSchemaFields(),
+        : topLevelSchemaFields,
     );
 
     const payload = {};
 
     for (const [key, value] of Object.entries(body)) {
+      if (key.startsWith("$") || key.includes(".")) {
+        throw new ApiError(400, "Invalid request field");
+      }
+
       if (!allowedFields.has(key)) {
         continue;
       }
 
-      if (key.startsWith("$") || key.includes(".")) {
-        throw new ApiError(400, "Invalid request field");
+      // Handle nested fields such as:
+      // photo: { url, publicId }
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        const nestedPayload = {};
+
+        for (const [nestedKey, nestedValue] of Object.entries(value)) {
+          if (nestedKey.startsWith("$") || nestedKey.includes(".")) {
+            throw new ApiError(400, "Invalid request field");
+          }
+
+          const fullPath = `${key}.${nestedKey}`;
+
+          if (!schemaFields.has(fullPath)) {
+            continue;
+          }
+
+          if (containsMongoOperator(nestedValue)) {
+            throw new ApiError(400, "Invalid request data");
+          }
+
+          nestedPayload[nestedKey] = nestedValue;
+        }
+
+        if (Object.keys(nestedPayload).length > 0) {
+          payload[key] = nestedPayload;
+        }
+
+        continue;
       }
 
       payload[key] = value;
@@ -102,7 +138,6 @@ const createCrudController = (Model, options = {}) => {
 
     return payload;
   };
-
   const buildSafeQueryFilter = (queryParams) => {
     const filter = {};
     const schemaFields = getSchemaFields();

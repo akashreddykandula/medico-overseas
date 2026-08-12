@@ -11,6 +11,7 @@ import {
 } from "react-icons/hi";
 import PageHero from "../components/common/PageHero";
 import { useTestimonials } from "../hooks/useContent";
+
 const SUCCESS_HERO_IMAGE =
   "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=2400&auto=format&fit=crop";
 
@@ -171,7 +172,6 @@ const TestimonialsPage = () => {
       </Helmet>
 
       {/* Hero Header */}
-      {/* Hero Header */}
       <section className="relative min-h-[320px] overflow-hidden text-white sm:min-h-[350px]">
         {/* Background Image */}
         <motion.img
@@ -313,69 +313,80 @@ const TestimonialsPage = () => {
           )}
 
           {!isLoading &&
-            filteredTestimonials.map((t) => (
-              <div
-                key={t._id}
-                className="group relative flex flex-col justify-between rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-slate-200 hover:shadow-xl"
-              >
-                <div>
-                  {/* Rating Stars & Verified Badge */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-1 text-coral">
-                      {Array.from({ length: t.rating || 5 }).map((_, i) => (
-                        <HiStar key={i} size={18} />
-                      ))}
-                    </div>
-                    {t.verified && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-600">
-                        <HiOutlineCheckCircle size={14} /> Verified
-                      </span>
-                    )}
-                  </div>
+            filteredTestimonials.map((t) => {
+              // Construct location label dynamically
+              const universityName = t.university?.name;
+              const countryName = t.country?.name;
+              const locationLabel =
+                universityName && countryName
+                  ? `${universityName}, ${countryName}`
+                  : universityName || countryName || "Study Abroad Student";
 
-                  {/* Quote Text */}
-                  <p className="mt-4 text-xs leading-relaxed text-slate-600 italic">
-                    "{t.quote}"
-                  </p>
-                </div>
-
-                {/* Student Info Card Footer */}
-                <div className="mt-6 flex items-center gap-3 border-t border-slate-50 pt-4">
-                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-slate-100 bg-navy-50">
-                    {t.photo?.url ? (
-                      <img
-                        src={t.photo.url}
-                        alt={t.studentName}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center font-bold text-navy-400">
-                        {t.studentName?.charAt(0) || "S"}
+              return (
+                <div
+                  key={t._id}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-slate-200 hover:shadow-xl min-w-0 w-full"
+                >
+                  <div className="min-w-0 w-full">
+                    {/* Rating Stars & Verified Badge */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-1 text-coral">
+                        {Array.from({ length: t.rating || 5 }).map((_, i) => (
+                          <HiStar key={i} size={18} />
+                        ))}
                       </div>
-                    )}
+                      {t.verified && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-600">
+                          <HiOutlineCheckCircle size={14} /> Verified
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Quote Text (with line-clamp & break-words to prevent overflow) */}
+                    <p className="mt-4 text-xs leading-relaxed italic text-slate-600 break-words line-clamp-5">
+                      "{t.quote}"
+                    </p>
                   </div>
 
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-bold text-navy-600">
-                      {t.studentName}
-                    </p>
-                    <p className="truncate text-xs text-navy-400">
-                      {t.university?.name ||
-                        t.country?.name ||
-                        "Study Abroad Student"}
-                    </p>
-                    {t.batch && (
-                      <span className="text-[10px] font-semibold text-coral">
-                        {t.batch}
-                      </span>
-                    )}
+                  {/* Student Info Card Footer */}
+                  <div className="mt-6 flex items-center gap-3 border-t border-slate-50 pt-4 min-w-0 w-full">
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-slate-100 bg-navy-50">
+                      {t.photo?.url ? (
+                        <img
+                          src={t.photo.url}
+                          alt={t.studentName}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center font-bold text-navy-400">
+                          {t.studentName?.charAt(0) || "S"}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-bold text-navy-600">
+                        {t.studentName}
+                      </p>
+                      <p
+                        className="truncate text-xs text-navy-400"
+                        title={locationLabel}
+                      >
+                        {locationLabel}
+                      </p>
+                      {t.batch && (
+                        <span className="text-[10px] font-semibold text-coral">
+                          {t.batch}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
         </div>
       </div>
     </>
