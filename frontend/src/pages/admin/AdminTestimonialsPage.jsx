@@ -10,12 +10,14 @@ import {
   HiOutlineCheckCircle,
   HiOutlinePhotograph,
   HiOutlineUpload,
+  HiOutlineExclamation,
 } from "react-icons/hi";
 import api from "../../lib/api";
 
 const AdminTestimonialsPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
+  const [deletingTestimonial, setDeletingTestimonial] = useState(null);
   const [imageInputType, setImageInputType] = useState("url");
   const [isUploading, setIsUploading] = useState(false);
 
@@ -172,6 +174,8 @@ const AdminTestimonialsPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["testimonials"],
       });
+
+      setDeletingTestimonial(null);
     },
     onError: (err) => {
       toast.error(
@@ -957,15 +961,7 @@ const AdminTestimonialsPage = () => {
 
                         <button
                           type="button"
-                          onClick={() => {
-                            if (
-                              window.confirm(
-                                `Delete testimonial from ${testimonial.studentName}?`,
-                              )
-                            ) {
-                              deleteMutation.mutate(testimonial._id);
-                            }
-                          }}
+                          onClick={() => setDeletingTestimonial(testimonial)}
                           className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-600"
                           title="Delete"
                         >
@@ -979,6 +975,75 @@ const AdminTestimonialsPage = () => {
           </table>
         </div>
       </div>
+
+      {/* ------------------------------------------------------ */}
+      {/* DELETE CONFIRMATION MODAL */}
+      {/* ------------------------------------------------------ */}
+
+      {deletingTestimonial && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl transition-all">
+            <div className="flex items-center gap-3 text-rose-600">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-50">
+                <HiOutlineExclamation size={22} />
+              </div>
+              <h3 className="text-base font-bold text-navy-700">
+                Delete Testimonial
+              </h3>
+            </div>
+
+            <p className="mt-3 text-xs leading-relaxed text-slate-500">
+              Are you sure you want to delete the testimonial for{" "}
+              <span className="font-semibold text-slate-700">
+                "{deletingTestimonial.studentName}"
+              </span>
+              ? This action cannot be undone.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setDeletingTestimonial(null)}
+                disabled={deleteMutation.isPending}
+                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={() => deleteMutation.mutate(deletingTestimonial._id)}
+                disabled={deleteMutation.isPending}
+                className="flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white shadow-xs transition-colors hover:bg-rose-700 disabled:opacity-50"
+              >
+                {deleteMutation.isPending && (
+                  <svg
+                    className="h-3.5 w-3.5 animate-spin text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                )}
+                {deleteMutation.isPending ? "Deleting..." : "Yes, Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
