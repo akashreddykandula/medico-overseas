@@ -10,6 +10,7 @@ import AdminLayout from "./components/layout/AdminLayout";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import { fetchMe } from "./features/authSlice";
 import AdminCounsellorsPage from "./pages/admin/AdminCounsellorsPage";
+import AdminTestimonialsPage from "./pages/admin/AdminTestimonialsPage";
 
 // Public pages
 import HomePage from "./pages/HomePage";
@@ -146,6 +147,10 @@ const App = () => {
             />
             <Route path="/admin/blogs" element={<AdminBlogsPage />} />
             <Route path="/admin/faqs" element={<AdminFaqsPage />} />
+            <Route
+              path="/admin/testimonials"
+              element={<AdminTestimonialsPage />}
+            />
 
             {/* ✅ Move it here */}
             <Route

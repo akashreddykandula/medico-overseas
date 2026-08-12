@@ -15,6 +15,7 @@ import {
   HiOutlineX,
   HiOutlineBell,
   HiOutlineShieldCheck,
+  HiOutlineChatAlt2,
 } from "react-icons/hi";
 import { logout } from "../../features/authSlice";
 
@@ -51,6 +52,11 @@ const LINKS = [
     to: "/admin/faqs",
     label: "FAQs",
     icon: HiOutlineQuestionMarkCircle,
+  },
+  {
+    to: "/admin/testimonials",
+    label: "Testimonials",
+    icon: HiOutlineChatAlt2,
   },
 ];
 
