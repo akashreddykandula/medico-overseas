@@ -4,7 +4,7 @@ import { FaWhatsapp } from "react-icons/fa";
 
 const WHATSAPP_NUMBER = "916301878730"; // replace with real business number
 const DEFAULT_MESSAGE =
-  "Hi Medico Overseas, I'd like to know more about MBBS abroad.";
+  "Hi Medico Overseas, I’m interested in studying MBBS abroad. I would like to know about the available countries, admission process, fees, and eligibility.";
 
 const WhatsAppButton = () => (
   <motion.a
