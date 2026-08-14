@@ -1,5 +1,12 @@
-import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+  useMotionValue,
+  animate,
+} from "framer-motion";
 import { Link } from "react-router-dom";
 import { HiArrowRight, HiAcademicCap, HiPhone } from "react-icons/hi";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -66,11 +73,45 @@ const HERO_IMAGES = [
 ];
 
 const STATS = [
-  ["12+", "Years Experience"],
-  ["5000+", "Students Placed"],
-  ["50+", "Partner Universities"],
-  ["6", "Countries Covered"],
+  { value: 12, suffix: "+", label: "Years Experience" },
+  { value: 5000, suffix: "+", label: "Students Placed" },
+  { value: 50, suffix: "+", label: "Partner Universities" },
+  { value: 6, suffix: "", label: "Countries Covered" },
 ];
+
+/* --- Animated Counter Component --- */
+const AnimatedStat = ({ value, suffix, label, index }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.floor(latest));
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(count, value, {
+        duration: 2,
+        ease: [0.16, 1, 0.3, 1],
+        delay: index * 0.15,
+      });
+      return controls.stop;
+    }
+  }, [isInView, value, index, count]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+    >
+      <p className="flex items-center font-heading text-2xl font-bold text-coral sm:text-3xl">
+        <motion.span>{rounded}</motion.span>
+        <span>{suffix}</span>
+      </p>
+      <p className="mt-1 text-xs text-navy-200">{label}</p>
+    </motion.div>
+  );
+};
 
 const Hero = () => {
   const { scrollY } = useScroll();
@@ -172,19 +213,16 @@ const Hero = () => {
             </Link>
           </div>
 
+          {/* Animated Stats Section */}
           <div className="mt-14 grid w-full grid-cols-2 gap-8 border-t border-white/10 pt-8 sm:grid-cols-4">
-            {STATS.map(([value, label], index) => (
-              <motion.div
-                key={label}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + index * 0.1 }}
-              >
-                <p className="font-heading text-2xl font-bold text-coral sm:text-3xl">
-                  {value}
-                </p>
-                <p className="mt-1 text-xs text-navy-200">{label}</p>
-              </motion.div>
+            {STATS.map((stat, index) => (
+              <AnimatedStat
+                key={stat.label}
+                value={stat.value}
+                suffix={stat.suffix}
+                label={stat.label}
+                index={index}
+              />
             ))}
           </div>
         </motion.div>

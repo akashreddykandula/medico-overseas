@@ -93,7 +93,7 @@ const Navbar = ({ onMobileMenuChange }) => {
         <nav
           className={`flex h-14 items-center justify-between rounded-full border px-4 lg:px-6 transition-all duration-500 ${
             scrolled
-              ? "border-slate-200/80 bg-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.06)] backdrop-blur-2xl"
+              ? "border-slate-100/80 bg-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.06)] backdrop-blur-2xl"
               : "border-slate-200/50 bg-white/60 shadow-[0_4px_24px_rgba(0,0,0,0.03)] backdrop-blur-xl"
           }`}
         >
