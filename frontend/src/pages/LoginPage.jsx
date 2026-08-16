@@ -155,7 +155,7 @@ const LoginPage = () => {
               Sign in to your account!
             </h1>
             <p className="mt-1.5 text-xs sm:text-sm text-slate-500 leading-relaxed">
-              Log in to track your application or manage the platform.
+              Log in Apply & to track your application or manage the platform.
             </p>
 
             <form
