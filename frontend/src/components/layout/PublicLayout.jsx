@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import WhatsAppButton from "../common/WhatsAppButton";
+import ApplicationPopup from "../common/ApplicationPopup";
 import useLenis from "../../hooks/useLenis";
 
 const PublicLayout = () => {
@@ -22,6 +23,9 @@ const PublicLayout = () => {
       </main>
 
       <Footer />
+
+      {/* Application Popup */}
+      {!isDestinationPage && !mobileOpen && <ApplicationPopup />}
 
       {/* Hide WhatsApp on destination pages AND when mobile menu is open */}
       {!isDestinationPage && !mobileOpen && <WhatsAppButton />}
