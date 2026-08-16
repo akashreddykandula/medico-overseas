@@ -353,20 +353,34 @@ const Navbar = ({ onMobileMenuChange }) => {
 
           {/* Right Action CTAs */}
           <div className="hidden items-center gap-3 lg:flex">
+            {/* Portal Login Button */}
             <Link
               to="/login"
-              className="rounded-full border border-orange-600/80 bg-white/50 px-4 py-2 text-xs font-bold text-slate-700 transition-all duration-300 hover:border-[#E15B3F]/40 hover:bg-[#E15B3F]/5 hover:text-[#E15B3F] active:scale-95"
+              className="group relative inline-flex overflow-hidden rounded-full p-[1.5px] transition-all duration-300 active:scale-95"
             >
-              Portal Login
+              {/* Rotating Border Beam */}
+              <span className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_300deg,#ea580c_360deg)]" />
+
+              {/* Button Inner Content */}
+              <span className="relative z-10 inline-flex items-center rounded-full bg-white/90 px-4 py-2 text-xs font-bold text-slate-700 backdrop-blur-sm transition-colors duration-300 group-hover:bg-[#E15B3F]/10 group-hover:text-[#E15B3F]">
+                Portal Login
+              </span>
             </Link>
 
+            {/* Get Free Counselling Button */}
             <Link
               to="/contact#enquiry"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-[#E15B3F] to-[#d4482b] px-5 py-2 text-xs font-bold text-white shadow-[0_4px_16px_rgba(225,91,63,0.3)] transition-all duration-300 hover:shadow-[0_6px_24px_rgba(225,91,63,0.45)] active:scale-95"
+              className="group relative inline-flex items-center justify-center overflow-hidden rounded-full p-[1.5px] shadow-[0_4px_16px_rgba(225,91,63,0.3)] transition-all duration-300 hover:shadow-[0_6px_24px_rgba(225,91,63,0.45)] active:scale-95"
             >
-              <span className="relative z-10">Get Free Counselling</span>
-              <HiArrowRight className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5" />
-              <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              {/* Rotating Border Beam */}
+              <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_270deg,#ffffff_360deg)]" />
+
+              {/* Button Inner Content */}
+              <span className="relative z-10 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#E15B3F] to-[#d4482b] px-5 py-2 text-xs font-bold text-white">
+                <span>Get Free Counselling</span>
+                <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </span>
             </Link>
           </div>
 
