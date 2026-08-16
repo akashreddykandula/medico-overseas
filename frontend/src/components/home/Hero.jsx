@@ -192,25 +192,51 @@ const Hero = () => {
             post-arrival support—all under one roof.
           </p>
 
-          <div className="mt-8 flex w-full flex-wrap gap-4 sm:w-auto">
-            <a
-              href="#enquiry"
-              className="btn-primary group flex items-center justify-center gap-2"
-            >
-              Get Free Counselling
-              <HiPhone
-                aria-hidden="true"
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </a>
+          <div className="mt-8 flex w-full flex-wrap items-center gap-5 sm:w-auto">
+            {/* Primary Button — Silky Aura Glow & Ultra-Fine Shimmer Beam */}
+            <div className="group relative inline-flex items-center justify-center rounded-full p-[1px] transition-transform duration-500 ease-out hover:-translate-y-0.5 active:scale-[0.98]">
+              {/* Soft Ambient Radial Bloom */}
+              <div className="pointer-events-none absolute -inset-1.5 rounded-full bg-gradient-to-r from-[#E15B3F]/50 via-orange-400/30 to-[#E15B3F]/50 opacity-40 blur-lg transition-all duration-700 ease-out group-hover:opacity-80 group-hover:blur-xl" />
 
-            <Link
-              to="/portal/apply"
-              className="btn-outline flex items-center justify-center gap-2 !border-white/30 !text-white hover:!bg-white hover:!text-navy"
-            >
-              <HiArrowRight className="text-coral" aria-hidden="true" />
-              Apply Now
-            </Link>
+              {/* Precision Border Mask Channel */}
+              <div className="absolute inset-0 overflow-hidden rounded-full [mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] [mask-composite:exclude] p-[1.5px]">
+                <span className="absolute -inset-[250%] animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_280deg,rgba(255,255,255,0.4)_330deg,#ffffff_360deg)] will-change-transform" />
+              </div>
+
+              {/* Button Face */}
+              <a
+                href="#enquiry"
+                className="relative z-10 inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-b from-[#E7684D] via-[#E15B3F] to-[#CE4D32] px-7 py-3 text-xs sm:text-sm font-semibold tracking-wide text-white shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.5),0_8px_20px_-4px_rgba(225,91,63,0.35)] transition-all duration-500 hover:shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.6),0_12px_28px_-4px_rgba(225,91,63,0.5)]"
+              >
+                <span>Get Free Counselling</span>
+                <HiPhone
+                  aria-hidden="true"
+                  className="transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110"
+                />
+                {/* Dynamic Specular Sheen */}
+                <span className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/15 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100" />
+              </a>
+            </div>
+
+            {/* Secondary Button — Deep Frosted Sapphire Glass with Comet Light Stream */}
+            <div className="group relative inline-flex items-center justify-center rounded-full p-[1px] transition-transform duration-500 ease-out hover:-translate-y-0.5 active:scale-[0.98]">
+              {/* Precision Border Mask Channel */}
+              <div className="absolute inset-0 overflow-hidden rounded-full [mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] [mask-composite:exclude] p-[1.5px]">
+                <span className="absolute -inset-[250%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_270deg,rgba(225,91,63,0.3)_320deg,#E15B3F_360deg)] will-change-transform" />
+              </div>
+
+              {/* Button Face */}
+              <Link
+                to="/portal/apply"
+                className="relative z-10 inline-flex items-center justify-center gap-2.5 rounded-full border border-white/10 bg-slate-950/40 px-7 py-3 text-xs sm:text-sm font-semibold tracking-wide text-white shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.12),0_4px_16px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition-all duration-500 ease-out hover:border-white/40 hover:bg-white hover:text-slate-900 hover:shadow-[0_8px_24px_rgba(255,255,255,0.15)]"
+              >
+                <HiArrowRight
+                  aria-hidden="true"
+                  className="text-[#E15B3F] transition-all duration-500 ease-out group-hover:translate-x-1 group-hover:text-slate-900"
+                />
+                <span>Apply Now</span>
+              </Link>
+            </div>
           </div>
 
           {/* Animated Stats Section */}
